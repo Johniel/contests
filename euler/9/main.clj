@@ -1,0 +1,1 @@
+(reduce * (first (filter (fn [[a b c]] (= (+ (* a a) (* b b)) (* c c))) (filter (fn [[a b c]] (< a b c)) (map (fn [[a b]] (list a b (- 1000 a b))) (for [a (range 1 1000) b (range 1 1000)] (list a b)))))))
