@@ -54,9 +54,9 @@ int main(int argc, char *argv[])
         if (r[r_idx] == t[t_idx]) {
           lcp2[t_idx][r_idx] = lcp2[t_idx + 1][r_idx + 1] + 1;
         }
-      }        
+      }
     }
-    
+
     vector<pair<int, int>> v;
     for (int idx = 0; idx < t.size(); ) {
       int* a = max_element(lcp1[idx], lcp1[idx] + N);
