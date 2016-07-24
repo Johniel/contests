@@ -1,4 +1,4 @@
-[Codeforces](http://codeforces.com/profile/___Johniel)\
+[Codeforces](http://codeforces.com/profile/___Johniel)
 
 
 [AOJ](http://judge.u-aizu.ac.jp/onlinejudge/user.jsp?id=___Johniel)
