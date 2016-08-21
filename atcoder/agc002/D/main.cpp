@@ -1,21 +1,21 @@
 #include <bits/stdc++.h>
-
+ 
 #define each(i, c) for (auto& i : c)
 #define unless(cond) if (!(cond))
-
+ 
 using namespace std;
-
+ 
 typedef long long int lli;
 typedef unsigned long long ull;
 typedef complex<double> point;
-
+ 
 template<typename P, typename Q>
 ostream& operator << (ostream& os, pair<P, Q> p)
 {
   os << "(" << p.first << "," << p.second << ")";
   return os;
 }
-
+ 
 template<typename T>
 ostream& operator << (ostream& os, vector<T> v)
 {
@@ -24,7 +24,7 @@ ostream& operator << (ostream& os, vector<T> v)
   os << ")";
   return os;
 }
-
+ 
 struct UnionFind {
   vector<int> r, p, s;
   UnionFind(int n)
@@ -67,7 +67,7 @@ struct UnionFind {
     return s[find(a)];
   }
 };
-
+ 
 int main(int argc, char *argv[])
 {
   int n, m;
@@ -91,14 +91,14 @@ int main(int argc, char *argv[])
       --z;
       qs.push_back(make_tuple(x, y, z));
     }
-
+ 
     vector<int> small(q, 0);
     vector<int> large(q, m + 1);
     map<int, vector<int>> mid;
     for (int i = 0; i < q; ++i) {
       mid[(small[i] + large[i]) / 2].push_back(i);
     }
-
+ 
     auto f = [&] (void) {
       for (int i = 0; i < q; ++i) {
         if (small[i] + 1 < large[i]) return true;
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
       }
       mid = move(next);
     }
-
+ 
     for (int i = 0; i < q; ++i) {
       cout << large[i] << endl;
     }
