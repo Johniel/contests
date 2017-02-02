@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+#define each(i, c) for (auto& i : c)
+#define unless(cond) if (!(cond))
+
+using namespace std;
+
+typedef long long int lli;
+typedef unsigned long long ull;
+typedef complex<double> point;
+
+template<typename P, typename Q>
+ostream& operator << (ostream& os, pair<P, Q> p)
+{
+  os << "(" << p.first << "," << p.second << ")";
+  return os;
+}
+
+int main(int argc, char *argv[])
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
+  int n;
+  while (cin >> n) {
+    int a[n];
+    for (int i = 0; i < n; ++i) {
+      cin >> a[i];
+    }
+    int i = 0;
+    int j = n - 1;
+    while (i < j) {
+      swap(a[i], a[j]);
+      i += 2;
+      j -= 2;
+    }
+    for (int i = 0; i < n; ++i) {
+      if (i) cout << ' ';
+      cout << a[i];
+    }
+    cout << endl;
+  }
+  
+  return 0;
+}
+
