@@ -1,3 +1,6 @@
 [submodule "icfpc/icfpc2018"]
 	path = icfpc/icfpc2018
 	url = git@github.com:hasipon/icfpc2018.git
+[submodule "icfpc/icfpc2017"]
+	path = icfpc/icfpc2017
+	url = git@github.com:hasipon/icfpc2017.git
