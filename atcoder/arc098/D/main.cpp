@@ -26,55 +26,21 @@ int main(int argc, char *argv[])
     vector<int> a(n);
     each (i, a) cin >> i;
 
-    map<int, int> cnt;
-
-    auto fn =
-      [&] () {
-        bool f = true;
-        for (int i = 0; i < 32; ++i) {
-          f = f && (cnt[i] <= 1);
-        }
-        return f;
-      };
-
-    auto include =
-      [&] (int n) {
-        for (int i = 0; i < 32; ++i) {
-          if (n & (1 << i)) {
-            ++cnt[i];
-          }
-        }
-        return ;
-      };
-
-    auto exclude =
-      [&] (int n) {
-        for (int i = 0; i < 32; ++i) {
-          if (n & (1 << i)) {
-            --cnt[i];
-          }
-        }
-        return ;
-      };
+    int bit = 0;
 
     int begin = 0;
     int end = 0;
 
     lli sum = 0;
     while (begin <= end) {
-      while (end < n && fn()) {
-        include(a[end]);
+      while (end < n) {
+        if (bit & a[end]) break;
+        bit |= a[end];
         ++end;
-        if (!fn()) {
-          --end;
-          exclude(a[end]);
-          break;
-        }
       }
 
-      sum += (end - begin) * fn();
-
-      exclude(a[begin]);
+      sum += end - begin;
+      bit ^= a[begin];
       ++begin;
     }
 
