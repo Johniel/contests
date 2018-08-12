@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
     each (i, a) cin >> i;
     map<lli, lli> cnt;
     lli x = 0;
-    for (int i = 0; i < a.size(); ++i) {
-      x += a[i];
+    each (i, a) {
+      x += i;
       x %= m;
       ++cnt[x];
     }
