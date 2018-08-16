@@ -41,10 +41,6 @@ function index(){
     done
 }
 
-cp README.md docs/README.md
-echo "" >> docs/README.md
-echo "## Solved Problems" >> docs/README.md
-
 targets=$(git ls-files ./codeforces | xargs dirname | sort --unique)
 for target in ${targets[@]}; do
     if [[ "$target" != "codeforces" ]]; then
@@ -52,7 +48,6 @@ for target in ${targets[@]}; do
     fi
 done
 index codeforces
-echo "+ [codeforces](codeforces/README.md)" >> docs/README.md
 
 targets=$(git ls-files ./atcoder | xargs dirname | sort --unique)
 for target in ${targets[@]}; do
@@ -61,4 +56,3 @@ for target in ${targets[@]}; do
     fi
 done
 index atcoder
-echo "+ [atcoder](atcoder/README.md)" >> docs/README.md
