@@ -11,6 +11,7 @@ jobs:
       - run: make
       - run:
           command: |
+            git status
             git config user.name "circle-ci"
             git add ./docs
             git commit -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
