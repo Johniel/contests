@@ -1,6 +1,9 @@
 function gen(){
+    echo "[GEN]" docs/$1.md
+            
     outputFile=docs/$1.md
     mkdir -p $(dirname $outputFile)
+
     if [[ -f $1/README.md ]]; then
         cat $1/README.md > docs/$1.md
     else
@@ -23,14 +26,38 @@ function gen(){
     done
 }
 
-export -f gen
+function index(){
+    cp $1/README.md docs/$1/README.md
+    echo  >> docs/$1/README.md
+    echo "## Solutions" >> docs/$1/README.md
+    filepaths=$(find docs/$1 | grep md | sort)
+    for filepath in ${filepaths[@]}; do
+        link=${filepath:5}
+        text=${link:0:-3}
+        if [[ "$text" != "$1/README" ]]; then
+            echo "["$text"]("$link")" >> docs/$1/README.md
+        fi
+    done
+}
 
-targets=$(git ls-files ./codeforces | xargs dirname | uniq)
-for target in ${targets[@]}; do
-    gen $target
-done
+cp README.md docs/README.md
+echo "" >> docs/README.md
+echo "## Solved Problems" >> docs/README.md
 
-targets=$(git ls-files ./atcoder | xargs dirname | uniq)
+targets=$(git ls-files ./codeforces | xargs dirname | sort --unique)
 for target in ${targets[@]}; do
-    gen $target
+    if [[ "$target" != "codeforces" ]]; then
+        gen $target
+    fi
 done
+index codeforces
+echo "[codeforces](codeforces/README.md)" >> docs/README.md
+
+targets=$(git ls-files ./atcoder | xargs dirname | sort --unique)
+for target in ${targets[@]}; do
+    if [[ "$target" != "atcoder" ]]; then
+        gen $target
+    fi
+done
+index atcoder
+echo "[atcoder](atcoder/README.md)" >> docs/README.md
