@@ -9,13 +9,14 @@ jobs:
     steps:
       - checkout
       - run: make
+      - run: git add ./docs
+      - run: git push origin master
 
 workflows:
     version: 2
     build-and-push:
         jobs:
-            - build
-            - push:
+            - build:
                 requires:
                     - build
                 filters:
