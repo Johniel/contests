@@ -32,10 +32,11 @@ function index(){
     echo "## Solutions" >> docs/$1/README.md
     filepaths=$(find docs/$1 | grep md | sort)
     for filepath in ${filepaths[@]}; do
-        link=${filepath:5}
-        text=${link:0:-3}
-        if [[ "$text" != "$1/README" ]]; then
-            echo "+ ["$text"]("$link")" >> docs/$1/README.md
+        pref="docs/$1/"
+        len=${#pref}
+        text=${filepath:len:-3}
+        if [[ "$text" != "README" ]]; then
+            echo "+ ["$text"]("$text".md)" >> docs/$1/README.md
         fi
     done
 }
