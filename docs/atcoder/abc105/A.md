@@ -1,4 +1,5 @@
-# atcoder/abc105/A
+# ABC105A
+⌈n/k⌉
 
 ## Codes
 ```cpp
