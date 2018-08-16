@@ -23,7 +23,10 @@ jobs:
           command: |
             git add ./docs
             git commit -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
+      - run:
+          command: |
             git remote add upstream https://${GITHUB_ACCESS_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+            git pull upstream gh-pages
             git push upstream gh-pages:gh-pages
 
 workflows:
