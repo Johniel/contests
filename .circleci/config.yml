@@ -13,7 +13,7 @@ jobs:
             git config user.name "circle-ci"
             git fetch
             git checkout published
-            git merge --no-ff origin/master
+            git merge --no-ff origin/master -m "merge --no-ff origin/master"
             make
             git add ./docs
             git remote add upstream https://${GITHUB_ACCESS_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
