@@ -9,8 +9,12 @@ jobs:
     steps:
       - checkout
       - run: make
-      - run: git add ./docs
-      - run: git push origin master
+      - run:
+          command: |
+            git add ./docs
+            git config user.name "circle-ci"
+            git remote add upstream https://${GITHUB_ACCESS_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+            git push upstream ${CIRCLE_BRANCH}:${CIRCLE_BRANCH}
 
 workflows:
     version: 2
