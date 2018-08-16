@@ -17,8 +17,6 @@ workflows:
     build-and-push:
         jobs:
             - build:
-                requires:
-                    - build
                 filters:
                     branches:
                         only: master
