@@ -12,13 +12,13 @@ jobs:
           command: |
             git config user.name "circle-ci"
             git fetch
-            git checkout published
+            git checkout gh-pages
             git merge --no-ff origin/master -m "merge --no-ff origin/master"
             make
             git add ./docs
             git commit -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
             git remote add upstream https://${GITHUB_ACCESS_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-            git push upstream published:published
+            git push upstream gh-pages:gh-pages
 
 workflows:
     version: 2
