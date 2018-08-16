@@ -1,5 +1,9 @@
-all: gen
+all: clean gen
 
 .PHONY: gen
 gen:
-		find codeforces atcoder -name "README.md" | go run ./scripts/gen.go
+	bash ./scripts/gen.sh
+
+.PHONY: clean
+clean:
+	rm -rf ./docs/codeforces ./docs/atcoder

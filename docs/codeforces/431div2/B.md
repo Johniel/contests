@@ -5,7 +5,7 @@
 + (1,y1)と(2,y2)が同一線上に有る場合
 
 
-## Code
+## Codes
 ```cpp
 #include <bits/stdc++.h>
 

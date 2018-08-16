@@ -4,7 +4,7 @@
 
 クエリとパターンが同じ長さかは確認したものの、注意深さが欠けていた。
 
-## Code
+## Codes
 ```cpp
 #include <bits/stdc++.h>
 

@@ -2,7 +2,7 @@
 
 DP\[どこまで見た\]\[偶奇\] = 到達可能か
 
-## Code
+## Codes
 ```cpp
 #include <bits/stdc++.h>
 
