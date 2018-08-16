@@ -11,10 +11,17 @@ jobs:
       - run:
           command: |
             git config user.name "circle-ci"
-            git checkout gh-pages
-            git pull origin gh-pages
-            git merge --no-ff origin/master -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
+      - run:
+          command: |
+            git fetch -p
+            git branch -D gh-pages
+            git checkout gh-pages:gh-pages
+            git merge --no-ff origin/master -m "AUTO BUILD ${CIRCLE_BUILD_URL}"            
+      - run:
+          command: |
             make
+      - run:
+          command: |
             git add ./docs
             git commit -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
             git remote add upstream https://${GITHUB_ACCESS_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
