@@ -35,7 +35,7 @@ function index(){
         link=${filepath:5}
         text=${link:0:-3}
         if [[ "$text" != "$1/README" ]]; then
-            echo "["$text"]("$link")" >> docs/$1/README.md
+            echo "+ ["$text"]("$link")" >> docs/$1/README.md
         fi
     done
 }
@@ -51,7 +51,7 @@ for target in ${targets[@]}; do
     fi
 done
 index codeforces
-echo "[codeforces](codeforces/README.md)" >> docs/README.md
+echo "+ [codeforces](codeforces/README.md)" >> docs/README.md
 
 targets=$(git ls-files ./atcoder | xargs dirname | sort --unique)
 for target in ${targets[@]}; do
@@ -60,4 +60,4 @@ for target in ${targets[@]}; do
     fi
 done
 index atcoder
-echo "[atcoder](atcoder/README.md)" >> docs/README.md
+echo "+ [atcoder](atcoder/README.md)" >> docs/README.md
