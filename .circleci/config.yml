@@ -10,8 +10,9 @@ jobs:
       - checkout
       - run:
           command: |
-            make
             git config user.name "circle-ci"
+            git mergo --no-ff origin/master -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
+            make
             git add ./docs
             git commit -m "AUTO BUILD ${CIRCLE_BUILD_URL}"
             git remote add upstream https://${GITHUB_ACCESS_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
