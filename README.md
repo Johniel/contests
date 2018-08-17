@@ -1,11 +1,12 @@
-# Competitive Programming Source Codes
+# Programming Contest Source Codes
 
-+ [Codeforces](http://codeforces.com/profile/___Johniel)
+## Profiles
 + [AOJ](http://judge.u-aizu.ac.jp/onlinejudge/user.jsp?id=___Johniel)
 + [AtCoder](https://beta.atcoder.jp/users/Johniel)
++ [Codeforces](http://codeforces.com/profile/___Johniel)
 + [Topcoder](https://www.topcoder.com/members/___watanabe/)
 + [UVa](http://uhunt.felix-halim.net/id/10883)
 
 ## Solved Problems
-+ [codeforces](docs/codeforces/README.md)
-+ [atcoder](docs/atcoder/README.md)
++ [AtCoder](https://johniel.github.io/contests/docs/atcoder/)
++ [Codeforces](https://johniel.github.io/contests/docs/codeforces/)
