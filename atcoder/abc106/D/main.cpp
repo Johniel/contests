@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   int n, m, q;
   while (cin >> n >> m >> q) {
     vector<lli> g[n];
-    fill(g, g + n, vector<lli>(n));
+    fill(g, g + n, vector<lli>(n, 0));
 
     for (int i = 0; i < m; ++i) {
       int a, b;
