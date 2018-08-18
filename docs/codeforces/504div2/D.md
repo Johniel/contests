@@ -1,4 +1,11 @@
-# codeforces/504div2/D
+# CF504Div2D
+a[i] = a[j] のとき、 a[k] < a[i] (i < k < j) となるような要素が存在しなければ良い。
+
+調べるにはRMQを使う。
+
+１つ以上連続する 0 はその左右の大きい方の数字で埋める。
+
+a に q が含まれていなければいけないことに注意する。
 
 ## Codes
 ```cpp
@@ -125,11 +132,6 @@ int main(int argc, char *argv[])
     int d[a.size()];
     copy(a.begin(), a.end(), d);
     RMQ rmq = RMQ(d, a.size());
-
-    // cout << a << endl;
-    // cout << b << endl;
-    // cout << c << endl;
-    // each (i, a) cout << i << ": " << mn[i] << ' ' << mx[i] << ", " << rmq.query(mn[i], mx[i]) << endl;
     
     bool f = *max_element(a.begin(), a.end()) == q;
     each (i, a) {

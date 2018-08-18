@@ -42,7 +42,6 @@ int main(int argc, char *argv[])
     b = min(b, n);
     a = k - b;
 
-    // cout << make_pair(a, b) << endl;
     cout << max(0LL, (b - a + 1) / 2) << endl;
   }
   
