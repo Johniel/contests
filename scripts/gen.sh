@@ -28,8 +28,9 @@ function gen(){
         fi
     done
     echo "---" >> $outputFile
-    echo "[toppage](https://johniel.github.io/contests/)" >> $outputFile
-    echo "[index](https://johniel.github.io/contests/docs/$2)" >> $outputFile
+    echo "+ [toppage](https://johniel.github.io/contests/)" >> $outputFile
+    echo "+ [index](https://johniel.github.io/contests/docs/$2)" >> $outputFile
+    echo "+ [repository](https://github.com/Johniel/contests/tree/master/$1)" >> $outputFile
 }
 
 function index(){
