@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-    int n, m, q;
+  int n, m, q;
   while (cin >> n >> m >> q) {
     vector<vector<lli>> g(n);
     fill(g.begin(), g.end(), vector<lli>(n, 0));
