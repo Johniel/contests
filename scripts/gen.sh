@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function gen(){
     echo "[GEN]" docs/$1.md
             
@@ -18,12 +20,16 @@ function gen(){
         filename=$(basename $filepath)
         if [[ $filename != "README.md" ]]; then
             extension="${filename##*.}"
+            echo $filename >> $outputFile
             echo '```'$extension >> $outputFile
             cat $filepath >> $outputFile
             echo '```' >> $outputFile
+            echo >> $outputFile
         fi
-
     done
+    echo "---" >> $outputFile
+    echo "[toppage](https://johniel.github.io/contests/)" >> $outputFile
+    echo "[index](https://johniel.github.io/contests/docs/$2)" >> $outputFile
 }
 
 function index(){
@@ -44,7 +50,7 @@ function index(){
 targets=$(git ls-files ./codeforces | xargs dirname | sort --unique)
 for target in ${targets[@]}; do
     if [[ "$target" != "codeforces" ]]; then
-        gen $target
+        gen $target codeforces
     fi
 done
 index codeforces
@@ -52,7 +58,7 @@ index codeforces
 targets=$(git ls-files ./atcoder | xargs dirname | sort --unique)
 for target in ${targets[@]}; do
     if [[ "$target" != "atcoder" ]]; then
-        gen $target
+        gen $target atcoder
     fi
 done
 index atcoder
