@@ -6,6 +6,7 @@ mで割った余り毎に `x*(x-1)/2` パターンある。
 `sum(0, i)%m==0` となる場合も忘れない。 
 
 ## Codes
+main.cpp
 ```cpp
 #include <bits/stdc++.h>
 
@@ -60,3 +61,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/atcoder)

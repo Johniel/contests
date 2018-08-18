@@ -2,6 +2,7 @@
 リーダーの位置を決め打ちして、その左右にあるEとWの個数を累積和で数える。
 
 ## Codes
+main.cpp
 ```cpp
 #include <bits/stdc++.h>
 
@@ -62,3 +63,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/atcoder)

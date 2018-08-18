@@ -1,6 +1,7 @@
 # atcoder/abc075/C
 
 ## Codes
+main.cpp
 ```cpp
 // uva 796
 #include <iostream>
@@ -115,3 +116,7 @@ int main(void)
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/atcoder)

@@ -5,6 +5,7 @@
 クエリとパターンが同じ長さかは確認したものの、注意深さが欠けていた。
 
 ## Codes
+main.cpp
 ```cpp
 #include <bits/stdc++.h>
 
@@ -70,3 +71,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/codeforces)

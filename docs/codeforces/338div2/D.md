@@ -1,6 +1,7 @@
 # codeforces/338div2/D
 
 ## Codes
+main.rb
 ```rb
 MOD = 1000000000 + 7
 
@@ -43,3 +44,7 @@ while s = $stdin.gets() do
   puts(ret)
 end
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/codeforces)

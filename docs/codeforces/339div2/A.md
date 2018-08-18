@@ -1,6 +1,7 @@
 # codeforces/339div2/A
 
 ## Codes
+main.rb
 ```rb
 require 'scanf'
 
@@ -25,3 +26,7 @@ while s = $stdin.gets() do
   end
 end
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/codeforces)

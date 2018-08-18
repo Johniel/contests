@@ -2,6 +2,7 @@
 場合分けがややこしかった。
 
 ## Codes
+main.cpp
 ```cpp
 #include <bits/stdc++.h>
 
@@ -139,3 +140,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/codeforces)

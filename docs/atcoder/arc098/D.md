@@ -3,6 +3,7 @@
 区間の端から|していき、&の結果が０でなくなるまで尺取り法で区間を伸ばしていけば線形時間で数えられる。<br/>
 
 ## Codes
+main.cpp
 ```cpp
 #include <bits/stdc++.h>
 
@@ -56,3 +57,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/atcoder)

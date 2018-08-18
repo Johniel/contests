@@ -1,6 +1,7 @@
 # codeforces/327div2/C
 
 ## Codes
+gen.php
 ```php
 <?php
 for ($a = 0; $a <= 1; ++$a) {
@@ -11,6 +12,8 @@ for ($a = 0; $a <= 1; ++$a) {
         }
     }   
 }```
+
+main.cpp
 ```cpp
 #include <bits/stdc++.h>
 
@@ -182,3 +185,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 ```
+
+---
+[toppage](https://johniel.github.io/contests/)
+[index](https://johniel.github.io/contests/docs/codeforces)
