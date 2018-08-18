@@ -121,11 +121,6 @@ int main(int argc, char *argv[])
     int d[a.size()];
     copy(a.begin(), a.end(), d);
     RMQ rmq = RMQ(d, a.size());
-
-    // cout << a << endl;
-    // cout << b << endl;
-    // cout << c << endl;
-    // each (i, a) cout << i << ": " << mn[i] << ' ' << mx[i] << ", " << rmq.query(mn[i], mx[i]) << endl;
     
     bool f = *max_element(a.begin(), a.end()) == q;
     each (i, a) {

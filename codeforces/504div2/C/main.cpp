@@ -46,11 +46,9 @@ int main(int argc, char *argv[])
       }
     }
 
-    // for (int i = 0; i < s.size(); ++i) cout << color[i] << ' '; cout << endl;
-    
     string u;
     for (int i = 0; i < s.size(); ++i) {
-      if (k/2 > color[i]) u += s[i];
+      if (k / 2 > color[i]) u += s[i];
     }
     assert(u.size() == k);
     cout << u << endl;  
