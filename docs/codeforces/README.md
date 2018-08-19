@@ -201,6 +201,7 @@
 + [505div2/A](505div2/A.md)
 + [505div2/B](505div2/B.md)
 + [505div2/C](505div2/C.md)
++ [505div2/D](505div2/D.md)
 + [GoodBye2015/A](GoodBye2015/A.md)
 + [GoodBye2015/B](GoodBye2015/B.md)
 + [GoodBye2015/C](GoodBye2015/C.md)
