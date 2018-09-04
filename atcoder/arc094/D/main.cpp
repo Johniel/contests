@@ -45,12 +45,13 @@ int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
-  
+
   int q;
   while (cin >> q) {
     while (q--) {
       lli a, b;
-      unless (cin >> a >> b) return 0;
+      cin >> a >> b;
+
       lli small = 0;
       lli large = 1e11 + 1;
       while (small + 1 < large) {
