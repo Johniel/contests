@@ -74,6 +74,7 @@
 + [arc079/E](arc079/E.md)
 + [arc085/C](arc085/C.md)
 + [arc085/D](arc085/D.md)
++ [arc085/E](arc085/E.md)
 + [arc086/C](arc086/C.md)
 + [arc086/D](arc086/D.md)
 + [arc092/C](arc092/C.md)
