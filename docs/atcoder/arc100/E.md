@@ -1,4 +1,6 @@
-# atcoder/arc100/E
+# ARC100 E
+高速ゼータ変換
+
 
 ## Codes
 main.cpp
