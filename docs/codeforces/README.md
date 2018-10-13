@@ -229,6 +229,7 @@
 + [e52/A](e52/A.md)
 + [e52/B](e52/B.md)
 + [e52/C](e52/C.md)
++ [e52/D](e52/D.md)
 + [hello2018/A](hello2018/A.md)
 + [hello2018/B](hello2018/B.md)
 + [hello2018/C](hello2018/C.md)
