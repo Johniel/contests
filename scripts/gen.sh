@@ -9,6 +9,7 @@ function gen(){
     if [[ -f $1/README.md ]]; then
         cat $1/README.md > docs/$1.md
     else
+        echo '{% raw %}' >> $outputFile
         echo "# $1" > $outputFile
     fi
 
@@ -31,6 +32,7 @@ function gen(){
     echo "+ [toppage](https://johniel.github.io/contests/)" >> $outputFile
     echo "+ [index](https://johniel.github.io/contests/docs/$2)" >> $outputFile
     echo "+ [repository](https://github.com/Johniel/contests/tree/master/$1)" >> $outputFile
+    echo '{% endraw %}' >> $outputFile
 }
 
 function index(){
