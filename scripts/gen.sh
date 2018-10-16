@@ -21,11 +21,11 @@ function gen(){
         if [[ $filename != "README.md" ]]; then
             extension="${filename##*.}"
             echo $filename >> $outputFile
-            echo '{% raw %}{{' >> $outputFile
+            echo '{% raw %}' >> $outputFile
             echo '```'$extension >> $outputFile
             cat $filepath >> $outputFile
-            echo '}}{% endraw %}' >> $outputFile
             echo '```' >> $outputFile
+            echo '{% endraw %}' >> $outputFile
         fi
     done
     echo "---" >> $outputFile
