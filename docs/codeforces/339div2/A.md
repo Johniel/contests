@@ -2,7 +2,7 @@
 
 ## Codes
 main.rb
-{% raw %}{{
+{% raw %}
 ```rb
 require 'scanf'
 
@@ -26,8 +26,8 @@ while s = $stdin.gets() do
     puts("-1");
   end
 end
-}}{% endraw %}
 ```
+{% endraw %}
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/codeforces)
