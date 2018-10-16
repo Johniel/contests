@@ -2,6 +2,7 @@
 
 ## Codes
 main.rb
+{% raw %}{{
 ```rb
 MOD = 1000000000 + 7
 
@@ -43,8 +44,8 @@ while s = $stdin.gets() do
   end
   puts(ret)
 end
+}}{% endraw %}
 ```
-
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/codeforces)

@@ -2,6 +2,7 @@
 
 ## Codes
 main.cpp
+{% raw %}{{
 ```cpp
 // uva 796
 #include <iostream>
@@ -115,8 +116,8 @@ int main(void)
   // }
   return 0;
 }
+}}{% endraw %}
 ```
-
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)

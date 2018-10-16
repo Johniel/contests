@@ -5,6 +5,7 @@ DP[a][b][c]=最小手数
 
 ## Codes
 main.cpp
+{% raw %}{{
 ```cpp
 #include <bits/stdc++.h>
 
@@ -68,8 +69,8 @@ int main(int argc, char *argv[])
   
   return 0;
 }
+}}{% endraw %}
 ```
-
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
