@@ -2,7 +2,6 @@
 
 ## Codes
 gen.php
-{% raw %}{{
 ```php
 <?php
 for ($a = 0; $a <= 1; ++$a) {
@@ -12,10 +11,8 @@ for ($a = 0; $a <= 1; ++$a) {
             echo $a . " " . $b . " " . $c . "\n";
         }
     }   
-}}}{% endraw %}
-```
+}```
 main.cpp
-{% raw %}{{
 ```cpp
 #include <bits/stdc++.h>
 
@@ -186,7 +183,6 @@ int main(int argc, char *argv[])
   }
   return 0;
 }
-}}{% endraw %}
 ```
 ---
 + [toppage](https://johniel.github.io/contests/)

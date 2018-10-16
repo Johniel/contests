@@ -3,7 +3,6 @@ modの結果には周期性があって、各aiについて最大（ai - 1）に
 
 ## Codes
 main.cpp
-{% raw %}{{
 ```cpp
 #include <bits/stdc++.h>
 
@@ -46,7 +45,6 @@ int main(int argc, char *argv[])
   
   return 0;
 }
-}}{% endraw %}
 ```
 ---
 + [toppage](https://johniel.github.io/contests/)

@@ -2,7 +2,6 @@
 
 ## Codes
 main.cpp
-{% raw %}{{
 ```cpp
 #include <algorithm>
 #include <list>
@@ -44,7 +43,6 @@ int main(int argc, char *argv[])
   
   return 0;
 }
-}}{% endraw %}
 ```
 ---
 + [toppage](https://johniel.github.io/contests/)
