@@ -21,8 +21,10 @@ function gen(){
         if [[ $filename != "README.md" ]]; then
             extension="${filename##*.}"
             echo $filename >> $outputFile
+            echo '{% raw %}{{' >> $outputFile
             echo '```'$extension >> $outputFile
             cat $filepath >> $outputFile
+            echo '}}{% endraw %}' >> $outputFile
             echo '```' >> $outputFile
         fi
     done
@@ -30,7 +32,6 @@ function gen(){
     echo "+ [toppage](https://johniel.github.io/contests/)" >> $outputFile
     echo "+ [index](https://johniel.github.io/contests/docs/$2)" >> $outputFile
     echo "+ [repository](https://github.com/Johniel/contests/tree/master/$1)" >> $outputFile
-    echo '{% endraw %}' >> $outputFile
 }
 
 function index(){
