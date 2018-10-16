@@ -49,3 +49,4 @@ end
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/codeforces)
 + [repository](https://github.com/Johniel/contests/tree/master/codeforces/338div2/D)
+{% endraw %}

@@ -68,3 +68,4 @@ int main(int argc, char *argv[])
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
 + [repository](https://github.com/Johniel/contests/tree/master/atcoder/arc098/C)
+{% endraw %}
