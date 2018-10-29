@@ -19,23 +19,19 @@ template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
 
 const int MAX_N = 2 * 10e5;
 const int inf = 1 << 29;
-int dat1[2 * MAX_N - 1];
-int dat2[2 * MAX_N - 1];
 
+template<typename T>
 struct RMQ {
   int n;
-  int* dat;
+  vector<T> dat;
 
-  RMQ(int n_, int* dat_) {
-    dat = dat_;
+  RMQ(int n_) {
     n = 1;
     while (n < n_) n *= 2;
-    for (int i = 0; i < 2 * n -1; ++i) {
-      dat[i] = inf;
-    }
+    dat = vector<T>(2 * n - 1, inf);
   }
 
-  void update(int k, int a) {
+  void update(int k, T a) {
     k += n - 1;
     dat[k] = a;
     while (k > 0) {
@@ -44,11 +40,11 @@ struct RMQ {
     }
   }
 
-  int query(int a, int b) {
+  T query(size_t a, size_t b) {
     return query(a, b, 0, 0, n);
   }
 
-  int query(int a, int b, int k, int l, int r) {
+  T query(size_t a, size_t b, size_t k, size_t l, size_t r) {
     if (r <= a || b <= l) return inf;
     if (a <= l && r <= b) return dat[k];
 
@@ -75,8 +71,8 @@ int main(int argc, char *argv[])
       idx[a[i]] = i;
     }
 
-    RMQ odd(n, dat1);
-    RMQ even(n, dat2);
+    RMQ<int> odd(n);
+    RMQ<int> even(n);
 
     for (int i = 0; i < n; ++i) {
       if (i % 2) odd.update(i, a[i]);
