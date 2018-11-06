@@ -2,6 +2,8 @@
 [AtCoderProblems](https://kenkoooo.com/atcoder/?user=Johniel&rivals=&kind=category)
 
 ## Solutions
++ [abc067/A](abc067/A.md)
++ [abc067/B](abc067/B.md)
 + [abc069/A](abc069/A.md)
 + [abc069/B](abc069/B.md)
 + [abc075/A](abc075/A.md)
@@ -121,6 +123,7 @@
 + [arc075/E](arc075/E.md)
 + [arc077/C](arc077/C.md)
 + [arc077/D](arc077/D.md)
++ [arc078/C](arc078/C.md)
 + [arc079/C](arc079/C.md)
 + [arc079/E](arc079/E.md)
 + [arc080/C](arc080/C.md)
