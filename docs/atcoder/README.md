@@ -124,6 +124,7 @@
 + [arc077/C](arc077/C.md)
 + [arc077/D](arc077/D.md)
 + [arc078/C](arc078/C.md)
++ [arc078/D](arc078/D.md)
 + [arc079/C](arc079/C.md)
 + [arc079/E](arc079/E.md)
 + [arc080/C](arc080/C.md)
