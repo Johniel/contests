@@ -2,6 +2,7 @@
 [AtCoderProblems](https://kenkoooo.com/atcoder/?user=Johniel&rivals=&kind=category)
 
 ## Solutions
++ [HTTF2018](HTTF2018.md)
 + [abc067/A](abc067/A.md)
 + [abc067/B](abc067/B.md)
 + [abc069/A](abc069/A.md)
@@ -110,7 +111,6 @@
 + [agc021/A](agc021/A.md)
 + [agc026/A](agc026/A.md)
 + [agc026/B](agc026/B.md)
-+ [agc026/C](agc026/C.md)
 + [agc028/A](agc028/A.md)
 + [arc051/A](arc051/A.md)
 + [arc051/B](arc051/B.md)
