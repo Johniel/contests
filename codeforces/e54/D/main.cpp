@@ -17,15 +17,11 @@ template<typename T> istream& operator >> (istream& is, vector<T>& v) { each (i,
 template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
 template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
 
-struct E {
-  int src, dst;
-  lli cost;
-};
-
 const int N = 3 * 1e5 + 10;
-vector<E> g[N];
+vector<int> g[N];
 vector<int> h[N];
-lli cost[N];
+lli dist[N];
+int parent[N];
 bool vis[N];
 const lli inf = 1LL << 60;
 
@@ -36,73 +32,71 @@ int main(int argc, char *argv[])
 
   int n, m, k;
   while (cin >> n >> m >> k) {
-    fill(g, g + N, vector<E>());
+    fill(g, g + N, vector<int>());
     fill(h, h + N, vector<int>());
-    fill(cost, cost + N, inf);
+    fill(dist, dist + N, inf);
     fill(vis, vis + N, false);
+    fill(parent, parent + N, -1);
 
+    map<pair<int, int>, lli> cost;
     map<pair<int, int>, int> name;
-    map<int, pair<int, int>> es;
 
     for (int i = 0; i < m; ++i) {
       int a, b, c;
       cin >> a >> b >> c;
       --a;
       --b;
-      g[a].push_back(E{a, b, c});
-      g[b].push_back(E{b, a, c});
+      g[a].push_back(b);
+      g[b].push_back(a);
 
-      pair<int, int> x = make_pair(a, b);
-      pair<int, int> y = make_pair(b, a);
+      pair<int, int> x = {a, b};
+      pair<int, int> y = {b, a};
+      cost[x] = cost[y] = c;
       name[x] = name[y] =  i;
-      es[i] = x;
     }
 
-    priority_queue<pair<int, pair<int, int>>> q;
-    cost[0] = 0;
-    vis[0] = true;
-    q.push(make_pair(0, make_pair(0, -1)));
+    priority_queue<pair<lli, int>> q;
+    dist[0] = 0;
+    q.push(make_pair(0, 0));
     
     while (q.size()) {
-      pair<int, pair<int, int>> p = q.top();
+      pair<lli, int> p = q.top();
       q.pop();
-      int C = -1 * p.first;
-      int curr = p.second.first;
-      int no = p.second.second;
-      if (cost[curr] != C) continue;
-      if (!vis[curr]) {
-        pair<int, int> e = es[no];
-        h[e.first].push_back(e.second);
-        h[e.second].push_back(e.first);
-        vis[curr] = true;
-        // cout << make_pair(e.first + 1, e.second + 1) << endl;
-      }
-      each (e, g[curr]) {
-        if (cost[e.dst] > cost[e.src] + e.cost) {
-          cost[e.dst] = cost[e.src] + e.cost;
-          pair<int, int> key = make_pair(e.src, e.dst);
-          q.push(make_pair(-cost[e.dst], make_pair(e.dst, name[key])));
+      lli C = -1 * p.first;
+      int curr = p.second;
+      if (dist[curr] != C) continue;
+      each (next, g[curr]) {
+        pair<int, int> e = {curr, next};
+        if (dist[next] > dist[curr] + cost[e]) {
+          dist[next] = dist[curr] + cost[e];
+          q.push(make_pair(-dist[next], next));
+          parent[next] = curr;
         }
+      }
+    }
+
+    for (int i = 0; i < N; ++i) {
+      if (parent[i] != -1) {
+        h[parent[i]].push_back(i);
       }
     }
 
     vector<int> u;
     {
-      set<int> visited;
-      visited.insert(0);
       queue<int> q;
+      vis[0] = true;
       for (q.push(0); q.size(); q.pop()) {
         int curr = q.front();
         each (next, h[curr]) {
-          if (visited.count(next)) continue;
+          if (vis[next]) continue;
           q.push(next);
-          visited.insert(next);
-          pair<int, int> key = make_pair(curr, next);
-          u.push_back(name[key]);
+          vis[next] = true;
+          pair<int, int> e = {curr, next};
+          u.push_back(name[e]);
         }
       }
     }
-    // cout << "u: " << u << endl;
+
     while (k < u.size()) u.pop_back();
     cout << u.size() << endl;
     each (i, u) cout << i + 1 << ' '; cout << endl;
