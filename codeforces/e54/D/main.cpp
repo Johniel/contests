@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
     priority_queue<pair<lli, int>> q;
     dist[0] = 0;
-    q.push(make_pair(0, 0));
+    q.push({0, 0});
     
     while (q.size()) {
       pair<lli, int> p = q.top();
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
         pair<int, int> e = {curr, next};
         if (dist[next] > dist[curr] + cost[e]) {
           dist[next] = dist[curr] + cost[e];
-          q.push(make_pair(-dist[next], next));
+          q.push({-dist[next], next});
           parent[next] = curr;
         }
       }
