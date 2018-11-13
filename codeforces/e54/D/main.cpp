@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
       g[a].push_back(b);
       g[b].push_back(a);
 
-      pair<int, int> x = {a, b};
-      pair<int, int> y = {b, a};
+      auto x = make_pair(a, b);
+      auto y = make_pair(b, a);
       cost[x] = cost[y] = c;
       name[x] = name[y] =  i;
     }
@@ -58,15 +58,15 @@ int main(int argc, char *argv[])
     priority_queue<pair<lli, int>> q;
     dist[0] = 0;
     q.push({0, 0});
-    
+
     while (q.size()) {
-      pair<lli, int> p = q.top();
+      auto p = q.top();
       q.pop();
-      lli C = -1 * p.first;
-      int curr = p.second;
+      auto C = -1 * p.first;
+      auto curr = p.second;
       if (dist[curr] != C) continue;
       each (next, g[curr]) {
-        pair<int, int> e = {curr, next};
+        auto e = make_pair(curr, next);
         if (dist[next] > dist[curr] + cost[e]) {
           dist[next] = dist[curr] + cost[e];
           q.push({-dist[next], next});
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
           if (vis[next]) continue;
           q.push(next);
           vis[next] = true;
-          pair<int, int> e = {curr, next};
+          auto e = make_pair(curr, next);
           u.push_back(name[e]);
         }
       }
@@ -101,6 +101,6 @@ int main(int argc, char *argv[])
     cout << u.size() << endl;
     each (i, u) cout << i + 1 << ' '; cout << endl;
   }
-  
+
   return 0;
 }
