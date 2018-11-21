@@ -130,6 +130,8 @@
 + [arc067/D](arc067/D.md)
 + [arc072/C](arc072/C.md)
 + [arc072/D](arc072/D.md)
++ [arc074/C](arc074/C.md)
++ [arc074/D](arc074/D.md)
 + [arc075/C](arc075/C.md)
 + [arc075/D](arc075/D.md)
 + [arc075/E](arc075/E.md)
