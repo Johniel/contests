@@ -3,6 +3,8 @@
 
 ## Solutions
 + [HTTF2018](HTTF2018.md)
++ [abc042/A](abc042/A.md)
++ [abc042/B](abc042/B.md)
 + [abc053/A](abc053/A.md)
 + [abc053/B](abc053/B.md)
 + [abc062/A](abc062/A.md)
@@ -129,6 +131,7 @@
 + [agc028/A](agc028/A.md)
 + [arc051/A](arc051/A.md)
 + [arc051/B](arc051/B.md)
++ [arc058/C](arc058/C.md)
 + [arc059/C](arc059/C.md)
 + [arc059/D](arc059/D.md)
 + [arc060/C](arc060/C.md)
