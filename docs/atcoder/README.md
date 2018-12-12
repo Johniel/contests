@@ -113,6 +113,7 @@
 + [agc003/C](agc003/C.md)
 + [agc004/A](agc004/A.md)
 + [agc004/B](agc004/B.md)
++ [agc004/C](agc004/C.md)
 + [agc009/A](agc009/A.md)
 + [agc009/B](agc009/B.md)
 + [agc010/A](agc010/A.md)
