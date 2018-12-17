@@ -224,4 +224,8 @@
 + [arc102/C](arc102/C.md)
 + [arc102/D](arc102/D.md)
 + [arc103/C](arc103/C.md)
++ [tdpc/A](tdpc/A.md)
++ [tdpc/B](tdpc/B.md)
++ [tdpc/D](tdpc/D.md)
++ [tdpc/E](tdpc/E.md)
 + [thanksfes2017/H](thanksfes2017/H.md)
