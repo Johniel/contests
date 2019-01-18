@@ -236,6 +236,7 @@
 + [edpc/J](edpc/J.md)
 + [edpc/K](edpc/K.md)
 + [edpc/L](edpc/L.md)
++ [edpc/M](edpc/M.md)
 + [edpc/N](edpc/N.md)
 + [edpc/O](edpc/O.md)
 + [edpc/P](edpc/P.md)
