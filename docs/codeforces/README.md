@@ -233,6 +233,8 @@
 + [533div2/B](533div2/B.md)
 + [533div2/C](533div2/C.md)
 + [533div2/D](533div2/D.md)
++ [538div2/A](538div2/A.md)
++ [538div2/B](538div2/B.md)
 + [GoodBye2015/A](GoodBye2015/A.md)
 + [GoodBye2015/B](GoodBye2015/B.md)
 + [GoodBye2015/C](GoodBye2015/C.md)
