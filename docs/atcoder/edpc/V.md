@@ -95,7 +95,6 @@ int main(int argc, char *argv[])
       each (j, g[i]) (x *= memo[make_pair(i, j)] + 1) %= mod;
       cout << x << endl;
     }
-    // break;
   }
 
   return 0;
