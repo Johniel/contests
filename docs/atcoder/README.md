@@ -277,6 +277,7 @@
 + [edpc/T](edpc/T.md)
 + [edpc/U](edpc/U.md)
 + [edpc/V](edpc/V.md)
++ [edpc/W](edpc/W.md)
 + [nikkei/2019/qual/A](nikkei/2019/qual/A.md)
 + [nikkei/2019/qual/B](nikkei/2019/qual/B.md)
 + [nikkei/2019/qual/C](nikkei/2019/qual/C.md)
