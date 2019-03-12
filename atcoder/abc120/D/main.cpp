@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
       if (uf.same(e.first, e.second)) {
         continue;
       }
-      
+
       x += (uf.size(e.first) - 1LL) * uf.size(e.first) / 2;
       x += (uf.size(e.second) - 1LL) * uf.size(e.second) / 2;
 
