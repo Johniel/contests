@@ -21,39 +21,33 @@ class UnionFind {
 public:
   UnionFind(int n) {
     r.resize(n, 0);
-    s.resize(n, 1);
-    p.resize(n);
-    for (int i = 0; i < n; ++i) {
-      p[i] = i;
-    }
+    p.resize(n, -1);
   }
   void unite(int a, int b) {
     a = find(a);
     b = find(b);
-    if (a == b) {
-      return ;
-    }
-
-    s[a] = (s[b] = s[a] + s[b]);
+    if (a == b) return ;
     if (r[a] > r[b]) {
+      p[a] += p[b];
       p[b] = a;
     } else {
+      p[b] += p[a];
       p[a] = b;
       if(r[a] == r[b]) r[b]++;
     }
     return ;
   }
   int find(int a) {
-    return (a == p[a]) ? a : p[a] = find(p[a]);
+    return (p[a] < 0) ? a : p[a] = find(p[a]);
   }
   bool same(int a, int b) {
     return find(a) == find(b);
   }
   size_t size(int n) {
-    return s[find(n)];
+    return -p[find(n)];
   }
 private:
-  vector<int> r, p, s;
+  vector<int> r, p;
 };
 
 int main(int argc, char *argv[])
