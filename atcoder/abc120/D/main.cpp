@@ -17,29 +17,37 @@ template<typename T> istream& operator >> (istream& is, vector<T>& v) { each (i,
 template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
 template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
 
-struct UnionFind {
-  vector<int> data;
-  UnionFind(int size) : data(size, -1) { }
-  bool unite(int x, int y) {
-    x = root(x); y = root(y);
-    if (x != y) {
-      if (data[y] < data[x]) swap(x, y);
-      data[x] += data[y]; data[y] = x;
+class UnionFind {
+public:
+  UnionFind(int n) {
+    r.resize(n, 0);
+    p.resize(n, -1);
+  }
+  void unite(int a, int b) {
+    a = find(a);
+    b = find(b);
+    if (a == b) return ;
+    if (r[a] > r[b]) {
+      p[a] += p[b];
+      p[b] = a;
+    } else {
+      p[b] += p[a];
+      p[a] = b;
+      if(r[a] == r[b]) r[b]++;
     }
-    return x != y;
+    return ;
   }
-  bool findSet(int x, int y) {
-    return root(x) == root(y);
+  int find(int a) {
+    return (p[a] < 0) ? a : p[a] = find(p[a]);
   }
-  int root(int x) {
-    return data[x] < 0 ? x : data[x] = root(data[x]);
+  bool same(int a, int b) {
+    return find(a) == find(b);
   }
-  lli size(int x) {
-    return -data[root(x)];
+  size_t size(int n) {
+    return -p[find(n)];
   }
-  bool isSameSet(int x, int y) {
-    return findSet(x, y);
-  }
+private:
+  vector<int> r, p;
 };
 
 int main(int argc, char *argv[])
@@ -59,16 +67,16 @@ int main(int argc, char *argv[])
     lli x = (n - 1) * n / 2;
     each (e, v) {
       u.push_back(x);
-      if (uf.isSameSet(e.first, e.second)) {
+      if (uf.same(e.first, e.second)) {
         continue;
       }
-      
-      x += (uf.size(e.first) - 1) * uf.size(e.first) / 2;
-      x += (uf.size(e.second) - 1) * uf.size(e.second) / 2;
+
+      x += (uf.size(e.first) - 1LL) * uf.size(e.first) / 2;
+      x += (uf.size(e.second) - 1LL) * uf.size(e.second) / 2;
 
       uf.unite(e.first, e.second);
 
-      x -= (uf.size(e.first) - 1) * uf.size(e.first) / 2;
+      x -= (uf.size(e.first) - 1LL) * uf.size(e.first) / 2;
     }
     reverse(u.begin(), u.end());
     each (i, u) cout << i << endl;
