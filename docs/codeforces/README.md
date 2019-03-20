@@ -249,6 +249,7 @@
 + [547div3/E](547div3/E.md)
 + [547div3/F1](547div3/F1.md)
 + [547div3/F2](547div3/F2.md)
++ [547div3/G](547div3/G.md)
 + [GoodBye2015/A](GoodBye2015/A.md)
 + [GoodBye2015/B](GoodBye2015/B.md)
 + [GoodBye2015/C](GoodBye2015/C.md)
