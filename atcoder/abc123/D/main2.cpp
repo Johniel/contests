@@ -1,4 +1,4 @@
-// atcoder/abc123/D/main.cpp
+// atcoder/abc123/D/main2.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
