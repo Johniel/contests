@@ -24,29 +24,44 @@ int main(int argc, char *argv[])
 
   int n, k;
   while (cin >> n >> k) {
-    vector<pair<int, int>> v(n);
-    for (int i = 0; i < n; ++i) {
-      cin >> v[i];
-    }
-    sort(v.begin(), v.end(), [] (auto a, auto b) { return a.second > b.second; });
-    vector<int> u;
-    set<int> vis;
+    using P = pair<lli, lli>;
+
+    vector<P> v(n);
+    cin >> v;
+    each (i, v) swap(i.first, i.second);
+    sort(begin(v), end(v));
+    reverse(begin(v), end(v));
+
+    lli mx = 0;
     lli sum = 0;
-    int cnt = 0;
-    each (i, v) {
-      if (vis.count(i.first)) {
-        u.push_back(i.second);
+
+    stack<P> a;
+    stack<P> b;
+    set<lli> vis;
+    for (int i = 0; i < v.size(); ++i) {
+      if (vis.count(v[i].second)) {
+        b.push(v[i]);
+      } else {
+        a.push(v[i]);
+        vis.insert(v[i].second);
       }
-      sum += i.second;
-      ++cnt;
-      vis.insert(i.first);
-      if (k < cnt) {
-        sum -= u.back();
-        --cnt;
-        u.pop_back();
+      sum += v[i].first;
+      if (k < a.size() + b.size()) {
+        if (b.size()) {
+          P j = b.top();
+          b.pop();
+          sum -= j.first;
+        } else {
+          P j = a.top();
+          a.pop();
+          sum -= j.first;
+          vis.erase(j.second);
+        }
       }
+      lli y = vis.size();
+      setmax<lli>(mx, sum + y * y);
     }
-    cout << sum << endl;
+    cout << mx << endl;
   }
 
   return 0;
