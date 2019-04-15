@@ -56,6 +56,7 @@
 + [abc089/D](abc089/D.md)
 + [abc091/A](abc091/A.md)
 + [abc091/B](abc091/B.md)
++ [abc092/A](abc092/A.md)
 + [abc093/A](abc093/A.md)
 + [abc093/B](abc093/B.md)
 + [abc094/A](abc094/A.md)
