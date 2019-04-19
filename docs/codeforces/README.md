@@ -259,6 +259,7 @@
 + [552div3/D](552div3/D.md)
 + [552div3/E](552div3/E.md)
 + [552div3/F](552div3/F.md)
++ [552div3/G](552div3/G.md)
 + [GoodBye2015/A](GoodBye2015/A.md)
 + [GoodBye2015/B](GoodBye2015/B.md)
 + [GoodBye2015/C](GoodBye2015/C.md)
