@@ -260,6 +260,8 @@
 + [552div3/E](552div3/E.md)
 + [552div3/F](552div3/F.md)
 + [552div3/G](552div3/G.md)
++ [554div2/A](554div2/A.md)
++ [554div2/B](554div2/B.md)
 + [GoodBye2015/A](GoodBye2015/A.md)
 + [GoodBye2015/B](GoodBye2015/B.md)
 + [GoodBye2015/C](GoodBye2015/C.md)
