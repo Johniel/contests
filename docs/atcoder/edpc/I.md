@@ -1,4 +1,9 @@
-# atcoder/edpc/I
+# EDPC: I
+
+```
+// dp[i枚目まで投げた][表がj回出た] := 確率
+dp[i][j] := dp[i - 1][j - 1] * p[i] + dp[i - 1][j] * (1.0 - p[i])
+```
 
 ## Codes
 main.cpp

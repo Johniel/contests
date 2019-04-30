@@ -1,4 +1,12 @@
-# atcoder/edpc/H
+# EDPC: H
+よくあるやつ。
+
+```
+// .の場合
+dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+// #の場合
+dp[i][j] = 0
+```
 
 ## Codes
 main.cpp

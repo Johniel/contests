@@ -1,4 +1,12 @@
-# atcoder/edpc/O
+# EDPC: Q
+
+枝刈りしないとTLEする。なお、 `__builtin_popcount` は `O(1)` です。
+
+状態はビットで管理すると良い。
+
+```
+dp[i番目まで相手を決めた][誰が残っているか] := パターン数
+```
 
 ## Codes
 main.cpp

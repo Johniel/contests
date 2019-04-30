@@ -1,4 +1,11 @@
-# atcoder/edpc/K
+# EDPC: K
+
+ゲーム理論の初歩。
+
+```
+// f(石の個数) = 先手必勝 or 後手必勝
+f(i) = max(f(i - aj) ^ 1) // i <= aj
+```
 
 ## Codes
 main.cpp
