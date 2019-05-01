@@ -310,6 +310,7 @@
 + [edpc/U](edpc/U.md)
 + [edpc/V](edpc/V.md)
 + [edpc/W](edpc/W.md)
++ [edpc/X](edpc/X.md)
 + [edpc/Y](edpc/Y.md)
 + [edpc/Z](edpc/Z.md)
 + [nikkei/2019/qual/A](nikkei/2019/qual/A.md)
