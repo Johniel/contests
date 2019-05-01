@@ -1,4 +1,4 @@
-# EDPC: Q
+# EDPC: O
 
 枝刈りしないとTLEする。なお、 `__builtin_popcount` は `O(1)` です。
 
