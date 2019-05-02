@@ -71,10 +71,10 @@ int main(int argc, char *argv[])
     cin >> h;
     ConvexHullTrick<lli> cht;
     for (int i = 0; i < n; ++i) {
-      lli x = i ? cht.query(h[i]) + h[i] * h[i] + c : 0;
-      cht.append(-2 * h[i], h[i] * h[i] + x);
+      lli x = i ? cht.query(h[i]) + h[i] * h[i] : 0;
+      cht.append(-2 * h[i], h[i] * h[i] + x + c);
     }
-    cout << cht.query(h.back()) + h.back() * h.back() + c << endl;
+    cout << cht.query(h.back()) + h.back() * h.back() << endl;
   }
 
   return 0;
