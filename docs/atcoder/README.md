@@ -318,6 +318,7 @@
 + [nikkei/2019/qual/C](nikkei/2019/qual/C.md)
 + [tdpc/A](tdpc/A.md)
 + [tdpc/B](tdpc/B.md)
++ [tdpc/C](tdpc/C.md)
 + [tdpc/D](tdpc/D.md)
 + [tdpc/E](tdpc/E.md)
 + [thanksfes2017/H](thanksfes2017/H.md)
