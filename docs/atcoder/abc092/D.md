@@ -1,4 +1,4 @@
-# ABC088D
+# ABC092D
 
 <p>
 xorなのでビット毎に1になる個数をカウントし、その偶奇を見る。<br/>
@@ -81,4 +81,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc088/D)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc092/D)
