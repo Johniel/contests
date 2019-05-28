@@ -68,6 +68,7 @@
 + [abc091/A](abc091/A.md)
 + [abc091/B](abc091/B.md)
 + [abc092/A](abc092/A.md)
++ [abc092/C](abc092/C.md)
 + [abc092/D](abc092/D.md)
 + [abc093/A](abc093/A.md)
 + [abc093/B](abc093/B.md)
