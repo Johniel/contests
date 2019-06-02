@@ -225,6 +225,7 @@
 + [agc026/A](agc026/A.md)
 + [agc026/B](agc026/B.md)
 + [agc028/A](agc028/A.md)
++ [agc034/A](agc034/A.md)
 + [arc051/A](arc051/A.md)
 + [arc051/B](arc051/B.md)
 + [arc058/C](arc058/C.md)
