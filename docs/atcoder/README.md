@@ -362,6 +362,7 @@
 + [tdpc/H](tdpc/H.md)
 + [tdpc/I](tdpc/I.md)
 + [tdpc/J](tdpc/J.md)
++ [tdpc/K](tdpc/K.md)
 + [thanksfes2017/H](thanksfes2017/H.md)
 + [yahoo-procon/2019-qual/A](yahoo-procon/2019-qual/A.md)
 + [yahoo-procon/2019-qual/B](yahoo-procon/2019-qual/B.md)
