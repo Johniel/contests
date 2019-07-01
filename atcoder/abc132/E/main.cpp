@@ -24,7 +24,7 @@ template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
 const int N = 1e5 + 5;
 vector<int> g[N];
 
-int bfs01(int src, int dst)
+int bfs(int src, int dst)
 {
   static int cost[N][3];
   static bool vis[N][3];
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     }
     int s, t;
     cin >> s >> t;
-    cout << bfs01(s - 1, t - 1) << endl;
+    cout << bfs(s - 1, t - 1) << endl;
   }
   return 0;
 }
