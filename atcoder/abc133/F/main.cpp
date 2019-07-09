@@ -36,21 +36,21 @@ namespace LCA {
   }
 
 // ! keep parent[root] = root
-  void build(const int &node)
+  void build(int n)
   {
     const int root = 0;
-    fill(L, L + node, -1);
+    fill(L, L + n, -1);
     L[root] = 0;
-    for (int i = 0; i < node; ++i) {
+    for (int i = 0; i < n; ++i) {
       L[i] = addLevel(i);
     }
 
     fill(&T[0][0], &T[N - 1][LOG2N], -1);
-    for (int i = 0; i < node; ++i) {
+    for (int i = 0; i < n; ++i) {
       T[i][0] = parent[i];
     }
-    for(int j = 1; (1 << j) < node; ++j){
-      for (int i = 0; i < node; ++i) {
+    for(int j = 1; (1 << j) < n; ++j){
+      for (int i = 0; i < n; ++i) {
         if (T[i][j - 1] != -1) {
           T[i][j] = T[T[i][j - 1]][j - 1];
         }
