@@ -38,53 +38,37 @@ int main(int argc, char *argv[])
       }
     }
 
-    const int N = 1e5 + 5;
+    string u = s + s;
+    const int N = 1e5 * 2 + 5;
     static map<char, lli> next[N];
-    static map<char, lli> prev[N];
     for (int i = 0; i < N; ++i) {
-      prev[i].clear();
       next[i].clear();
     }
     map<char, lli> last;
 
     last.clear();
-    for (int i = s.size() - 1; 0 <= i; --i) {
+    for (int i = u.size() - 1; 0 <= i; --i) {
       next[i] = last;
-      last[s[i]] = i;
-    }
-
-    last.clear();
-    for (int i = 0; i < s.size(); ++i) {
-      prev[i] = last;
-      if (last.count(s[i]) == 0) {
-        last[s[i]] = i;
-      }
+      last[u[i]] = i;
     }
 
     lli x = 0, y = 0, z = 0;
     if (s[0] != t[0]) {
       char c = t[0];
       if (next[x].count(c)) {
-        x = next[x][c];
-      } else if (prev[x].count(c)) {
-        x = prev[x][c];
-      } else {
-        x = x;
+        y = x = next[x][c];
       }
-      y = x;
     }
 
     for (int i = 1; i < t.size(); ++i) {
       char c = t[i];
       if (next[x].count(c)) {
         y = next[x][c];
-      } else if (prev[x].count(c)) {
-        y = prev[x][c];
-        ++z;
-      } else {
-        y = x;
-        ++z;
       }
+      if (s.size() < y) {
+        y -= s.size();
+      }
+      z += (y <= x);
       x = y;
     }
     cout << y + z * s.size() + 1 << endl;
