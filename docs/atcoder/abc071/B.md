@@ -1,0 +1,55 @@
+# atcoder/abc071/B
+
+## Codes
+main.cpp
+{% raw %}
+```cpp
+// atcoder/abc071/B/main.cpp
+// author: @___Johniel
+// github: https://github.com/johniel/
+
+#include <bits/stdc++.h>
+
+#define each(i, c) for (auto& i : c)
+#define unless(cond) if (!(cond))
+
+using namespace std;
+
+typedef long long int lli;
+typedef unsigned long long ull;
+typedef complex<double> point;
+
+template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p) { os << "(" << p.first << "," << p.second << ")"; return os; }
+template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p) { is >> p.first >> p.second; return is; }
+template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; each (i, v) os << i << ","; os << ")"; return os; }
+template<typename T> istream& operator >> (istream& is, vector<T>& v) { each (i, v) is >> i; return is; }
+
+template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
+template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+int main(int argc, char *argv[])
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
+  string s;
+  while (cin >> s) {
+    set<char> vis(s.begin(), s.end());
+    string t = "None";
+    for (char c = 'a'; c <= 'z'; ++c) {
+      if (!vis.count(c)) {
+        t = string(1, c);
+        break ;
+      }
+    }
+    cout << t << endl;
+  }
+
+  return 0;
+}
+```
+{% endraw %}
+---
++ [toppage](https://johniel.github.io/contests/)
++ [index](https://johniel.github.io/contests/docs/atcoder)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc071/B)
