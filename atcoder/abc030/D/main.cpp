@@ -1,0 +1,69 @@
+// atcoder/abc030/D/main.cpp
+// author: @___Johniel
+// github: https://github.com/johniel/
+
+#include <bits/stdc++.h>
+
+#define each(i, c) for (auto& i : c)
+#define unless(cond) if (!(cond))
+
+using namespace std;
+
+typedef long long int lli;
+typedef unsigned long long ull;
+typedef complex<double> point;
+
+template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p) { os << "(" << p.first << "," << p.second << ")"; return os; }
+template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p) { is >> p.first >> p.second; return is; }
+template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; each (i, v) os << i << ","; os << ")"; return os; }
+template<typename T> istream& operator >> (istream& is, vector<T>& v) { each (i, v) is >> i; return is; }
+
+template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
+template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+#include <boost/multiprecision/cpp_int.hpp>
+using namespace boost::multiprecision;
+
+
+const int N = 1e5 + 5;
+int g[N], ord[N];
+string k;
+int a;
+int rec(int curr, int prev)
+{
+  if (ord[curr] != -1) {
+    cpp_int x(k);
+    x = x - cpp_int(to_string(ord[curr]));
+    x = x % cpp_int(to_string(1 + abs(ord[prev] - ord[curr])));
+    int y = ord[curr] + stoi(x.str());
+    assert(ord[curr] <= y && y <= ord[prev]);
+    for (int i = 0; i < N; ++i) {
+      if (ord[i] == y) {
+        return i;
+      }
+    }
+    assert(false);
+  }
+  ord[curr] = ord[prev] + 1;
+  if (k.size() < 20 && to_string(ord[curr]) == k) return curr;
+  return rec(g[curr], curr);
+}
+
+int main(int argc, char *argv[])
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
+  int n;
+  while (cin >> n >> a >> k) {
+    --a;
+    fill(ord, ord + N, -1);
+    for (int i = 0; i < n; ++i) {
+      cin >> g[i];
+      --g[i];
+    }
+    cout << rec(a, N - 1) + 1 << endl;
+  }
+
+  return 0;
+}
