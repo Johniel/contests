@@ -4,6 +4,8 @@
 ## Solutions
 + [HTTF2018](HTTF2018.md)
 + [abc013/D](abc013/D.md)
++ [abc014/A](abc014/A.md)
++ [abc014/B](abc014/B.md)
 + [abc014/D](abc014/D.md)
 + [abc021/C](abc021/C.md)
 + [abc030/A](abc030/A.md)
