@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
       lli ex = 0;
       each (i, a) ex ^= i;
 
-      lli sum = accumulate(a.begin(), a.end(), 0);
+      lli sum = accumulate(a.begin(), a.end(), 0LL);
 
       lli x = (ex * 2) ^ ex;
       cout << 2 << endl;
