@@ -18,6 +18,7 @@
 + [abc030/C](abc030/C.md)
 + [abc030/D](abc030/D.md)
 + [abc032/C](abc032/C.md)
++ [abc032/D](abc032/D.md)
 + [abc034/D](abc034/D.md)
 + [abc035/A](abc035/A.md)
 + [abc035/B](abc035/B.md)
