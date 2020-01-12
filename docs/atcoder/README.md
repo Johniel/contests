@@ -3,6 +3,10 @@
 
 ## Solutions
 + [HTTF2018](HTTF2018.md)
++ [abc001/A](abc001/A.md)
++ [abc001/B](abc001/B.md)
++ [abc001/C](abc001/C.md)
++ [abc001/D](abc001/D.md)
 + [abc002/A](abc002/A.md)
 + [abc002/B](abc002/B.md)
 + [abc002/C](abc002/C.md)
