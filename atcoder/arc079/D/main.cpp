@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
   lli k;
   while (cin >> k) {
     const int N = 50;
-    vector<lli> a(N, (N - 1) + k / 50);
+    vector<lli> a(N, (N - 1) + k / N);
     for (int i = 0; i < k % N; ++i) {
       a[i] += N;
     }
