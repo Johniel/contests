@@ -105,9 +105,7 @@ lli max_flow(int src, int snk)
   return sum;
 }
 
-inline lli min_cut(int src, int snk) {
-  return max_flow(src, snk);
-}
+auto min_cut = max_flow;
 
 int main(int argc, char *argv[])
 {
