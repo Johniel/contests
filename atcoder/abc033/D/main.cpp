@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
       for (int i = 0; i < n - 1; ++i) {
         double x = u[i] + (M_PI / 2.0);
         double y = u[i] + M_PI;
-        const double eps = 1e-10;
+        const double eps = 1e-9;
         auto itr1 = lower_bound(u.begin(), u.end(), x - eps);
         auto itr2 = upper_bound(u.begin(), u.end(), x + eps);
         auto itr3 = lower_bound(u.begin(), u.end(), y);
