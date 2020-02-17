@@ -28,19 +28,14 @@ template<typename T> using vec = vector<T>;
 
 constexpr lli mod = 1e9 + 7;
 
-const int N = 2 * 1e5 + 5;
-vector<int> g[N];
-
-const int inf = 1 << 29;
-
 template<typename T>
-struct RMQ {
+struct SegTree {
   int n;
   vector<T> dat;
   using F = function<T(T, T)>;
   F fn;
   T e;
-  RMQ(int n_, T e_, F fn_) {
+  SegTree(int n_, T e_, F fn_) {
     e = e_;
     fn = fn_;
     n = 1;
@@ -84,7 +79,9 @@ int main(int argc, char *argv[])
     cin >> a;
     each (i, a) --i;
 
-    fill(g, g + N, vector<int>());
+    const int N = 2 * 1e5 + 5;
+    vector<int> g[N];
+
     for (int i = 0; i < m; ++i) {
       int x, y;
       cin >> x >> y;
@@ -93,6 +90,8 @@ int main(int argc, char *argv[])
       g[x].push_back(y);
       g[y].push_back(x);
     }
+
+    const int inf = 1 << 29;
 
     auto bfs = [&] (int src) {
       vector<int> cost(n, inf);
@@ -114,7 +113,7 @@ int main(int argc, char *argv[])
     vector<int> d2 = bfs(n - 1);
     sort(a.begin(), a.end(), [&] (int i, int j) { return d1[i] < d1[j]; });
 
-    RMQ<int> rmq(a.size(), -(1 << 29), [] (int a, int b) { return max(a, b); });
+    SegTree<int> rmq(a.size(), -(1 << 29), [] (int a, int b) { return max(a, b); });
     for (int i = 0; i < a.size(); ++i) {
       rmq.update(i, d2[a[i]]);
     }
