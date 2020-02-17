@@ -37,20 +37,25 @@ template<typename T>
 struct RMQ {
   int n;
   vector<T> dat;
-
-  RMQ(int n_) {
+  using F = function<T(T, T)>;
+  F fn;
+  T e;
+  RMQ(int n_, T e_, F fn_) {
+    e = e_;
+    fn = fn_;
     n = 1;
     while (n < n_) n *= 2;
-    dat.resize(2 * n - 1, -inf);
+    dat.resize(2 * n - 1, e);
   }
 
-  void update(int k, T a) {
+  void update(size_t k, T a) {
     k += n - 1;
     dat[k] = a;
     while (k > 0) {
       k = (k - 1) / 2;
-      dat[k] = max(dat[k * 2 + 1], dat[k * 2 + 2]);
+      dat[k] = fn(dat[k * 2 + 1], dat[k * 2 + 2]);
     }
+    return ;
   }
 
   T query(size_t a, size_t b) {
@@ -58,38 +63,13 @@ struct RMQ {
   }
 
   T query(size_t a, size_t b, size_t k, size_t l, size_t r) {
-    if (r <= a || b <= l) return -inf;
+    if (r <= a || b <= l) return e;
     if (a <= l && r <= b) return dat.at(k);
 
     T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
     T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
 
-    return max(vl,vr);
-  }
-};
-
-class RMQ2{
-public:
-  int n,dat[555555];
-  void init(int _n){
-    n=1;
-    while(n<_n)n*=2;
-    fill(dat,dat+2*n-1,-inf);
-  }
-  void update(int k,int a){
-    k+=n-1;dat[k]=a;
-    while(k>0){
-      k=(k-1)/2;
-      dat[k]=max(dat[k*2+1],dat[k*2+2]);
-    }
-  }
-  int query(int a,int b){return query(a,b,0,0,n);}
-  int query(int a,int b,int k,int l,int r){
-    if(r<=a||b<=l) return -inf;
-    if(a<=l&&r<=b) return dat[k];
-    int vl=query(a,b,k*2+1,l,(l+r)/2);
-    int vr=query(a,b,k*2+2,(l+r)/2,r);
-    return max(vl,vr);
+    return fn(vl,vr);
   }
 };
 
@@ -134,8 +114,7 @@ int main(int argc, char *argv[])
     vector<int> d2 = bfs(n - 1);
     sort(a.begin(), a.end(), [&] (int i, int j) { return d1[i] < d1[j]; });
 
-    RMQ<int> rmq(a.size());
-    // RMQ2 rmq; rmq.init(a.size());
+    RMQ<int> rmq(a.size(), -(1 << 29), [] (int a, int b) { return max(a, b); });
     for (int i = 0; i < a.size(); ++i) {
       rmq.update(i, d2[a[i]]);
     }
