@@ -1,4 +1,4 @@
-// codeforces/612div2/D/main.cpp
+// codeforces/621div2/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -9,74 +9,121 @@
 
 using namespace std;
 
-typedef long long int lli;
-typedef unsigned long long ull;
-typedef complex<double> point;
-
 template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p) { os << "(" << p.first << "," << p.second << ")"; return os; }
 template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p) { is >> p.first >> p.second; return is; }
-template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; each (i, v) os << i << ","; os << ")"; return os; }
-template<typename T> istream& operator >> (istream& is, vector<T>& v) { each (i, v) is >> i; return is; }
+template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; for (auto& i: v) os << i << ","; os << ")"; return os; }
+template<typename T> istream& operator >> (istream& is, vector<T>& v) { for (auto& i: v) is >> i; return is; }
+template<typename T> ostream& operator << (ostream& os, set<T> s) { os << "#{"; for (auto& i: s) os << i << ","; os << "}"; return os; }
+template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m) { os << "{"; for (auto& i: m) os << i << ","; os << "}"; return os; }
 
 template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
 template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+template<typename P, typename Q> inline pair<Q, P> reverse(pair<P, Q> p) { return make_pair(p.second, p.first); }
 
-const int N = 2000 + 5;
-int a[N];
-vector<int> g[N];
+using lli = long long int;
+using ull = unsigned long long;
+using point = complex<double>;
+using str = string;
+template<typename T> using vec = vector<T>;
 
-int n;
-vector<int> rec(int curr)
-{
-  if (g[curr].empty() && a[curr]) throw "";
-  vector<int> v;
-  each (next, g[curr]) {
-    vector<int> u = rec(next);
-    v.insert(v.begin(), u.begin(), u.end());
+constexpr lli mod = 1e9 + 7;
+
+template<typename T>
+struct SegTree {
+  int n;
+  vector<T> dat;
+  using F = function<T(T, T)>;
+  F fn;
+  T e;
+  SegTree(int n_, T e_, F fn_) {
+    e = e_;
+    fn = fn_;
+    n = 1;
+    while (n < n_) n *= 2;
+    dat.resize(2 * n - 1, e);
   }
-  if (v.empty()) {
-    v.push_back(curr);
-  } else {
-    auto itr = v.begin();
-    itr += a[curr];
-    // cout << v << " INSERT " << curr << " at " << a[curr] << endl;
-    if (v.size() < a[curr]) throw "";
-    v.insert(itr, curr);
+
+  void update(size_t k, T a) {
+    k += n - 1;
+    dat[k] = a;
+    while (k > 0) {
+      k = (k - 1) / 2;
+      dat[k] = fn(dat[k * 2 + 1], dat[k * 2 + 2]);
+    }
+    return ;
   }
-  return v;
-}
+
+  T query(size_t a, size_t b) {
+    return query(a, b, 0, 0, n);
+  }
+
+  T query(size_t a, size_t b, size_t k, size_t l, size_t r) {
+    if (r <= a || b <= l) return e;
+    if (a <= l && r <= b) return dat.at(k);
+
+    T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
+    T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
+
+    return fn(vl,vr);
+  }
+};
 
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  while (cin >> n) {
-    fill(g, g + N, vector<int>());
-    int root;
-    for (int i = 0; i < n; ++i) {
-      int p, c;
-      cin >> p >> c;
-      --p;
-      a[i] = c;
-      if (0 <= p) {
-        g[p].push_back(i);
-      } else {
-        root = i;
-      }
+  int n, m, k;
+  while (cin >> n >> m >> k) {
+    vector<int> a(k);
+    cin >> a;
+    each (i, a) --i;
+
+    const int N = 2 * 1e5 + 5;
+    vector<int> g[N];
+
+    for (int i = 0; i < m; ++i) {
+      int x, y;
+      cin >> x >> y;
+      --x;
+      --y;
+      g[x].push_back(y);
+      g[y].push_back(x);
     }
-    try {
-      vector<int> v = rec(root);
-      map<int, int> m;
-      for (int i = 0; i < v.size(); ++i) {
-        m[v[i]] = m.size();
+
+    const int inf = 1 << 29;
+
+    auto bfs = [&] (int src) {
+      vector<int> cost(n, inf);
+      queue<int> q;
+      cost[src] = 0;
+      for (q.push(src); q.size(); q.pop()) {
+        int curr = q.front();
+        each (next, g[curr]) {
+          if (cost[next] == inf) {
+            cost[next] = cost[curr] + 1;
+            q.push(next);
+          }
+        }
       }
-      cout << "YES" << endl;
-      each (i, m) cout << i.second + 1 << ' ';
-      cout << endl;
-    } catch (const char* e) {
-      cout << "NO" << endl;
+      return cost;
+    };
+
+    vector<int> d1 = bfs(0);
+    vector<int> d2 = bfs(n - 1);
+    sort(a.begin(), a.end(), [&] (int i, int j) { return d1[i] < d1[j]; });
+
+    SegTree<int> rmq(a.size(), -(1 << 29), [] (int a, int b) { return max(a, b); });
+    for (int i = 0; i < a.size(); ++i) {
+      rmq.update(i, d2[a[i]]);
     }
+
+    int mx = 0;
+    for (int i = 0; i < a.size(); ++i) {
+      int x = rmq.query(i + 1, a.size());
+      setmax(mx, d1[a[i]] + x + 1);
+    }
+    cout << min(mx, d1[n - 1]) << endl;
   }
 
   return 0;

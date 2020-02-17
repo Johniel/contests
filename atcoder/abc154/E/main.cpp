@@ -48,22 +48,17 @@ int main(int argc, char *argv[])
       for (int j = false; j <= true; ++j) {
         for (int x = 0; x < K; ++x) {
           unless (dp[i][j][x]) continue;
-          // cout << ">> " << i << ' ' << j << ' ' << x << endl;
           int z = s[i] - '0';
           for (int y = 0; y <= (j ? 9 : z); ++y) {
             int p = (x + (y != 0));
             if (p <= k) {
-              // cout << i + 1 << ' ' << (j | (y < z)) << ' ' << x + (y != 0) << endl;
               dp[i + 1][j | (y < z)][x + (y != 0)] += dp[i][j][x];
             }
           }
         }
       }
     }
-    // cout << dp[s.size()][false][k] << ' ' << dp[s.size()][true][k] << endl;
     cout << dp[s.size()][false][k] + dp[s.size()][true][k] << endl;
-    // cout << endl;
-    // break;
   }
 
   return 0;
