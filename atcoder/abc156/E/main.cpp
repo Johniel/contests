@@ -46,6 +46,7 @@ namespace math {
 
   lli mod_comb(int n, int k)
   {
+    assert(n < N && k < N);
     if (n < k) return 0;
     if (n < 0 || k < 0) return 0;
     return fact[n] * (finv[k] * finv[n - k] % mod) % mod;
