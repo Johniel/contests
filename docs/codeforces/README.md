@@ -344,6 +344,8 @@
 + [621div2/B](621div2/B.md)
 + [621div2/C](621div2/C.md)
 + [621div2/D](621div2/D.md)
++ [622div2/A](622div2/A.md)
++ [622div2/C](622div2/C.md)
 + [GoodBye2015/A](GoodBye2015/A.md)
 + [GoodBye2015/B](GoodBye2015/B.md)
 + [GoodBye2015/C](GoodBye2015/C.md)
