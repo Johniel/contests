@@ -1,6 +1,6 @@
 # atcoder/arc076/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -1,6 +1,6 @@
 # atcoder/thanksfes2017/H
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

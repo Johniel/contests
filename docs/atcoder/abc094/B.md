@@ -2,7 +2,7 @@
 
 移動パターンが２通りしかないので両方試す。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

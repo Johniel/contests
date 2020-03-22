@@ -14,7 +14,7 @@
 dp[x | y] = min(dp[x] + score[y])
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

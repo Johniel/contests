@@ -1,7 +1,7 @@
 # ABC103 C
 modの結果には周期性があって、各aiについて最大（ai - 1）になるような都合の良いmが存在するはず。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

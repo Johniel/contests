@@ -2,7 +2,7 @@
 気合で実装する。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

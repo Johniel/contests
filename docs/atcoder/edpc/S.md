@@ -13,7 +13,7 @@
 
 xを追加したとして、 `j * 10 % D` に遷移する。 `Dの倍数である` = `Dで割った余りが0` なので答えは `dp[n][0][true] + dp[n][0][false]` 。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

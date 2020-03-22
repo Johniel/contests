@@ -1,6 +1,6 @@
 # atcoder/arc001/A
 
-## Codes
+## Code
 main.rs
 {% raw %}
 ```rs

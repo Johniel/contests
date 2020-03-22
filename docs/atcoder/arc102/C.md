@@ -1,7 +1,7 @@
 # ARC102 C
 `(a + b) % k == 0` ということは `a%k + b%k == k or 0` なので、 `mod k` で `0` か `k/2` になる数値を数える。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -1,6 +1,6 @@
 # codeforces/gr1/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

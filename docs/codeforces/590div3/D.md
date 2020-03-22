@@ -1,6 +1,6 @@
 # codeforces/590div3/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

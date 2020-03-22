@@ -1,6 +1,6 @@
 # codeforces/327div2/C
 
-## Codes
+## Code
 gen.php
 {% raw %}
 ```php

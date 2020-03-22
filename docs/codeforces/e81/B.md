@@ -1,6 +1,6 @@
 # codeforces/e81/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

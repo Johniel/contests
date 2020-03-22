@@ -1,6 +1,6 @@
 # codeforces/GoodBye2019/C
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

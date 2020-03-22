@@ -1,6 +1,6 @@
 # atcoder/diverta2019/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

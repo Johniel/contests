@@ -6,7 +6,7 @@
 
 ありえる総パターン数はKの上限より多いことに注意する。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

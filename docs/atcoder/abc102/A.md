@@ -1,6 +1,6 @@
 # atcoder/abc102/A
 
-## Codes
+## Code
 main.rs
 {% raw %}
 ```rs

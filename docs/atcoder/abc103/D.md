@@ -2,7 +2,7 @@
 ソートして貪欲するやつ。頻出解法。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

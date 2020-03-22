@@ -8,7 +8,7 @@
 dp[i][j] = min(dp[i][k] + dp[k][j] + sum(i,k) + sum(k,j))
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

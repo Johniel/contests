@@ -1,6 +1,6 @@
 # codeforces/e82/C
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

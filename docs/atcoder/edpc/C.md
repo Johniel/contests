@@ -4,7 +4,7 @@
 dp[i + 1][k] = min{ dp[i][j] + x[i][k] } (j != k)
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

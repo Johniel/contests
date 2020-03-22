@@ -1,6 +1,6 @@
 # atcoder/abc096/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

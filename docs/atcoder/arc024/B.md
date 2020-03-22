@@ -1,6 +1,6 @@
 # atcoder/arc024/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

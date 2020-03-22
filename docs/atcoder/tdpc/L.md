@@ -1,6 +1,6 @@
 # atcoder/tdpc/L
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

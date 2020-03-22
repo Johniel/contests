@@ -2,7 +2,7 @@
 
 DP\[どこまで見た\]\[偶奇\] = 到達可能か
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

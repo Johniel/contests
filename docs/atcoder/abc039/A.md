@@ -1,6 +1,6 @@
 # atcoder/abc039/A
 
-## Codes
+## Code
 mani.cpp
 {% raw %}
 ```cpp

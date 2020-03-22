@@ -5,7 +5,7 @@
 f(i) = max(f(j) + 1) // (i,j)∈E
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

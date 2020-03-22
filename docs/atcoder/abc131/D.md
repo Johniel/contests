@@ -1,6 +1,6 @@
 # atcoder/abc131/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

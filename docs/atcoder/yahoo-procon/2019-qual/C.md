@@ -1,6 +1,6 @@
 # atcoder/yahoo-procon/2019-qual/C
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

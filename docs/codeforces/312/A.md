@@ -1,6 +1,6 @@
 # codeforces/312/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

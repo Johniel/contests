@@ -17,7 +17,7 @@ dp[i][通過] = dp[i - 1][通過] + dp[i - 1][停止]
 dp[i][停止] = dp[i - 1][通過] + dp[i - 1][停止] - dp[i - k][通過]
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

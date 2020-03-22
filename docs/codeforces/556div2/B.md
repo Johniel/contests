@@ -1,6 +1,6 @@
 # codeforces/556div2/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -6,7 +6,7 @@
 
 2次元の累積和で角の黒のサイズをK^2通り試す。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -5,7 +5,7 @@
 dp[i][j] := dp[i - 1][j - 1] * p[i] + dp[i - 1][j] * (1.0 - p[i])
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -4,7 +4,7 @@
 
 あとは01BFS。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

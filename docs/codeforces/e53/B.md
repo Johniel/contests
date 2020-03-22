@@ -1,6 +1,6 @@
 # codeforces/e53/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

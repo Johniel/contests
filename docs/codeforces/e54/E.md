@@ -1,6 +1,6 @@
 # codeforces/e54/E
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

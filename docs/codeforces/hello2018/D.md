@@ -1,6 +1,6 @@
 # codeforces/hello2018/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

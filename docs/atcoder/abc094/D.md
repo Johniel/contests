@@ -6,7 +6,7 @@
 また、`comb(n, k) == comb(n, n - k)` なので、n/2を超えない大きな値を選べば良い。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

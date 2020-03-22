@@ -1,6 +1,6 @@
 # codeforces/hello2020/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -13,7 +13,7 @@ DP[どこまで見た][いくつ選んだ]=最適値
 
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

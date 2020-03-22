@@ -1,7 +1,7 @@
 # ABC105A
 ⌈n/k⌉
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

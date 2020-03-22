@@ -12,7 +12,7 @@ f(n,p) = x * x // pが偶数
 f(n,p) = x * x * n // pが奇数
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

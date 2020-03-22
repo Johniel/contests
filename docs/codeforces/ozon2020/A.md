@@ -1,6 +1,6 @@
 # codeforces/ozon2020/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

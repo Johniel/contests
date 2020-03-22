@@ -2,7 +2,7 @@
 約数を列挙してN個に分割した場合のGCDをそれぞれ考える。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

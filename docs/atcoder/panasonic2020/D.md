@@ -1,6 +1,6 @@
 # atcoder/panasonic2020/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -4,7 +4,7 @@
 dp[i] = min{ dp[j] + abs(h[i] - h[j]) } (j < i)
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

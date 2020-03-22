@@ -5,7 +5,7 @@
 
 最初の１回はプラスx方向に固定なことに注意する。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -12,7 +12,7 @@ dp[i][j] = max(dp[i + 1][j] + ai, dp[i][j - 1] + aj)
 dp[i][j] = min(dp[i + 1][j] - ai, dp[i][j - 1] - aj)
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

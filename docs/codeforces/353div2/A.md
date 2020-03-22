@@ -1,6 +1,6 @@
 # codeforces/353div2/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

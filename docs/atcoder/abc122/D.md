@@ -6,7 +6,7 @@ dp[何文字目][3つ前の文字][2つ前の文字][1つ前の文字] := パタ
 
 `?AGC`, `?ACG`, `?GAC`, `A?GC`, `AG?C`を無視する。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

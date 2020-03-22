@@ -2,7 +2,7 @@
 高速ゼータ変換
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

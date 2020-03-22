@@ -10,7 +10,7 @@
 
 柔らか頭でないと実装で戸惑う気がした。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

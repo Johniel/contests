@@ -3,7 +3,7 @@
 DP[a][b][c]=最小手数
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

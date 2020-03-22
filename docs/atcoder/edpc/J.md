@@ -21,7 +21,7 @@ f(皿3,皿2,皿1) =
 
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -1,6 +1,6 @@
 # atcoder/nikkei/2019/qual/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

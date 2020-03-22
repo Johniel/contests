@@ -14,7 +14,7 @@
 なぜ本番中に解けなかったのか悔やまれる。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

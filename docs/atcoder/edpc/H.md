@@ -8,7 +8,7 @@ dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
 dp[i][j] = 0
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

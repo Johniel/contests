@@ -1,6 +1,6 @@
 # codeforces/338div2/D
 
-## Codes
+## Code
 main.rb
 {% raw %}
 ```rb

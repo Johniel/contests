@@ -1,6 +1,6 @@
 # codeforces/456iv2/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

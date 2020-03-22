@@ -1,6 +1,6 @@
 # codeforces/395div2/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

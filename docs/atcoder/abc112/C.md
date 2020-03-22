@@ -2,7 +2,7 @@
 全箇所試す。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -16,7 +16,7 @@ DP[x番目の素数まで見た][指数部+1の積]=パターン数
 ```
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

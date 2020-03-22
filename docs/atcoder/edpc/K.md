@@ -7,7 +7,7 @@
 f(i) = max(f(i - aj) ^ 1) // i <= aj
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

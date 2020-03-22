@@ -1,6 +1,6 @@
 # codeforces/e56/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

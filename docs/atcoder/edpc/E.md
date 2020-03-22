@@ -7,7 +7,7 @@
 dp[i][j] := min(dp[i - 1][j], dp[i - 1][j - v[i]] + w[i])
 ```
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

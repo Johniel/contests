@@ -11,7 +11,7 @@ f(i,j) := fn(i+1,j) + fn(i,j+1) - fn(i+1,j+1) // si == tj
 
 `si == tj` の場合はsi,tjより後ろを使うパターン数f(i+1,j+1)と使わないパターン数1を足す。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

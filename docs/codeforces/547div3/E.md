@@ -1,6 +1,6 @@
 # codeforces/547div3/E
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

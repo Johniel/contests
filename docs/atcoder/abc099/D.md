@@ -2,7 +2,7 @@
 割当パターンは少ないので全て試す。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

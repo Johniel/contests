@@ -1,6 +1,6 @@
 # codeforces/manthan16/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

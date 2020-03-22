@@ -7,7 +7,7 @@ MEMO[i] = i番目以降で作れる最小のsubsequenceの長さ
 
 以下の実装だと、g[][]をmap<char,int>[]にするとMLEする。やはり静的確保が正義。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

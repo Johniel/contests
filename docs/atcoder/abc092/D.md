@@ -16,7 +16,7 @@ modを取りながら毎回sortして２分探索をすると間に合う。<br/
 ## a<2^xのとき
 2^x〜2^(x+1)-1の範囲
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

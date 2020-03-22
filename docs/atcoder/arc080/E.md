@@ -11,7 +11,7 @@
 どの区間の組を優先して残すかは、priority_queueで管理すれば良い。
 
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

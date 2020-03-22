@@ -1,6 +1,6 @@
 # atcoder/sumitrust2019/C
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

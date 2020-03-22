@@ -1,6 +1,6 @@
 # codeforces/310/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

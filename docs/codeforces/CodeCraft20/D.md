@@ -1,6 +1,6 @@
 # codeforces/CodeCraft20/D
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

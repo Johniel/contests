@@ -1,6 +1,6 @@
 # codeforces/GoodBye2015/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

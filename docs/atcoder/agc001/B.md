@@ -1,6 +1,6 @@
 # atcoder/agc001/B
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

@@ -1,7 +1,7 @@
 # ARC094 E
 サンプル１と小さいケースを手で実験して解いた。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

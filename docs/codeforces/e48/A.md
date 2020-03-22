@@ -1,6 +1,6 @@
 # codeforces/e48/A
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp

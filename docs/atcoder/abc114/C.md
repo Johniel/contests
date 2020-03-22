@@ -1,7 +1,7 @@
 # ABC114 C
 x桁の753数は3^xパターンしかない。Nが9桁なので全て試す。
 
-## Codes
+## Code
 main.cpp
 {% raw %}
 ```cpp
