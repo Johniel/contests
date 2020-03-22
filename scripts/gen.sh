@@ -2,7 +2,7 @@
 
 function gen(){
     echo "[GEN]" docs/$1.md
-            
+
     outputFile=docs/$1.md
     mkdir -p $(dirname $outputFile)
 
@@ -13,7 +13,7 @@ function gen(){
     fi
 
     echo >> $outputFile
-    echo '## Codes' >> $outputFile
+    echo '## Code' >> $outputFile
 
     filepaths=$(git ls-files $1)
     for filepath in ${filepaths[@]}; do
