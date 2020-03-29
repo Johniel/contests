@@ -24,6 +24,8 @@ jobs:
 
     - name: Run
       run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email ""
         git fetch -p --all
         git checkout gh-pages
         git merge --no-ff origin/master -m "AUTO BUILD"
