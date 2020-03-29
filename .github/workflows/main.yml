@@ -24,7 +24,7 @@ jobs:
 
     - name: Run
       run: |
-        git fetch -p --all
+        git fetch -p --all --unshallow
         git checkout gh-pages
         git merge --no-ff origin/master -m "AUTO BUILD"
         make
