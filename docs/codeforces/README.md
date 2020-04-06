@@ -357,6 +357,8 @@
 + [629div3/B](629div3/B.md)
 + [629div3/C](629div3/C.md)
 + [629div3/D](629div3/D.md)
++ [631div2/A](631div2/A.md)
++ [631div2/B](631div2/B.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
