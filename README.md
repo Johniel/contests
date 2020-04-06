@@ -1,4 +1,4 @@
-# Programming Contest Source Codes
+# Johniel/Contests
 
 ## Profiles
 + [AOJ](http://judge.u-aizu.ac.jp/onlinejudge/user.jsp?id=___Johniel)
