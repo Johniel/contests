@@ -1,6 +1,4 @@
-# Programming Contest Source Codes
-
-[![CircleCI](https://circleci.com/gh/Johniel/contests.svg?style=svg)](https://circleci.com/gh/Johniel/contests)
+# Johniel/Contests
 
 ## Profiles
 + [AOJ](http://judge.u-aizu.ac.jp/onlinejudge/user.jsp?id=___Johniel)
