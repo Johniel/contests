@@ -20,16 +20,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Run
       run: |
         git config --global user.name "GitHub Actions"
-        git config --global user.email ""
-        git fetch -p --all
+        git config --global user.email "Johniel@@users.noreply.github.com"
+        git fetch --prune --unshallow
         git checkout gh-pages
         git merge --no-ff origin/master -m "AUTO BUILD"
         make
         git add ./docs
         git commit -m "AUTO BUILD"
-        git push upstream gh-pages:gh-pages
+        git push origin gh-pages:gh-pages
