@@ -46,27 +46,6 @@ int main(int argc, char *argv[])
       continue;
     }
 
-    // for (int bit = 0; bit < (1 << n); ++bit) {
-    //   if (__builtin_popcount(bit) == (n / 2)) {
-    //     lli sum = 0;
-    //     vec<lli> v;
-    //     for (int i = 0; i < n; ++i) {
-    //       const int j = i + 1;
-    //       if (bit & (1 << i)) {
-    //         if (bit & (1 << j)) sum = -(1LL << 60);
-    //         else {
-    //           v.push_back(a[i]);
-    //           sum += a[i];
-    //         }
-    //       }
-    //     }
-    //     if (sum == 295) {
-    //       cout << v << ", " << sum << endl;
-    //       break;
-    //     }
-    //   }
-    // }
-
     lli x = 0;
     for (int i = 0; i < n; ++i) {
       if (i % 2) x += a[i];
@@ -94,24 +73,6 @@ int main(int argc, char *argv[])
     setmax(x, dp[n][1]);
     setmax(x, dp[n+1][1]);
     setmax(x, dp[n][2]);
-
-    // for (int i = 0; i <= n+1; ++i) {
-    //   if (dp[i][0] != -inf) cout << dp[i][0] <<  ' ';
-    //   else  cout << "_ ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i <= n+1; ++i) {
-    //   if (dp[i][1] != -inf) cout << dp[i][1] <<  ' ';
-    //   else  cout << "_ ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i <= n+1; ++i) {
-    //   if (dp[i][2] != -inf) cout << dp[i][2] <<  ' ';
-    //   else  cout << "_ ";
-    // }
-    // cout << endl;
-
-
     cout << x << endl;
 
   }
