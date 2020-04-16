@@ -794,6 +794,7 @@
 + [edpc/Z](edpc/Z.md)
 + [hitachi2020/B](hitachi2020/B.md)
 + [keyence2019/B](keyence2019/B.md)
++ [keyence2019/C](keyence2019/C.md)
 + [keyence2020/C](keyence2020/C.md)
 + [m-solutions2019/A](m-solutions2019/A.md)
 + [m-solutions2019/B](m-solutions2019/B.md)
