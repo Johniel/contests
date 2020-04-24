@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
       }
       for (int d = -1; d <= +1; ++d) {
         const int na = a + d;
-        unless (0 <= na && na < n) continue;
+        unless (0 <= na && na < m) continue;
         const int y = abs(v[a] - v[na]);
         if (b + y <= g && cost[na][b + y] > cost[a][b] + y) {
           cost[na][b + y] = cost[a][b] + y;
