@@ -40,52 +40,49 @@ int main(int argc, char *argv[])
   while (cin >> n >> m) {
     const int N = 1e4 + 5;
     const int M = 1000 + 5;
-    int g, r;
+    lli g, r;
     vec<int> v(m);
     cin >> v >> g >> r;
     sort(v.begin(), v.end());
 
-    const lli inf = 1LL << 60;
+    const lli inf = 1LL << 50;
     static lli cost[N][M];
     fill(&cost[0][0], &cost[N - 1][M - 1] + 1, inf);
 
-    lli x = -1;
+    deque<pair<lli, pair<int, int>>> q;
 
-    priority_queue<pair<lli, pair<int, int>>> q;
-
-    q.push(make_pair(0, make_pair(0, 0)));
+    q.push_back(make_pair(0, make_pair(0, 0)));
     cost[0][0] = 0;
 
     while (q.size()) {
-      auto p = q.top();
-      q.pop();
-      lli c = -1 * p.first;
+      auto p = q.front();
+      q.pop_front();
+      lli c = p.first;
       int a = p.second.first;
       int b = p.second.second;
-      if (cost[a][b] != c) continue;
-      if (a == m - 1) {
-        x = c;
-        break;
-      }
       if (b == g) {
-        if (cost[a][0] > cost[a][b] + r) {
-          cost[a][0] = cost[a][b] + r;
-          q.push(make_pair(-cost[a][0], make_pair(a, 0)));
+        if (cost[a][0] == inf) {
+          cost[a][0] = c + 1;
+          q.push_back(make_pair(c + 1, make_pair(a, 0)));
         }
         continue;
       }
       for (int d = -1; d <= +1; ++d) {
         const int na = a + d;
-        unless (0 <= na && na < m) continue;
+        unless (0 <= na && na < v.size()) continue;
         const int y = abs(v[a] - v[na]);
-        if (b + y <= g && cost[na][b + y] > cost[a][b] + y) {
-          cost[na][b + y] = cost[a][b] + y;
-          q.push(make_pair(-cost[na][b + y], make_pair(na, b + y)));
+        if (b + y <= g && cost[na][b + y] == inf) {
+          cost[na][b + y] = c;
+          q.push_front(make_pair(c, make_pair(na, b + y)));
         }
       }
     }
 
-    cout << x << endl;
+    lli x = inf;
+    for (int i = 0; i < M; ++i) {
+      setmin(x, cost[v.size() - 1][i] * (r + g) + i);
+    }
+    cout << (x == inf ? -1 : x) << endl;
   }
 
   return 0;
