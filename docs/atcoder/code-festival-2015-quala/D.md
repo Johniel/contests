@@ -1,10 +1,10 @@
-# atcoder/ddcc2020-qual/A
+# atcoder/code-festival-2015-quala/D
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/ddcc2020-qual/A/main.cpp
+// atcoder/code-festival-2015-quala/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -37,25 +37,49 @@ constexpr lli mod = 1e9 + 7;
 
 int main(int argc, char *argv[])
 {
-  std::ios_base::sync_with_stdio(0);
-  std::cin.tie(0);
-  std::cout.setf(std::ios_base::fixed);
-  std::cout.precision(15);
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.setf(ios_base::fixed);
+  cout.precision(15);
 
-  int n;
-  while (cin >> n) {
-    vec<lli> a(n);
-    cin >> a;
-    for (int i = 0; i + 1 < a.size(); ++i) {
-      a[i + 1] += a[i];
+  lli n, m;
+  while (cin >> n >> m) {
+    vec<lli> v(m);
+    cin >> v;
+    sort(v.begin(), v.end());
+
+    auto fn = [&] (lli x) {
+      lli y = 1;
+      each (i, v) {
+        lli z = -1;
+        // ->, <-, <-
+        const lli a = x - abs(i - y);
+        if (0 <= a) {
+          setmax(z, i + a / 2 + 1);
+        }
+        // <-, ->, ->
+        const lli b = x - abs(i - y) * 2;
+        if (0 <= b) {
+          setmax(z, i + b + 1);
+        }
+        if (i < y) {
+          setmax(z, i + x + 1);
+        }
+        if (z == -1) return false;
+        y = z;
+      }
+      return n < y;
+    };
+
+    lli small = 0;
+    lli large = 3 * 1e9 + 5;
+    while (small + 1 < large) {
+      const lli mid = (small + large) / 2;
+      if (fn(mid)) large = mid;
+      else small = mid;
     }
-    lli mn = 1LL << 60;
-    for (int i = 0; i < a.size() - 1; ++i) {
-      lli x = a.back() - a[i];
-      lli y = a.back() - x;
-      setmin(mn, abs(x - y));
-    }
-    cout << mn << endl;
+    if (fn(small)) cout << small << endl;
+    else cout << large << endl;
   }
 
   return 0;
@@ -65,4 +89,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/ddcc2020-qual/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2015-quala/D)
