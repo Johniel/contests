@@ -1,4 +1,4 @@
-// atcoder/abc164/D/main.cpp
+// atcoder/abc164/D/main2.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -38,35 +38,20 @@ int main(int argc, char *argv[])
 
   str s;
   while (cin >> s) {
-    lli sum = 0;
-    const int M = 2019;
-    const int N = 2;
-    const lli K = 2;
-    static int dp[2][M][K];
-    fill(&dp[0][0][0], &dp[N - 1][M - 1][K - 1] + 1, 0);
-    dp[0][0][false] = 1;
-    for (int i = 0; i < s.size(); ++i) {
-      int curr = i % 2;
-      int next = (curr + 1) % 2;
-      for (int j = 0; j < M; ++j) {
-        dp[next][j][false] = dp[next][j][true] = 0;
-      }
-      for (int j = 0; j < M; ++j) {
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][true];
-        }
-        {
-          dp[next][j][false] += dp[curr][j][false];
-        }
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][false];
-        }
-      }
-      sum += dp[next][0][true];
+    map<int, lli> m;
+    reverse(s.begin(), s.end());
+    int x = 0;
+    int w = 1;
+    each (c, s) {
+      x = (x + (c - '0') * w) % 2019;
+      (w *= 10) %= 2019;
+      ++m[x];
     }
-    cout << sum << endl;
-  }
 
+    lli y = m[0];
+    each (i, m) y += i.second * (i.second - 1) / 2;
+    cout << y << endl;
+  }
 
   return 0;
 }
