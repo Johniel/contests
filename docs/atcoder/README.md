@@ -787,6 +787,7 @@
 + [diverta2019/B](diverta2019/B.md)
 + [diverta2019/C](diverta2019/C.md)
 + [diverta2019/D](diverta2019/D.md)
++ [donuts-2015/C](donuts-2015/C.md)
 + [edpc/A](edpc/A.md)
 + [edpc/B](edpc/B.md)
 + [edpc/C](edpc/C.md)
