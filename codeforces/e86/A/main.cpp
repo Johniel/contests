@@ -1,4 +1,4 @@
-// atcoder/abc164/D/main.cpp
+// codeforces/e86/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,16 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+lli fn1(lli a, lli b, lli x, lli y)
+{
+  return abs(x - y) * a + min(x, y) * b;
+}
+
+lli fn2(lli a, lli b, lli x, lli y)
+{
+  return (x + y) * a;
+}
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -36,37 +46,14 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    lli sum = 0;
-    const int M = 2019;
-    const int N = 2;
-    const lli K = 2;
-    static int dp[2][M][K];
-    fill(&dp[0][0][0], &dp[N - 1][M - 1][K - 1] + 1, 0);
-    dp[0][0][false] = 1;
-    for (int i = 0; i < s.size(); ++i) {
-      int curr = i % 2;
-      int next = (curr + 1) % 2;
-      for (int j = 0; j < M; ++j) {
-        dp[next][j][false] = dp[next][j][true] = 0;
-      }
-      for (int j = 0; j < M; ++j) {
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][true];
-        }
-        {
-          dp[next][j][false] += dp[curr][j][false];
-        }
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][false];
-        }
-      }
-      sum += dp[next][0][true];
-    }
-    cout << sum << endl;
-  }
+  int _;
+  cin >> _;
 
+  lli a, b;
+  lli x, y;
+  while (cin >> x >> y >> a >> b) {
+    cout << min(fn1(a, b, x, y), fn2(a, b, x, y)) << endl;
+  }
 
   return 0;
 }

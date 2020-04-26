@@ -1,4 +1,4 @@
-// atcoder/abc164/D/main.cpp
+// codeforces/e86/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,37 +36,23 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    lli sum = 0;
-    const int M = 2019;
-    const int N = 2;
-    const lli K = 2;
-    static int dp[2][M][K];
-    fill(&dp[0][0][0], &dp[N - 1][M - 1][K - 1] + 1, 0);
-    dp[0][0][false] = 1;
-    for (int i = 0; i < s.size(); ++i) {
-      int curr = i % 2;
-      int next = (curr + 1) % 2;
-      for (int j = 0; j < M; ++j) {
-        dp[next][j][false] = dp[next][j][true] = 0;
-      }
-      for (int j = 0; j < M; ++j) {
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][true];
-        }
-        {
-          dp[next][j][false] += dp[curr][j][false];
-        }
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][false];
-        }
-      }
-      sum += dp[next][0][true];
-    }
-    cout << sum << endl;
-  }
+  int _;
+  cin >> _;
 
+  str t;
+  while (cin >> t) {
+    int _0 = count(t.begin(), t.end(), '0');
+    if (_0 == 0 || _0 == t.size()) {
+      cout << t << endl;
+      continue;
+    }
+    char a = t.front();
+    char b = '0' + '1' - a;
+    for (int i = 0; i < t.size(); ++i) {
+      cout << a << b;
+    }
+    cout << endl;
+  }
 
   return 0;
 }

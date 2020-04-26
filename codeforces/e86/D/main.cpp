@@ -1,4 +1,4 @@
-// atcoder/abc164/D/main.cpp
+// codeforces/e86/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,37 +36,34 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    lli sum = 0;
-    const int M = 2019;
-    const int N = 2;
-    const lli K = 2;
-    static int dp[2][M][K];
-    fill(&dp[0][0][0], &dp[N - 1][M - 1][K - 1] + 1, 0);
-    dp[0][0][false] = 1;
-    for (int i = 0; i < s.size(); ++i) {
-      int curr = i % 2;
-      int next = (curr + 1) % 2;
-      for (int j = 0; j < M; ++j) {
-        dp[next][j][false] = dp[next][j][true] = 0;
-      }
-      for (int j = 0; j < M; ++j) {
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][true];
-        }
-        {
-          dp[next][j][false] += dp[curr][j][false];
-        }
-        {
-          dp[next][(j * 10 + s[i] - '0') % M][true] += dp[curr][j][false];
-        }
-      }
-      sum += dp[next][0][true];
-    }
-    cout << sum << endl;
-  }
+  int n, k;
+  while (cin >> n >> k) {
+    vec<int> m(n);
+    vec<int> c(k);
+    cin >> m >> c;
+    sort(m.begin(), m.end());
+    each (i, m) --i;
 
+    int mx = 0;
+    for (int i = 0; i < k; ++i) {
+      int x = lower_bound(m.begin(), m.end(), i) - m.begin();
+      setmax(mx, (n - x + c[i] - 1) / c[i]);
+    }
+
+    vec<vec<int>> v(mx, vec<int>());
+    int cnt = 0;
+    each (i, m) {
+      v[cnt].push_back(i);
+      cnt = (cnt + 1) % mx;
+    }
+
+    cout << mx << endl;
+    each (i, v) {
+      cout << i.size();
+      each (j, i) cout << ' ' << j+1;
+      cout << endl;
+    }
+  }
 
   return 0;
 }
