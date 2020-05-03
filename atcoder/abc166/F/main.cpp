@@ -31,33 +31,24 @@ constexpr lli mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 const int M = 3;
-char path[N][M][M][M];
 int memo[N][M][M][M];
 str s[N];
-int p, q, r;
 char t[N];
 int rec(int nth, int a, int b, int c)
 {
   if (min({a, b, c}) < 0) return false;
-  if (s[nth] == "@") {
-    p = a;
-    q = b;
-    r = c;
-    return true;
-  }
+  if (s[nth] == "@") return true;
   int& ret = memo[nth][a][b][c];
   if (ret != -1) return ret;
 
   if (s[nth] == "AB") {
     if (a) {
-      path[nth][a - 1][b + 1][c] = 'B';
       if (rec(nth + 1, a - 1, b + 1, c)) {
         t[nth] = 'B';
         return ret = true;
       }
     }
     if (b) {
-      path[nth][a + 1][b - 1][c] = 'A';
       if (rec(nth + 1, a + 1, b - 1, c)) {
         t[nth] = 'A';
         return ret = true;
@@ -67,14 +58,12 @@ int rec(int nth, int a, int b, int c)
 
   if (s[nth] == "AC") {
     if (a) {
-      path[nth][a - 1][b][c + 1] = 'C';
       if (rec(nth + 1, a - 1, b, c + 1)) {
         t[nth] = 'C';
         return ret = true;
       }
     }
     if (c) {
-      path[nth][a + 1][b][c - 1] = 'A';
       if (rec(nth + 1, a + 1, b, c - 1)) {
         t[nth] = 'A';
         return ret = true;
@@ -84,14 +73,12 @@ int rec(int nth, int a, int b, int c)
 
   if (s[nth] == "BC") {
     if (b) {
-      path[nth][a][b - 1][c + 1] = 'C';
       if (rec(nth + 1, a, b - 1, c + 1)) {
         t[nth] = 'C';
         return ret = true;
       }
     }
     if (c) {
-      path[nth][a][b + 1][c - 1] = 'B';
       if (rec(nth + 1, a, b + 1, c - 1)) {
         t[nth] = 'B';
         return ret = true;
