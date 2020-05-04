@@ -789,6 +789,7 @@
 + [atc001/B](atc001/B.md)
 + [caddi2018/C](caddi2018/C.md)
 + [cf16-final/B](cf16-final/B.md)
++ [cf16-final/D](cf16-final/D.md)
 + [cf17-final/B](cf17-final/B.md)
 + [code-festival-2014-qualb/D](code-festival-2014-qualb/D.md)
 + [code-festival-2015-quala/D](code-festival-2015-quala/D.md)
