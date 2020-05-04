@@ -33,6 +33,7 @@
 + [abc008/A](abc008/A.md)
 + [abc008/B](abc008/B.md)
 + [abc008/C](abc008/C.md)
++ [abc008/D](abc008/D.md)
 + [abc009/A](abc009/A.md)
 + [abc009/B](abc009/B.md)
 + [abc009/C](abc009/C.md)
