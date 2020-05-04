@@ -833,6 +833,7 @@
 + [edpc/X](edpc/X.md)
 + [edpc/Y](edpc/Y.md)
 + [edpc/Z](edpc/Z.md)
++ [exawizards2019/C](exawizards2019/C.md)
 + [hitachi2020/B](hitachi2020/B.md)
 + [keyence2019/B](keyence2019/B.md)
 + [keyence2019/C](keyence2019/C.md)
