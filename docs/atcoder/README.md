@@ -873,6 +873,7 @@
 + [tdpc/L](tdpc/L.md)
 + [tdpc/M](tdpc/M.md)
 + [tdpc/N](tdpc/N.md)
++ [tenka1-2017/D](tenka1-2017/D.md)
 + [tenka1-2019-beginner/C](tenka1-2019-beginner/C.md)
 + [thanksfes2017/H](thanksfes2017/H.md)
 + [yahoo-procon/2019-qual/A](yahoo-procon/2019-qual/A.md)
