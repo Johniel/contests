@@ -687,6 +687,7 @@
 + [arc040/C](arc040/C.md)
 + [arc041/A](arc041/A.md)
 + [arc041/B](arc041/B.md)
++ [arc041/C](arc041/C.md)
 + [arc042/A](arc042/A.md)
 + [arc042/B](arc042/B.md)
 + [arc042/C](arc042/C.md)
