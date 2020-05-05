@@ -701,6 +701,7 @@
 + [arc051/A](arc051/A.md)
 + [arc051/B](arc051/B.md)
 + [arc052/A](arc052/A.md)
++ [arc053/C](arc053/C.md)
 + [arc054/A](arc054/A.md)
 + [arc055/A](arc055/A.md)
 + [arc056/A](arc056/A.md)
