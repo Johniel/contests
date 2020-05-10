@@ -800,6 +800,7 @@
 + [code-festival-2015-quala/D](code-festival-2015-quala/D.md)
 + [code-festival-2016-quala/A](code-festival-2016-quala/A.md)
 + [code-festival-2016-qualb/B](code-festival-2016-qualb/B.md)
++ [code-festival-2016-qualb/D](code-festival-2016-qualb/D.md)
 + [code-festival-2017-quala/A](code-festival-2017-quala/A.md)
 + [code-festival-2017-qualb/B](code-festival-2017-qualb/B.md)
 + [code-festival-2017-qualc/B](code-festival-2017-qualc/B.md)
