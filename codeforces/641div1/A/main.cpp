@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     const int M = 2 * 1e5 + 5;
     static int mn[M][3];
-    fill(&mn[0][0], &mn[M - 1][3 - 1] + 1, M);
+    fill(&mn[0][0], &mn[M - 1][3 - 1] + 1, 1 << 30);
     static int cnt[M];
     fill(cnt, cnt + M, 0);
     each (i, a) {
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
       }
     }
 
-    int x = 1;
+    lli x = 1;
     for (int i = 0; i < M; ++i) {
       if (n == cnt[i]) x *= mn[i][1];
       if (n == cnt[i] + 1) x *= mn[i][0];
