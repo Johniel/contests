@@ -369,6 +369,7 @@
 + [637div2/C](637div2/C.md)
 + [637div2/D](637div2/D.md)
 + [637div2/E](637div2/E.md)
++ [641div1/A](641div1/A.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
