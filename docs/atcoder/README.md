@@ -818,6 +818,7 @@
 + [code-festival-2017-qualb/B](code-festival-2017-qualb/B.md)
 + [code-festival-2017-qualc/B](code-festival-2017-qualc/B.md)
 + [ddcc2020-qual/B](ddcc2020-qual/B.md)
++ [ddcc2020-qual/D](ddcc2020-qual/D.md)
 + [discovery2016-qual/B](discovery2016-qual/B.md)
 + [diverta2019-2/A](diverta2019-2/A.md)
 + [diverta2019-2/B](diverta2019-2/B.md)
