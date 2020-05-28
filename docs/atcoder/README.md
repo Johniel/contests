@@ -871,6 +871,7 @@
 + [edpc/Z](edpc/Z.md)
 + [exawizards2019/C](exawizards2019/C.md)
 + [hitachi2020/B](hitachi2020/B.md)
++ [indeednow-quala/D](indeednow-quala/D.md)
 + [keyence2019/B](keyence2019/B.md)
 + [keyence2019/C](keyence2019/C.md)
 + [keyence2020/C](keyence2020/C.md)
