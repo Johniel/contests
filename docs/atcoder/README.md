@@ -830,6 +830,7 @@
 + [cf16-final/B](cf16-final/B.md)
 + [cf16-final/D](cf16-final/D.md)
 + [cf17-final/B](cf17-final/B.md)
++ [code-festival-2014-morning-middle/C](code-festival-2014-morning-middle/C.md)
 + [code-festival-2014-qualb/D](code-festival-2014-qualb/D.md)
 + [code-festival-2015-quala/D](code-festival-2015-quala/D.md)
 + [code-festival-2016-quala/A](code-festival-2016-quala/A.md)
