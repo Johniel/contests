@@ -920,3 +920,4 @@
 + [yahoo-procon/2019-qual/A](yahoo-procon/2019-qual/A.md)
 + [yahoo-procon/2019-qual/B](yahoo-procon/2019-qual/B.md)
 + [yahoo-procon/2019-qual/C](yahoo-procon/2019-qual/C.md)
++ [yahoo-procon/2019-qual/D](yahoo-procon/2019-qual/D.md)
