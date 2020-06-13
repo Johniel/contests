@@ -1,4 +1,4 @@
-# atcoder/yahoo-procon/2019-qual/B
+# atcoder/yahoo-procon2019-qual/C
 
 ## Code
 main.cpp
@@ -28,33 +28,22 @@ int main(int argc, char *argv[])
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  while (true) {
-    const int N = 5;
-    bool g[N][N];
-    fill(&g[0][0], &g[N - 1][N - 1] + 1, false);
-    for (int i = 0; i < 3; ++i) {
-      int src, dst;
-      if (cin >> src >> dst) {
-        --src;
-        --dst;
-        g[src][dst] = g[dst][src] = true;
-      } else {
-        return 0;
-      }
+  lli k, a, b;
+  while (cin >> k >> a >> b) {
+    unless (a + 2 < b) {
+      cout << k + 1 << endl;
+      continue;
     }
-    vector<int> v;
-    v.push_back(0);
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
-    sort(v.begin(), v.end());
-    bool f = false;
-    do {
-      f = f || (g[v[0]][v[1]] && g[v[1]][v[2]] && g[v[2]][v[3]]);
-    } while (next_permutation(v.begin(), v.end()));
-    cout << (f ? "YES" : "NO") << endl;
+    
+    if (k + 1 <= a) {
+      cout << k + 1 << endl;
+      continue;
+    }
+
+    k -= a - 1;
+    cout << a + (b - a) * (k / 2) + (k % 2) << endl;
   }
-  
+
   return 0;
 }
 ```
@@ -62,4 +51,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/yahoo-procon/2019-qual/B)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/yahoo-procon2019-qual/C)

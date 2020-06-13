@@ -1,4 +1,4 @@
-# atcoder/yahoo-procon/2019-qual/A
+# atcoder/yahoo-procon2019-qual/A
 
 ## Code
 main.cpp
@@ -44,4 +44,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/yahoo-procon/2019-qual/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/yahoo-procon2019-qual/A)
