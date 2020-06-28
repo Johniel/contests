@@ -899,6 +899,7 @@
 + [hitachi2020/B](hitachi2020/B.md)
 + [indeednow-quala/D](indeednow-quala/D.md)
 + [indeednow-qualb/C](indeednow-qualb/C.md)
++ [intro-heuristics](intro-heuristics.md)
 + [keyence2019/B](keyence2019/B.md)
 + [keyence2019/C](keyence2019/C.md)
 + [keyence2020/C](keyence2020/C.md)
