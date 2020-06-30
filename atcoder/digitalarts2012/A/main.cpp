@@ -37,28 +37,40 @@ int main(int argc, char *argv[])
   cout.precision(15);
 
   str s;
-  while (getline(s, cin)) {
+  while (getline(cin, s)) {
     int n;
     cin >> n;
+
     vec<str> v(n);
     cin >> v;
-    for (int i = 0; i < s.size(); ++i) {
-      each (t, v) {
+
+    vec<str> u;
+    istringstream iss(s);
+    for (str t; iss >> t; u.push_back(t)) ;
+
+
+    each (i, u) {
+      each (j, v) {
+        if (i.size() != j.size()) continue;
         bool f = true;
-        for (int k = 0; j < t.size() && i + j < s.size(); ++k) {
-          if (s[i + j] == ' ') f = false;
-          if (s[i + j] == '*') continue;
-          if (t[j] == '*') continue;
-          f = f && (s[i + j] == t[j]);
+        for (int k = 0; k < i.size(); ++k) {
+          if (j[k] == '*') continue;
+          f = f && (i[k] == j[k]);
         }
         if (f) {
-          for (int k = 0; j < t.size() && i + j < s.size(); ++k) {
-            s[i + j] = '*';
+          for (int k = 0; k < i.size(); ++k) {
+            i[k] = '*';
           }
         }
       }
     }
-    cout << s << endl;
+
+    for (int i = 0; i < u.size(); ++i) {
+      if (i) cout << ' ';
+      cout << u[i];
+    }
+    cout << endl;
+    getline(cin, s);
   }
 
   return 0;
