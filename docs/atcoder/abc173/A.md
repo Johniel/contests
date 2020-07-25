@@ -1,10 +1,10 @@
-# atcoder/abc17173/B
+# atcoder/abc173/A
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/abc17173/B/main.cpp
+// atcoder/abc17173/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -44,16 +44,8 @@ int main(int argc, char *argv[])
 
   int n;
   while (cin >> n) {
-    map<str, int> m;
-    for (int i = 0; i < n; ++i) {
-      str s;
-      cin >> s;
-      ++m[s];
-    }
-    cout << "AC x " << m["AC"] << endl;
-    cout << "WA x " << m["WA"] << endl;
-    cout << "TLE x " << m["TLE"] << endl;
-    cout << "RE x " << m["RE"] << endl;
+    if (n % 1000) cout << 1000 - n % 1000 << endl;
+    else cout << 0 << endl;
   }
 
   return 0;
@@ -63,4 +55,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc17173/B)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc173/A)

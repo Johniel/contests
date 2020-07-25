@@ -1,4 +1,4 @@
-# atcoder/abc17173/D
+# atcoder/abc173/D
 
 ## Code
 main.cpp
@@ -72,4 +72,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc17173/D)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc173/D)

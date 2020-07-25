@@ -1,10 +1,10 @@
-# atcoder/abc17173/A
+# atcoder/abc173/F
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/abc17173/A/main.cpp
+// atcoder/abc173/F/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -24,6 +24,7 @@ template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m)
 
 template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
 template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+template<typename T, typename U> inline pair<T, U> swap(pair<T, U>& p) { swap(p.first, p.second); return p; }
 
 using lli = long long int;
 using ull = unsigned long long;
@@ -42,10 +43,24 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n;
+  lli n;
   while (cin >> n) {
-    if (n % 1000) cout << 1000 - n % 1000 << endl;
-    else cout << 0 << endl;
+    vec<pair<int, int>> v(n - 1);
+    cin >> v;
+    each (i, v) --i.first, --i.second;
+
+    // 木の場合:
+    // 連結成分の数 = 頂点数 - 辺数
+
+    lli x = 0;
+    for (int i = 0; i < n; ++i) {
+      x += (i + 1) * (n - i);
+    }
+    each (e, v) {
+      unless (e.first < e.second) swap(e);
+      x -= (e.first + 1) * (n - e.second);
+    }
+    cout << x << endl;
   }
 
   return 0;
@@ -55,4 +70,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc17173/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc173/F)

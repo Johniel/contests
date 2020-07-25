@@ -1,10 +1,10 @@
-# atcoder/abc17173/C
+# atcoder/abc173/B
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/abc17173/C/main.cpp
+// atcoder/abc17173/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,31 +42,18 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int h, w, k;
-  while (cin >> h >> w >> k) {
-    const int N = 6 + 1;
-    char g[N][N];
-    fill(&g[0][0], &g[N - 1][N - 1] + 1, '@');
-    for (int i = 0; i < h; ++i) {
-      for (int j = 0; j < w; ++j) {
-        cin >> g[i][j];
-      }
+  int n;
+  while (cin >> n) {
+    map<str, int> m;
+    for (int i = 0; i < n; ++i) {
+      str s;
+      cin >> s;
+      ++m[s];
     }
-    int x = 0;
-    for (int bith = 0; bith < (1 << h); ++bith) {
-      for (int bitw = 0; bitw < (1 << w); ++bitw) {
-        int cnt = 0;
-        for (int i = 0; i < h; ++i) {
-          for (int j = 0; j < w; ++j) {
-            if (bith & (1 << i)) continue;
-            if (bitw & (1 << j)) continue;
-            cnt += (g[i][j] == '#');
-          }
-        }
-        x += (cnt == k);
-      }
-    }
-    cout << x << endl;
+    cout << "AC x " << m["AC"] << endl;
+    cout << "WA x " << m["WA"] << endl;
+    cout << "TLE x " << m["TLE"] << endl;
+    cout << "RE x " << m["RE"] << endl;
   }
 
   return 0;
@@ -76,4 +63,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc17173/C)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc173/B)
