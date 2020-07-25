@@ -77,13 +77,13 @@ int main(int argc, char *argv[])
 
     for (int bit = 0; bit < (1 << n); ++bit) {
       const int pc = __builtin_popcount(bit);
-      for (int a = bit; 0 <= a; --a) {
-        a = bit & a;
-        int b = bit - a;
+      for (int A = bit; 0 <= A; --A) {
+        A = A & bit;
+        int B = bit - A;
 
         lli sum = 0;
         for (int i = 0; i < n; ++i) {
-          sum += min(mnx[a][i], mny[b][i]) * u[i];
+          sum += min(mnx[A][i], mny[B][i]) * u[i];
         }
 
         setmin(mn[pc], sum);
