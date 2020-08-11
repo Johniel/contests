@@ -1,0 +1,92 @@
+// atcoder/digitalarts2012/C/main.cpp
+// author: @___Johniel
+// github: https://github.com/johniel/
+
+#include <bits/stdc++.h>
+
+#define each(i, c) for (auto& i : c)
+#define unless(cond) if (!(cond))
+
+using namespace std;
+
+template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p) { os << "(" << p.first << "," << p.second << ")"; return os; }
+template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p) { is >> p.first >> p.second; return is; }
+template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; for (auto& i: v) os << i << ","; os << ")"; return os; }
+template<typename T> istream& operator >> (istream& is, vector<T>& v) { for (auto& i: v) is >> i; return is; }
+template<typename T> ostream& operator << (ostream& os, set<T> s) { os << "#{"; for (auto& i: s) os << i << ","; os << "}"; return os; }
+template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m) { os << "{"; for (auto& i: m) os << i << ","; os << "}"; return os; }
+
+template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
+template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+using lli = long long int;
+using ull = unsigned long long;
+using point = complex<double>;
+using str = string;
+template<typename T> using vec = vector<T>;
+
+constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
+constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
+constexpr lli mod = 1e9 + 7;
+
+int num(char c) { return c - 'a' + 1; }
+char rev(int n) { return 'a' + n - 1; }
+
+bool f1(str s)
+{
+  for (int i = 0; i < s.size(); ++i) {
+    for (int j = 0; j < s.size(); ++j) {
+      if (i == j) continue;
+      if (s[i] != 'a' && s[j] != 'z') {
+        --s[i];
+        ++s[j];
+        cout << s << endl;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool f2(str s)
+{
+  for (int i = 0; i < s.size(); ++i) {
+    if (s[i] != 'a') {
+      for (int k = 0; k < s.size(); ++k) {
+        if (k == i) cout << char(s[k] - 1);
+        else cout << s[k];
+      }
+      cout << 'a' << endl;
+      return true;
+    }
+  }
+  return false;
+}
+
+bool f3(str s)
+{
+  unless (count(s.begin(), s.end(), 'a') == s.size()) return false;
+  cout << 'b' << s.substr(2) << endl;
+  return true;
+}
+
+int main(int argc, char *argv[])
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.setf(ios_base::fixed);
+  cout.precision(15);
+
+  str s;
+  while (cin >> s) {
+    if (0) ;
+    else if (s == "a") cout << "NO" << endl;
+    else if (s == str(20, 'z')) cout << "NO" << endl;
+    else if (f1(s)) ;
+    else if (f2(s)) ;
+    else if (f3(s)) ;
+    else assert(false);
+  }
+
+  return 0;
+}
