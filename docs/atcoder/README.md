@@ -736,6 +736,7 @@
 + [arc015/A](arc015/A.md)
 + [arc015/B](arc015/B.md)
 + [arc017/C](arc017/C.md)
++ [arc018/B](arc018/B.md)
 + [arc021/A](arc021/A.md)
 + [arc022/A](arc022/A.md)
 + [arc022/B](arc022/B.md)
