@@ -409,6 +409,7 @@
 + [677div3/D](677div3/D.md)
 + [677div3/E](677div3/E.md)
 + [677div3/F](677div3/F.md)
++ [677div3/G](677div3/G.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
