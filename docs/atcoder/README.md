@@ -931,6 +931,7 @@
 + [arc107/A](arc107/A.md)
 + [arc107/B](arc107/B.md)
 + [arc107/C](arc107/C.md)
++ [arc107/D](arc107/D.md)
 + [atc001/B](atc001/B.md)
 + [caddi2018/B](caddi2018/B.md)
 + [caddi2018/C](caddi2018/C.md)
