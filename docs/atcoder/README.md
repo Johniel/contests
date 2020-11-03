@@ -953,6 +953,7 @@
 + [code-festival-2014-final/D](code-festival-2014-final/D.md)
 + [code-festival-2014-final/E](code-festival-2014-final/E.md)
 + [code-festival-2014-morning-middle/C](code-festival-2014-morning-middle/C.md)
++ [code-festival-2014-morning-middle/D](code-festival-2014-morning-middle/D.md)
 + [code-festival-2014-quala/B](code-festival-2014-quala/B.md)
 + [code-festival-2014-quala/C](code-festival-2014-quala/C.md)
 + [code-festival-2014-qualb/B](code-festival-2014-qualb/B.md)
