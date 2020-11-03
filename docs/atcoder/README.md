@@ -1040,6 +1040,7 @@
 + [keyence2019/C](keyence2019/C.md)
 + [keyence2020/B](keyence2020/B.md)
 + [keyence2020/C](keyence2020/C.md)
++ [keyence2020/D](keyence2020/D.md)
 + [m-solutions2019/A](m-solutions2019/A.md)
 + [m-solutions2019/B](m-solutions2019/B.md)
 + [m-solutions2019/D](m-solutions2019/D.md)
