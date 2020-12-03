@@ -31,22 +31,18 @@ constexpr lli mod = 1e9 + 7;
 
 int main(int argc, char *argv[])
 {
-  std::ios_base::sync_with_stdio(0);
-  std::cin.tie(0);
-  std::cout.setf(std::ios_base::fixed);
-  std::cout.precision(15);
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.setf(ios_base::fixed);
+  cout.precision(15);
 
-  int n;
-  while (cin >> n) {
-    vec<int> a(n);
-    cin >> a;
-    each (i, a) --i;
-
-    int cnt = 0;
-    for (int i = 0; i < a.size(); ++i) {
-      cnt += (a[a[i]] == i);
+  str s;
+  while (cin >> s) {
+    for (int i = 0; i < s.size(); ++i) {
+      if (i == 4) cout << ' ';
+      cout << s[i];
     }
-    cout << cnt / 2 << endl;
+    cout << endl;
   }
 
   return 0;
