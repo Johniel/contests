@@ -1083,6 +1083,7 @@
 + [m-solutions2020/D](m-solutions2020/D.md)
 + [m-solutions2020/E](m-solutions2020/E.md)
 + [mujin-pc-2016/B](mujin-pc-2016/B.md)
++ [mujin-pc-2016/C](mujin-pc-2016/C.md)
 + [nikkei/2019/qual/A](nikkei/2019/qual/A.md)
 + [nikkei/2019/qual/B](nikkei/2019/qual/B.md)
 + [nikkei/2019/qual/C](nikkei/2019/qual/C.md)
