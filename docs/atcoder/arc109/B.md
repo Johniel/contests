@@ -1,10 +1,10 @@
-# atcoder/code-festival-2016-quala/A
+# atcoder/arc109/B
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/code-festival-2016-quala/A/main.cpp
+// atcoder/arc109/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,13 +42,16 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    for (int i = 0; i < s.size(); ++i) {
-      if (i == 4) cout << ' ';
-      cout << s[i];
+  lli n;
+  while (cin >> n) {
+    lli m = n + 1;
+    for (int i = 0; ; ++i) {
+      m -= i;
+      if (m < 0) {
+        cout << n - i + 2 << endl;
+        break;
+      }
     }
-    cout << endl;
   }
 
   return 0;
@@ -58,4 +61,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2016-quala/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/arc109/B)

@@ -1,10 +1,10 @@
-# atcoder/code-festival-2016-quala/A
+# atcoder/arc109/C
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/code-festival-2016-quala/A/main.cpp
+// atcoder/arc109/C/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,13 +42,31 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
+  int n, k;
   str s;
-  while (cin >> s) {
-    for (int i = 0; i < s.size(); ++i) {
-      if (i == 4) cout << ' ';
-      cout << s[i];
+  while (cin >> n >> k >> s) {
+    auto f = [] (char a, char b) {
+      if (a == 'R' && b == 'S') return 'R';
+      if (a == 'P' && b == 'R') return 'P';
+      if (a == 'S' && b == 'P') return 'S';
+      return '@';
+    };
+    auto fn = [&] (char a, char b) {
+      if (a == b) return a;
+      char x = f(a, b);
+      char y = f(b, a);
+      if (x != '@') return x;
+      else return y;
+    };
+    str t = s;
+    for (int _ = 0; _ < k; ++_) {
+      str u = t + t;
+      t = "";
+      for (int i = 0; i + 1 < u.size(); i += 2) {
+        t += fn(u[i], u[i + 1]);
+      }
     }
-    cout << endl;
+    cout << t[0] << endl;
   }
 
   return 0;
@@ -58,4 +76,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2016-quala/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/arc109/C)

@@ -1,10 +1,10 @@
-# atcoder/code-festival-2016-quala/A
+# atcoder/agc033/A
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/code-festival-2016-quala/A/main.cpp
+// atcoder/agc033/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,13 +42,47 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    for (int i = 0; i < s.size(); ++i) {
-      if (i == 4) cout << ' ';
-      cout << s[i];
+  int h, w;
+  while (cin >> h >> w) {
+    char g[h][w];
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        cin >> g[i][j];
+      }
     }
-    cout << endl;
+    const int inf = 1 << 29;
+    queue<pair<int, int>> q;
+    int cost[h][w];
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        if (g[i][j] == '#') {
+          cost[i][j] = 0;
+          q.push({i, j});
+        } else {
+          cost[i][j] = inf;
+        }
+      }
+    }
+    for (; q.size(); q.pop()) {
+      pair<int, int> curr = q.front();
+      for (int d = 0; d < 4; ++d) {
+        int ni = curr.first + di[d];
+        int nj = curr.second + dj[d];
+        unless (0 <= ni && ni < h) continue;
+        unless (0 <= nj && nj < w) continue;
+        if (cost[ni][nj] != inf) continue;
+        cost[ni][nj] = cost[curr.first][curr.second] + 1;
+        q.push({ni, nj});
+      }
+    }
+
+    int mx = 0;
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        if (g[i][j] == '.') setmax(mx, cost[i][j]);
+      }
+    }
+    cout << mx << endl;
   }
 
   return 0;
@@ -58,4 +92,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2016-quala/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/agc033/A)
