@@ -1,4 +1,4 @@
-// atcoder/code-festival-2016-quala/A/main.cpp
+// atcoder/arc037/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,13 +36,13 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    for (int i = 0; i < s.size(); ++i) {
-      if (i == 4) cout << ' ';
-      cout << s[i];
-    }
-    cout << endl;
+  int n;
+  while (cin >> n) {
+    vec<int> v(n);
+    cin >> v;
+    int sum = 0;
+    each (i, v) sum += max(0, 80 - i);
+    cout << sum << endl;
   }
 
   return 0;

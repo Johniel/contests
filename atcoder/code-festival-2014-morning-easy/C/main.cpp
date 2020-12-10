@@ -1,4 +1,4 @@
-// atcoder/code-festival-2016-quala/A/main.cpp
+// atcoder/code-festival-2014-morning-easy/C/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,13 +36,52 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    for (int i = 0; i < s.size(); ++i) {
-      if (i == 4) cout << ' ';
-      cout << s[i];
+  int n, m, s, t;
+  while (cin >> n >> m >> s >> t) {
+    --s;
+    --t;
+
+    vec<pair<int, lli>> g[n];
+    for (int i = 0; i < m; ++i) {
+      int a, b, c;
+      cin >> a >> b >> c;
+      --a;
+      --b;
+      g[a].push_back({b, c});
+      g[b].push_back({a, c});
     }
-    cout << endl;
+    const lli inf = 1LL << 60;
+    auto sssp = [&] (int src) {
+      vec<lli> cost(n, inf);
+      cost[src] = 0;
+      priority_queue<pair<int, int>> q;
+      q.push({0, src});
+      while (q.size()) {
+        auto curr = q.top();
+        q.pop();
+        if (cost[curr.second] != abs(curr.first)) continue;
+        each (e, g[curr.second]) {
+          lli c = e.second + abs(curr.first);
+          if (cost[e.first] > c) {
+            cost[e.first] = c;
+            q.push({-c, e.first});
+          }
+        }
+      }
+      return cost;
+    };
+
+    vec<lli> cost1 = sssp(s);
+    vec<lli> cost2 = sssp(t);
+    int x = -1;
+    for (int i = 0; i < n; ++i) {
+      if (cost1[i] == inf) continue;
+      if (cost1[i] == cost2[i]) {
+        x = i + 1;
+        break;
+      }
+    }
+    cout << x << endl;
   }
 
   return 0;

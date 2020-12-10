@@ -1,4 +1,4 @@
-// atcoder/code-festival-2016-quala/A/main.cpp
+// atcoder/nikkei2019-qual/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,22 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+const int N = 1e5 + 5;
+
+vec<int> g[N];
+int memo[N];
+int rec(int curr)
+{
+  int& ret = memo[curr];
+  if (ret != -1) return ret;
+
+  int mx = 0;
+  each (next, g[curr]) {
+    setmax(mx, rec(next) + 1);
+  }
+  return ret = mx;
+}
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -36,13 +52,39 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    for (int i = 0; i < s.size(); ++i) {
-      if (i == 4) cout << ' ';
-      cout << s[i];
+  int n, m;
+  while (cin >> n >> m) {
+    fill(g, g + N, vec<int>());
+    for (int i = 0; i < n + m - 1; ++i) {
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      g[b].push_back(a);
     }
-    cout << endl;
+    static int deg[N];
+    fill(deg, deg + N, 0);
+    for (int i = 0; i < n; ++i) {
+      each (j, g[i]) ++deg[j];
+    }
+    fill(memo, memo + N, -1);
+    for (int i = 0; i < n; ++i) {
+      rec(i);
+    }
+    static int p[N];
+    fill(p, p + N, -1);
+    for (int i = 0; i < n; ++i) {
+      if (g[i].empty()) continue;
+      int k = g[i].front();
+      each (j, g[i]) {
+        if (memo[i] == memo[j] + 1) {
+          p[i] = j;
+        }
+      }
+    }
+    for (int i = 0; i < n; ++i) {
+      cout << p[i] + 1 << endl;
+    }
   }
 
   return 0;
