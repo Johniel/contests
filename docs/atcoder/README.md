@@ -1013,6 +1013,7 @@
 + [code-festival-2017-qualc/B](code-festival-2017-qualc/B.md)
 + [code-festival-2017-qualc/C](code-festival-2017-qualc/C.md)
 + [code-formula-2014-final/C](code-formula-2014-final/C.md)
++ [code-formula-2014-quala/C](code-formula-2014-quala/C.md)
 + [code-formula-2014-qualb/C](code-formula-2014-qualb/C.md)
 + [code-formula-2014-qualb/D](code-formula-2014-qualb/D.md)
 + [ddcc2020-qual/B](ddcc2020-qual/B.md)
