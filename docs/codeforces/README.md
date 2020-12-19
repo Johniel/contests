@@ -419,6 +419,7 @@
 + [690div3/C](690div3/C.md)
 + [690div3/D](690div3/D.md)
 + [690div3/E](690div3/E.md)
++ [690div3/F](690div3/F.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
