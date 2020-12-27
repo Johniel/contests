@@ -414,6 +414,7 @@
 + [686div3/B](686div3/B.md)
 + [686div3/C](686div3/C.md)
 + [686div3/D](686div3/D.md)
++ [686div3/F](686div3/F.md)
 + [690div3/A](690div3/A.md)
 + [690div3/B](690div3/B.md)
 + [690div3/C](690div3/C.md)
