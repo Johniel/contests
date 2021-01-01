@@ -36,60 +36,19 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  const int N = 1e5 + 5;
-  static bool prime[N];
-  fill(prime, prime + N, true);
-  prime[0] = prime[1] = false;
-  for (int i = 2; i * i < N; ++i) {
-    for (int j = 2; i * j < N; ++j) {
-      prime[i * j] = false;
-    }
-  }
-  vector<int> p;
-  for (int i = 0; i < N; ++i) {
-    if (prime[i]) p.push_back(i);
-  }
-  p.push_back(1);
-  sort(p.begin(), p.end());
-
   int n, m;
   while (cin >> n >> m) {
-    vec<int> v;
-    each (i, p) {
-      if (i < n) v.push_back(i);
-      else break;
-    }
-
-    vec<pair<lli, lli>> u;
-    set<int> vis;
-    for (int i = 0, j = 0; u.size() < m; ++i) {
-      lli a = i;
-      lli b = n - i - 1;
-      if (vis.count(a)) continue;
-      if (vis.count(b)) continue;
-      unless (a < b) swap(a, b);
-      if (a != b) {
-        ++j;
-        u.push_back(make_pair(a, b));
-        vis.insert(a);
-        vis.insert(b);
+    int a, b;
+    a = b = 0;
+    bool f = !(n % 2);
+    for (int _ = 0; _ < m; ++_) {
+      a = (a + 1) % n;
+      b = (b + n - 1) % n;
+      if (f && (max(a, b) - min(a, b)) <= n/2) {
+        a = (a + 1) % n;
+        f = false;
       }
-    }
-    each (i, u) cout << i.first+1 << ' ' << i.second+1 << endl;
-
-    {
-      set<pair<lli, lli>> vis;
-      for (int i = 0; i < n; ++i) {
-        each (j, u) {
-          pair<lli, lli> p = j;
-          (p.first += i) %= n;
-          (p.second += i) %= n;
-          unless (p.first < p.second) swap(p.first, p.second);
-          cout << i << ' ' << make_pair(p.first+1, p.second+1) << endl;
-          assert(vis.count(p) == 0);
-          vis.insert(p);
-        }
-      }
+      cout << a + 1 << ' ' << b + 1 << endl;
     }
   }
 
