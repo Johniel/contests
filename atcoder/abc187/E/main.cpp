@@ -29,89 +29,31 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
-template<typename T = long long int>
-struct BIT {
-  vector<T> v;
-  int n;
-
-  BIT(int n_ = 0) {
-    n = n_;
-    v.resize(n + 1, 0);
-  }
-
-  T operator () (int i) const {
-    T s = 0;
-    while (i > 0) {
-      s += v.at(i);
-      i -= i & -i;
-    }
-    return s;
-
-  }
-
-  T operator () (int begin, int end) const {
-    return (*this)(end) - (*this)(begin);
-  }
-
-  void add(int i, T x) {
-    ++i;
-    while (i <= n) {
-      v.at(i) += x;
-      i += i & -i;
-    }
-    return ;
-  }
-
-  static bool verify(void) {
-    vector<int> v;
-    v.push_back(1 << 0);
-    v.push_back(1 << 2);
-    v.push_back(1 << 1);
-    v.push_back(1 << 4);
-    v.push_back(1 << 3);
-    v.push_back(1 << 6);
-    v.push_back(1 << 5);
-
-    BIT<int> bit(v.size());
-    for (int i = 0; i < v.size(); ++i) {
-      bit.add(i, v[i]);
-    }
-
-    if (bit(1, 3) != v[1] + v[2]) return false;
-
-    int sum = 0;
-    for (int i = 0; i < v.size(); ++i) {
-      if (sum != bit(i)) return false;
-      sum += v[i];
-    }
-    if (sum != bit(v.size())) return false;
-
-    for (int i = 0; i < v.size(); ++i) {
-      int sum = 0;
-      for (int j = i; j < v.size(); ++j) {
-        if (sum != bit(i, j)) return false;
-        sum += v[j];
-      }
-      if (sum != bit(i, v.size())) return false;
-    }
-
-    return true;
-  }
-};
-
 const int N = 2 * 1e5 + 5;
+int depth[N];
 vec<int> g[N];
-vec<int> ord;
-int S[N];
-int rec(int curr, int prev)
+void rec(int curr, int prev, int d)
 {
-  S[curr] = 1;
-  ord.push_back(curr);
+  depth[curr] = d;
   each (next, g[curr]) {
     if (next == prev) continue;
-    S[curr] += rec(next, curr);
+
+    rec(next, curr, d + 1);
   }
-  return S[curr];
+  return ;
+}
+
+lli m[N];
+lli r[N];
+void rec2(int curr, int prev, lli sum)
+{
+  sum += m[curr];
+  r[curr] = sum;
+  each (next, g[curr]) {
+    if (next == prev) continue;
+    rec2(next, curr, sum);
+  }
+  return ;
 }
 
 int main(int argc, char *argv[])
@@ -123,8 +65,8 @@ int main(int argc, char *argv[])
 
   int n;
   while (cin >> n) {
-    fill(g, g + N, vec<int>());
     vec<pair<int, int>> v;
+    fill(g, g + n, vec<int>());
     for (int i = 0; i < n - 1; ++i) {
       int a, b;
       cin >> a >> b;
@@ -135,15 +77,9 @@ int main(int argc, char *argv[])
       v.push_back({a, b});
     }
 
-    ord.clear();
-    rec(0, -1);
-
-    map<int, int> rev;
-    for (int i = 0; i < ord.size(); ++i) {
-      rev[ord[i]] = i;
-    }
-
-    BIT<lli> bit(n+3);
+    rec(0, -1, 0);
+    fill(m, m + N, 0);
+    fill(r, r + N, 0);
 
     int q;
     cin >> q;
@@ -151,31 +87,20 @@ int main(int argc, char *argv[])
       int t, e, x;
       cin >> t >> e >> x;
       --e;
-      int src, dst;
-      if (t == 1) {
-        src = v[e].first;
-        dst = v[e].second;
-      }
-      if (t == 2) {
-        src = v[e].second;
-        dst = v[e].first;
-      }
-
-      if (rev[src] < rev[dst]) {
-        bit.add(0, +x);
-        bit.add(rev[dst], -x);
-        bit.add(rev[dst] + S[dst], +x);
+      int src = v[e].first;
+      int dst = v[e].second;
+      if (t == 2) swap(src, dst);
+      if (depth[src] < depth[dst]) {
+        m[0] += x;
+        m[dst] -= x;
       } else {
-        bit.add(rev[src], +x);
-        bit.add(rev[src] + S[src], -x);
+        m[src] += x;
       }
     }
-
-    vec<lli> r(n);
+    rec2(0, -1, 0);
     for (int i = 0; i < n; ++i) {
-      r[ord[i]] = bit(0, i + 1);
+      cout << r[i] << endl;
     }
-    each (i, r) cout << i << endl;
   }
 
   return 0;
