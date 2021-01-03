@@ -1093,6 +1093,7 @@
 + [hhkb2020/C](hhkb2020/C.md)
 + [hhkb2020/E](hhkb2020/E.md)
 + [hitachi2020/B](hitachi2020/B.md)
++ [hitachi2020/C](hitachi2020/C.md)
 + [indeednow-quala/B](indeednow-quala/B.md)
 + [indeednow-quala/C](indeednow-quala/C.md)
 + [indeednow-quala/D](indeednow-quala/D.md)
