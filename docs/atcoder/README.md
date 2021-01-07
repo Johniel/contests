@@ -1160,6 +1160,7 @@
 + [thanksfes2017/H](thanksfes2017/H.md)
 + [tokiomarine2020/B](tokiomarine2020/B.md)
 + [tokiomarine2020/C](tokiomarine2020/C.md)
++ [xmascon20/B](xmascon20/B.md)
 + [yahoo-procon2019-qual/A](yahoo-procon2019-qual/A.md)
 + [yahoo-procon2019-qual/B](yahoo-procon2019-qual/B.md)
 + [yahoo-procon2019-qual/C](yahoo-procon2019-qual/C.md)
