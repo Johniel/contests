@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// codeforces/GoodBye2020/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,38 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
+  int _;
+  cin >> _;
+
+  int n;
+  while (cin >> n) {
+    vec<int> v(n);
+    cin >> v;
+
+    vec<int> u;
+    each (i, v) u.push_back(i), u.push_back(i + 1);
+    sort(u.begin(), u.end());
+    u.erase(unique(u.begin(), u.end()), u.end());
+
+    const int N = 2 * 1e5 + 5;
+    static int x[N];
+    static int y[N];
+
+    each (i, v) ++x[i];
+
+    each (i, u) {
+      if (1 < x[i] + y[i] && x[i]) {
+        --x[i];
+        ++y[i + 1];
       }
-      cout << a + 1 << ' ' << b + 1 << endl;
     }
+
+    int z = 0;
+    each (i, u) {
+      if (x[i] + y[i]) ++z;
+    }
+    cout << z << endl;
+    each (i, u) x[i] = y[i + 1] = 0;
   }
 
   return 0;

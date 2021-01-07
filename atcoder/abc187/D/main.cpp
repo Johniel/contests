@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc187/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,25 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+  int n;
+  while (cin >> n) {
+    vec<pair<lli, lli>> v(n);
+    cin >> v;
+    sort(v.begin(), v.end(), [] (auto a, auto b) {
+      return (a.second + a.first * 2) < (b.second + b.first * 2);
+    });
+    lli aoki = 0;
+    lli takahashi = 0;
+    each (i, v) aoki += i.first;
+    int cnt = 0;
+    while (takahashi <= aoki) {
+      ++cnt;
+      auto p = v.back();
+      v.pop_back();
+      takahashi += p.first + p.second;
+      aoki -= p.first;
     }
+    cout << cnt << endl;
   }
 
   return 0;

@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// codeforces/GoodBye2020/C/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,30 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+void fn(const str& S)
+{
+  const int N = S.size();
+  int R[N];
+  fill(R, R + N, 0);
+  int c = 0;
+  for (int i = 0; i < S.size(); ++i) {
+    int l = c - (i-c);
+    if (i+R[l] < c+R[c]) {
+      R[i] = R[l];
+    } else {
+      int j = c+R[c] - i;
+      while (i-j >= 0 && i+j < S.size() && S[i-j] == S[i+j]) ++j;
+      R[i] = j;
+      c = i;
+    }
+  }
+  for (int i = 0; i < N; ++i) {
+    cout << R[i] <<",";
+  }
+  cout << endl;
+  return ;
+}
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -36,20 +60,25 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
+  int _;
+  cin >> _;
+
+  str s;
+  while (cin >> s) {
+    vec<int> v;
+    each (c, s) v.push_back(c - 'a');
+    int x = 0;
+    for (int i = 0; i < v.size(); ++i) {
+      if (i + 1 < v.size() && v[i] == v[i + 1]) {
+        v[i + 1] = --x;
       }
-      cout << a + 1 << ' ' << b + 1 << endl;
+      if (i + 2 < v.size() && v[i] == v[i + 2]) {
+        v[i + 2] = --x;
+      }
     }
+    int y = 0;
+    each (i, v) y += (i < 0);
+    cout << y << endl;
   }
 
   return 0;

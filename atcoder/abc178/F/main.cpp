@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc178/F/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,47 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+  int n;
+  while (cin >> n) {
+    vec<int> a(n);
+    vec<int> b(n);
+    cin >> a >> b;
+
+    map<int, int> m;
+    each (i, a) ++m[i];
+    each (i, b) ++m[i];
+    int mx = 0;
+    each (i, m) setmax(mx, i.second);
+    if (n < mx) {
+      cout << "No" << endl;
+      continue;
     }
+
+    int x = -1;
+    reverse(b.begin(), b.end());
+    for (int i = 0; i < n; ++i) {
+      if (a[i] == b[i]) {
+        x = a[i];
+      }
+    }
+
+    vec<int> c;
+    for (int i = 0; i < n; ++i) {
+      if (a[i] != x && b[i] != x) {
+        c.push_back(i);
+      }
+    }
+
+    for (int i = 0; i < n; ++i) {
+      if (a[i] == b[i]) {
+        int y = c.back();
+        c.pop_back();
+        swap(b[i], b[y]);
+      }
+    }
+
+    cout << "Yes" << endl;
+    each (i, b) cout << i << ' '; cout << endl;
   }
 
   return 0;

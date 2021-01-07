@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// codeforces/693div3/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,41 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+  int _;
+  cin >> _;
+
+  int n;
+  while (cin >> n) {
+    vec<int> a(n);
+    cin >> a;
+
+    priority_queue<int> q[2];
+    each (i, a) {
+      q[i % 2].push(i);
     }
+
+    lli score[2];
+    score[0] = score[1] = 0;
+    for (int turn = 0; q[0].size() + q[1].size(); ++turn) {
+      int idx = turn % 2;
+      if (q[0].size() && q[1].size()) {
+        if (q[idx].top() < q[idx ^ 1].top()) {
+          q[idx ^ 1].pop();
+        } else {
+          score[idx] += q[idx].top();
+          q[idx].pop();
+        }
+      } else {
+        if (q[idx].size()) {
+          score[idx] += q[idx].top();
+          q[idx].pop();
+        } else {
+          q[idx ^ 1].pop();
+        }
+      }
+    }
+    if (score[0] == score[1]) cout << "Tie" << endl;
+    else cout << (score[0] > score[1] ? "Alice" : "Bob") << endl;
   }
 
   return 0;

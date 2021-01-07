@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc187/C/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,22 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
+  int n;
+  while (cin >> n) {
+    vec<str> v(n);
+    cin >> v;
+    sort(v.begin(), v.end());
+
+    str t = "satisfiable";
+    each (s, v) {
+      if (s[0] == '!') continue;
+      str u = string("!") + s;
+      if (binary_search(v.begin(), v.end(), u)) {
+        t = s;
+        break;
       }
-      cout << a + 1 << ' ' << b + 1 << endl;
     }
+    cout << t << endl;
   }
 
   return 0;

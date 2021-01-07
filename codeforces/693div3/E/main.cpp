@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// codeforces/693div3/E/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,42 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+  int _;
+  cin >> _;
+
+  int n;
+  while (cin >> n) {
+    vec<vec<int>> v;
+    for (int i = 0; i < n; ++i) {
+      int a, b;
+      cin >> a >> b;
+      if (a < b) swap(a, b);
+      v.push_back({a, b, i});
     }
+    sort(v.begin(), v.end(), [] (auto a, auto b) {
+      if (a[0] != b[0]) return a[0] < b[0];
+      return a[1] > b[1];
+    });
+
+    // cout << v << endl;
+
+    vec<int> w(n, -2);
+    vec<vec<int>> u;
+    each (i, v) {
+      if (u.empty()) u.push_back(i);
+      else {
+        while (u.size() && !(u.back()[0] < i[0] && u.back()[1] < i[1])) {
+          u.pop_back();
+        }
+        // cout << u << " -> " << i << endl;
+        if (u.size()) {
+          w[i[2]] = u.back()[2];
+          // w[u.back()[2]] = i[2];
+        }
+        u.push_back(i);
+      }
+    }
+    each (i, w) cout << i+1 << ' '; cout << endl;
   }
 
   return 0;

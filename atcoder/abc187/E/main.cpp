@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc187/E/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,33 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+const int N = 2 * 1e5 + 5;
+int depth[N];
+vec<int> g[N];
+void rec(int curr, int prev, int d)
+{
+  depth[curr] = d;
+  each (next, g[curr]) {
+    if (next == prev) continue;
+
+    rec(next, curr, d + 1);
+  }
+  return ;
+}
+
+lli m[N];
+lli r[N];
+void rec2(int curr, int prev, lli sum)
+{
+  sum += m[curr];
+  r[curr] = sum;
+  each (next, g[curr]) {
+    if (next == prev) continue;
+    rec2(next, curr, sum);
+  }
+  return ;
+}
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -36,19 +63,43 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
+  int n;
+  while (cin >> n) {
+    vec<pair<int, int>> v;
+    fill(g, g + n, vec<int>());
+    for (int i = 0; i < n - 1; ++i) {
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      g[a].push_back(b);
+      g[b].push_back(a);
+      v.push_back({a, b});
+    }
+
+    rec(0, -1, 0);
+    fill(m, m + N, 0);
+    fill(r, r + N, 0);
+
+    int q;
+    cin >> q;
+    while (q--) {
+      int t, e, x;
+      cin >> t >> e >> x;
+      --e;
+      int src = v[e].first;
+      int dst = v[e].second;
+      if (t == 2) swap(src, dst);
+      if (depth[src] < depth[dst]) {
+        m[0] += x;
+        m[dst] -= x;
+      } else {
+        m[src] += x;
       }
-      cout << a + 1 << ' ' << b + 1 << endl;
+    }
+    rec2(0, -1, 0);
+    for (int i = 0; i < n; ++i) {
+      cout << r[i] << endl;
     }
   }
 

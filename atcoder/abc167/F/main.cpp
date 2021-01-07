@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc167/F/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,42 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
+  int n;
+  while (cin >> n) {
+    vec<str> v(n);
+    cin >> v;
+
+    vec<pair<int, str>> a, b;
+    each (s, v) {
+      str t;
+      each (c, s) {
+        if (t.size() && t.back() == '(' && c == ')') {
+          t.pop_back();
+        } else {
+          t += c;
+        }
       }
-      cout << a + 1 << ' ' << b + 1 << endl;
+      int x = count(t.begin(), t.end(), '(');
+      int y = count(t.begin(), t.end(), ')');
+      if (y < x) {
+        a.push_back({y, s});
+      } else {
+        b.push_back({-x, s});
+      }
     }
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+    str s;
+    each (i, a) s += i.second;
+    each (i, b) s += i.second;
+    int x = 0;
+    each (c, s) {
+      if (c == '(') ++x;
+      if (c == ')') --x;
+      if (x < 0) break;
+    }
+    if (x == 0) cout << "Yes" << endl;
+    else cout << "No" << endl;
   }
 
   return 0;

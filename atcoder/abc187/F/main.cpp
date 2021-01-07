@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc187/F/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -38,18 +38,38 @@ int main(int argc, char *argv[])
 
   int n, m;
   while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+    int g[n];
+    fill(g, g + n, 0);
+    for (int i = 0; i < m; ++i) {
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      g[a] |= (1 << b);
+      g[b] |= (1 << a);
     }
+
+    const int N = 18 + 1;
+    const int BIT = (1 << N) + 2;
+    static int dp[BIT];
+    fill(dp, dp + BIT, (1 << 29));
+    dp[0] = 1;
+
+    for (int bit = 0; bit < (1 << n); ++bit) {
+      if (dp[bit] != 1) continue;
+      for (int i = 0; i < n; ++i) {
+        if ((g[i] & bit) == bit) {
+          dp[bit | (1 << i)] = 1;
+        }
+      }
+    }
+    int mn = 1 << 29;
+    for (int bit = 0; bit < (1 << n); ++bit) {
+      for (int i = bit - 1; i; i = (i - 1) & bit) {
+        setmin(dp[bit], dp[bit ^ i] + dp[i]);
+      }
+    }
+    cout << dp[(1 << n) - 1] << endl;
   }
 
   return 0;

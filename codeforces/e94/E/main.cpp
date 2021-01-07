@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// codeforces/e94/E/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,31 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+int rec(vec<int> v)
+{
+  int opt = v.size();
+  const int mn = *min_element(v.begin(), v.end());
+
+  int sum = 0;
+  each (i, v) i -= mn;
+  if (mn) sum += mn;
+
+  vec<int> b;
+  each (i, v) {
+    if (i) b.push_back(i);
+    else {
+      if (b.size()) sum += rec(b);
+      b.clear();
+    }
+  }
+  if (b.size()) {
+    sum += rec(b);
+  }
+  setmin(opt, sum);
+
+  return opt;
+}
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -36,20 +61,11 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
-    }
+  int n;
+  while (cin >> n) {
+    vec<int> a(n);
+    cin >> a;
+    cout << rec(a) << endl;
   }
 
   return 0;

@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// codeforces/686div3/E/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,9 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+const int N = 2 * 1e5 + 5;
+set<int> g[N];
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -36,20 +39,45 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+  int _;
+  cin >> _;
+
+  int n;
+  while (cin >> n) {
+    fill(g, g + n, set<int>());
+    for (int i = 0; i < n; ++i) {
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      g[a].insert(b);
+      g[b].insert(a);
     }
+
+    vec<int> v;
+    for (int i = 0; i < n; ++i) {
+      if (g[i].size() == 1) v.push_back(i);
+    }
+
+    vec<lli> u(n, 1);
+    while (!v.empty()) {
+      int x = v.back();
+      v.pop_back();
+      int y = *g[x].begin();
+      u[y] += u[x];
+      u[x] = 0;
+      g[y].erase(x);
+      if (g[y].size() == 1) {
+        v.push_back(y);
+      }
+    }
+
+    lli z = 0;
+    for (int i = 0; i < n; ++i) {
+      z += u[i] * (n - u[i]);
+      z += u[i] * (u[i] - 1) / 2;
+    }
+    cout << z << endl;
   }
 
   return 0;

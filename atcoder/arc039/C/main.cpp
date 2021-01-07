@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/arc039/C/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -25,9 +25,28 @@ using point = complex<double>;
 using str = string;
 template<typename T> using vec = vector<T>;
 
-constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
-constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
+const int di[] = {1, 0, -1, 0};
+const int dj[] = {0, -1, 0, 1};
 constexpr lli mod = 1e9 + 7;
+
+map<pair<int, int>, pair<int, int>> m[4];
+pair<int, int> fn(pair<int, int> curr, const int dir)
+{
+  for (int d = 0; d < 4; ++d) {
+    if (!m[d].count(curr)) {
+      m[d][curr] = make_pair(curr.first + di[d], curr.second + dj[d]);
+    }
+  }
+
+
+  for (int d = 0; d < 4; ++d) {
+    int e = (d + 2) % 4;
+    pair<int, int> q = m[d][curr];
+    m[e][q] = m[e][curr];
+  }
+
+  return m[dir][curr];
+}
 
 int main(int argc, char *argv[])
 {
@@ -36,20 +55,18 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
-    }
+  int k;
+  str s;
+  while (cin >> k >> s) {
+    fill(m, m + 4, map<pair<int, int>, pair<int, int>>());
+    pair<int, int> curr = {0, 0};
+    map<char, int> dir;
+    dir['R'] = 0;
+    dir['D'] = 1;
+    dir['L'] = 2;
+    dir['U'] = 3;
+    each (c, s) curr = fn(curr, dir[c]);
+    cout << curr.first << ' ' << curr.second << endl;
   }
 
   return 0;

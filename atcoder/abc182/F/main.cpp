@@ -1,4 +1,4 @@
-// atcoder/abc165/E/main.cpp
+// atcoder/abc182/F/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,20 +36,43 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, m;
-  while (cin >> n >> m) {
-    int a, b;
-    a = b = 0;
-    bool f = !(n % 2);
-    for (int _ = 0; _ < m; ++_) {
-      a = (a + 1) % n;
-      b = (b + n - 1) % n;
-      if (f && (max(a, b) - min(a, b)) <= n/2) {
-        a = (a + 1) % n;
-        f = false;
-      }
-      cout << a + 1 << ' ' << b + 1 << endl;
+  lli n, x;
+  while (cin >> n >> x) {
+    vec<lli> a(n);
+    cin >> a;
+
+    vec<lli> v;
+    reverse(a.begin(), a.end());
+    each (i, a) {
+      v.push_back(x / i);
+      x %= i;
     }
+    reverse(a.begin(), a.end());
+    reverse(v.begin(), v.end());
+    v.push_back(1LL << 60);
+    a.push_back(1LL << 60);
+
+    const int N = 55;
+    static lli dp[N][2];
+    fill(&dp[0][0], &dp[N - 1][2 - 1] + 1, 0);
+    dp[0][0] = 1;
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < 2; ++j) {
+        for (int k = 0; k < 2; ++k) {
+          lli p = (a[i + 1] / a[i]);
+          {
+            lli z = p * j - v[i] - k;
+            if (0 <= z && z < p) dp[i + 1][j] += dp[i][k];
+          }
+          {
+            lli y = v[i] + k - p * j;
+            if (0 < y && y < p) dp[i + 1][j] += dp[i][k];
+          }
+        }
+      }
+    }
+
+    cout << dp[n][0] << endl;
   }
 
   return 0;
