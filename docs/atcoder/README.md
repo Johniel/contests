@@ -1127,6 +1127,7 @@
 + [nikkei/2019/qual/B](nikkei/2019/qual/B.md)
 + [nikkei/2019/qual/C](nikkei/2019/qual/C.md)
 + [nikkei2019-2-qual/B](nikkei2019-2-qual/B.md)
++ [nikkei2019-2-qual/C](nikkei2019-2-qual/C.md)
 + [nikkei2019-2-qual/D](nikkei2019-2-qual/D.md)
 + [nikkei2019-qual/A](nikkei2019-qual/A.md)
 + [nikkei2019-qual/B](nikkei2019-qual/B.md)
