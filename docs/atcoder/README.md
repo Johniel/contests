@@ -1016,6 +1016,7 @@
 + [arc110/C](arc110/C.md)
 + [arc111/A](arc111/A.md)
 + [arc111/B](arc111/B.md)
++ [arc111/D](arc111/D.md)
 + [atc001/B](atc001/B.md)
 + [caddi2018/B](caddi2018/B.md)
 + [caddi2018/C](caddi2018/C.md)
