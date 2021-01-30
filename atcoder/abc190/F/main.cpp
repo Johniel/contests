@@ -102,12 +102,9 @@ int main(int argc, char *argv[])
     cin >> a;
 
     SegTree<int> seg(n, 0, [] (auto x, auto y) { return x + y; });
-    vec<int> v(n);
     lli x = 0;
     for (int i = 0; i < a.size(); ++i) {
-      int t = seg(0, a[i]);
-      x += i - t;
-      v[i] = i - t;
+      x += i - seg(0, a[i]);
       seg.update(a[i], 1);
     }
 
