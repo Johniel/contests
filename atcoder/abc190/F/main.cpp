@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < n; ++i) {
       cout << x << endl;
-      x -= seg(0, a[i]);
+      x -= a[i];
       x += n - a[i] - 1;
     }
   }
