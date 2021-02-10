@@ -1134,6 +1134,7 @@
 + [hhkb2020/A](hhkb2020/A.md)
 + [hhkb2020/B](hhkb2020/B.md)
 + [hhkb2020/C](hhkb2020/C.md)
++ [hhkb2020/D](hhkb2020/D.md)
 + [hhkb2020/E](hhkb2020/E.md)
 + [hitachi2020/B](hitachi2020/B.md)
 + [hitachi2020/C](hitachi2020/C.md)
