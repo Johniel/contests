@@ -165,26 +165,19 @@ int main(int argc, char *argv[])
         ++itr;
       }
       add.push_back({begin, end, w});
-      // cout << "-" << rm << endl;
-      // cout << "+" << add << endl;
 
       each (i, rm) {
         lli x = (bit(i[0], i[1] + 1) * i[2]) % mod;
-        // cout << i << ' ' << -x << endl;
         sum = (sum - x + mod) % mod;
         s.erase(i);
       }
       each (i, add) {
         lli x = (bit(i[0], i[1] + 1) * i[2]) % mod;
-        // cout << i << "+" << x << endl;
         sum = (sum + x) % mod;
         s.insert(i);
       }
-      // cout << s << endl;
       cout << sum << endl;
     }
-    // cout << endl;
-    // break;
   }
 
   return 0;
