@@ -869,6 +869,7 @@
 + [arc027/B](arc027/B.md)
 + [arc027/C](arc027/C.md)
 + [arc028/A](arc028/A.md)
++ [arc028/B](arc028/B.md)
 + [arc028/C](arc028/C.md)
 + [arc029/A](arc029/A.md)
 + [arc029/B](arc029/B.md)
