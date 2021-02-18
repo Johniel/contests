@@ -1053,6 +1053,7 @@
 + [code-festival-2014-final/E](code-festival-2014-final/E.md)
 + [code-festival-2014-morning-easy/B](code-festival-2014-morning-easy/B.md)
 + [code-festival-2014-morning-easy/C](code-festival-2014-morning-easy/C.md)
++ [code-festival-2014-morning-easy/D](code-festival-2014-morning-easy/D.md)
 + [code-festival-2014-morning-middle/C](code-festival-2014-morning-middle/C.md)
 + [code-festival-2014-morning-middle/D](code-festival-2014-morning-middle/D.md)
 + [code-festival-2014-quala/B](code-festival-2014-quala/B.md)
