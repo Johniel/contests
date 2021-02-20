@@ -786,6 +786,7 @@
 + [agc020/B](agc020/B.md)
 + [agc021/A](agc021/A.md)
 + [agc022/A](agc022/A.md)
++ [agc022/B](agc022/B.md)
 + [agc023/A](agc023/A.md)
 + [agc024/A](agc024/A.md)
 + [agc024/B](agc024/B.md)
