@@ -1091,6 +1091,7 @@
 + [code-festival-2017-quala/A](code-festival-2017-quala/A.md)
 + [code-festival-2017-quala/C](code-festival-2017-quala/C.md)
 + [code-festival-2017-qualb/B](code-festival-2017-qualb/B.md)
++ [code-festival-2017-qualb/C](code-festival-2017-qualb/C.md)
 + [code-festival-2017-qualc/B](code-festival-2017-qualc/B.md)
 + [code-festival-2017-qualc/C](code-festival-2017-qualc/C.md)
 + [code-formula-2014-final/C](code-formula-2014-final/C.md)
