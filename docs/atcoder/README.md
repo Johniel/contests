@@ -1035,6 +1035,7 @@
 + [arc108/A](arc108/A.md)
 + [arc108/B](arc108/B.md)
 + [arc108/C](arc108/C.md)
++ [arc108/D](arc108/D.md)
 + [arc109/B](arc109/B.md)
 + [arc109/C](arc109/C.md)
 + [arc110/A](arc110/A.md)
