@@ -821,6 +821,7 @@
 + [agc049/B](agc049/B.md)
 + [aising2019/B](aising2019/B.md)
 + [aising2019/C](aising2019/C.md)
++ [aising2019/D](aising2019/D.md)
 + [aising2020/A](aising2020/A.md)
 + [aising2020/B](aising2020/B.md)
 + [aising2020/C](aising2020/C.md)
