@@ -1133,6 +1133,7 @@
 + [dwacon5th-prelims/C](dwacon5th-prelims/C.md)
 + [dwacon6th-prelims/B](dwacon6th-prelims/B.md)
 + [dwango2015-prelims/B](dwango2015-prelims/B.md)
++ [dwango2015-prelims/C](dwango2015-prelims/C.md)
 + [dwango2016-prelims/A](dwango2016-prelims/A.md)
 + [dwango2016-prelims/B](dwango2016-prelims/B.md)
 + [edpc/A](edpc/A.md)
