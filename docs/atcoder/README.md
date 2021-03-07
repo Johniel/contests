@@ -1093,6 +1093,7 @@
 + [code-festival-2015-qualb/A](code-festival-2015-qualb/A.md)
 + [code-festival-2015-qualb/B](code-festival-2015-qualb/B.md)
 + [code-festival-2015-qualb/C](code-festival-2015-qualb/C.md)
++ [code-festival-2015-qualb/D](code-festival-2015-qualb/D.md)
 + [code-festival-2016-quala/A](code-festival-2016-quala/A.md)
 + [code-festival-2016-quala/C](code-festival-2016-quala/C.md)
 + [code-festival-2016-quala/D](code-festival-2016-quala/D.md)
