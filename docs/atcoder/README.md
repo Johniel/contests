@@ -1095,6 +1095,7 @@
 + [code-festival-2015-morning-easy/B](code-festival-2015-morning-easy/B.md)
 + [code-festival-2015-morning-hard/A](code-festival-2015-morning-hard/A.md)
 + [code-festival-2015-morning-middle/A](code-festival-2015-morning-middle/A.md)
++ [code-festival-2015-morning-middle/B](code-festival-2015-morning-middle/B.md)
 + [code-festival-2015-quala/A](code-festival-2015-quala/A.md)
 + [code-festival-2015-quala/C](code-festival-2015-quala/C.md)
 + [code-festival-2015-quala/D](code-festival-2015-quala/D.md)
