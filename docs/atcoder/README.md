@@ -1090,6 +1090,7 @@
 + [code-festival-2014-quala/B](code-festival-2014-quala/B.md)
 + [code-festival-2014-quala/C](code-festival-2014-quala/C.md)
 + [code-festival-2014-qualb/B](code-festival-2014-qualb/B.md)
++ [code-festival-2014-qualb/C](code-festival-2014-qualb/C.md)
 + [code-festival-2014-qualb/D](code-festival-2014-qualb/D.md)
 + [code-festival-2015-morning-easy/B](code-festival-2015-morning-easy/B.md)
 + [code-festival-2015-morning-hard/A](code-festival-2015-morning-hard/A.md)
