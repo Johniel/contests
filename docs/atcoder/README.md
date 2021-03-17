@@ -1112,6 +1112,7 @@
 + [code-festival-2016-qualb/D](code-festival-2016-qualb/D.md)
 + [code-festival-2016-qualc/A](code-festival-2016-qualc/A.md)
 + [code-festival-2016-qualc/B](code-festival-2016-qualc/B.md)
++ [code-festival-2016-qualc/C](code-festival-2016-qualc/C.md)
 + [code-festival-2017-quala/A](code-festival-2017-quala/A.md)
 + [code-festival-2017-quala/C](code-festival-2017-quala/C.md)
 + [code-festival-2017-qualb/B](code-festival-2017-qualb/B.md)
