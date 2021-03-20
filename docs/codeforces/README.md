@@ -445,6 +445,7 @@
 + [702div3/E](702div3/E.md)
 + [702div3/F](702div3/F.md)
 + [702div3/G](702div3/G.md)
++ [706div1/C](706div1/C.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
