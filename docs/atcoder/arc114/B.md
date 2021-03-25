@@ -1,10 +1,10 @@
-# atcoder/code-festival-2017-quala/A
+# atcoder/arc114/B
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/code-festival-2017-quala/A/main.cpp
+// atcoder/arc114/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -33,7 +33,26 @@ template<typename T> using vec = vector<T>;
 
 constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
-constexpr lli mod = 1e9 + 7;
+constexpr lli mod = 998244353;
+
+const int N = 2 * 1e5 + 3;
+vec<int> g[N];
+bool vis[N];
+
+bool rec(int curr, int prev)
+{
+  vis[curr] = true;
+  bool f = false;
+  each (next, g[curr]) {
+    if (next == prev) continue;
+    if (vis[next]) f = true;
+    else {
+      bool g = rec(next, curr);
+      f = f || g;
+    }
+  }
+  return f;
+}
 
 int main(int argc, char *argv[])
 {
@@ -42,9 +61,24 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    cout << (s.find("YAKI") == 0 ? "Yes" : "No") << endl;
+  int n;
+  while (cin >> n) {
+    fill(g, g + N, vec<int>());
+    vec<int> v(n);
+    cin >> v;
+    each (i, v) --i;
+    for (int i = 0; i < v.size(); ++i) {
+      g[i].push_back(v[i]);
+      g[v[i]].push_back(i);
+    }
+
+    fill(vis, vis + N, false);
+    lli x = 1;
+    for (int i = 0; i < v.size(); ++i) {
+      if (vis[i]) continue;
+      if (rec(i, -1)) (x *= 2) %= mod;
+    }
+    cout << (x - 1 + mod) % mod << endl;
   }
 
   return 0;
@@ -54,4 +88,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2017-quala/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/arc114/B)

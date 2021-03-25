@@ -1,10 +1,10 @@
-# atcoder/code-festival-2017-quala/A
+# atcoder/agc031/B
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/code-festival-2017-quala/A/main.cpp
+// atcoder/agc031/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,9 +42,37 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    cout << (s.find("YAKI") == 0 ? "Yes" : "No") << endl;
+  int n;
+  while (cin >> n) {
+    vec<int> v(n);
+    cin >> v;
+    vec<int> prev(n, -1);
+    map<int, int> m;
+    each (i, v) m[i] = -1;
+    for (int i = 0; i < v.size(); ++i) {
+      prev[i] = m[v[i]];
+      m[v[i]] = i;
+    }
+    // cout << prev << endl;
+
+    const int N = 2 * 1e5 + 3;
+    lli dp[N];
+    fill(dp, dp + N, 0);
+    dp[0] = 1;
+
+    for (int i = 0; i < n; ++i) {
+      int j = prev[i];
+      if (j != -1 && j + 1 < i) { // 実は塗っていた。
+        (dp[i] += dp[j]) %= mod;
+      }
+      // 塗らない
+      (dp[i + 1] += dp[i]) %= mod;
+    }
+    cout << dp[n] << endl;
+    // for (int i = 0; i < n; ++i) {
+    //   cout << i << ": " << dp[i] << endl;
+    // }
+    // cout << endl;
   }
 
   return 0;
@@ -54,4 +82,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2017-quala/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/agc031/B)

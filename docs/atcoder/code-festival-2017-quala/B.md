@@ -1,10 +1,10 @@
-# atcoder/code-festival-2017-quala/A
+# atcoder/code-festival-2017-quala/B
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/code-festival-2017-quala/A/main.cpp
+// atcoder/code-festival-2017-quala/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -37,14 +37,22 @@ constexpr lli mod = 1e9 + 7;
 
 int main(int argc, char *argv[])
 {
-  ios_base::sync_with_stdio(0);
-  cin.tie(0);
-  cout.setf(ios_base::fixed);
-  cout.precision(15);
+  std::ios_base::sync_with_stdio(0);
+  std::cin.tie(0);
+  std::cout.setf(std::ios_base::fixed);
+  std::cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    cout << (s.find("YAKI") == 0 ? "Yes" : "No") << endl;
+  int n, m, k;
+  while (cin >> n >> m >> k) {
+    bool f = false;
+    for (int i = 0; i <= n; ++i) {
+      for (int j = 0; j <= m; ++j) {
+        int a = i * (m - j);
+        int b = (n - i) * j;
+        if (a + b == k) f = true;
+      }
+    }
+    cout << (f ? "Yes" : "No") << endl;
   }
 
   return 0;
@@ -54,4 +62,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2017-quala/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/code-festival-2017-quala/B)
