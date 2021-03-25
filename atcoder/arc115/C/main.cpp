@@ -1,4 +1,4 @@
-// atcoder/code-festival-2017-quala/A/main.cpp
+// atcoder/arc115/C/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,9 +36,47 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  str s;
-  while (cin >> s) {
-    cout << (s.find("YAKI") == 0 ? "Yes" : "No") << endl;
+  const int N = 1e5 + 5;
+  int v[N];
+  fill(v, v + N, 1);
+  for (int i = 2; i < N; ++i) {
+    set<int> vis;
+    vis.insert(0);
+    vis.insert(1);
+    for (int j = 2; j * j <= i; ++j) {
+      if (i % j == 0) {
+        vis.insert(v[i / j]);
+        vis.insert(v[j]);
+      }
+    }
+    vec<int> u;
+    each (j, vis) u.push_back(j);
+    int x = -1;
+    for (int j = 0; j < u.size(); ++j) {
+      if (u[j] != j) {
+        x = j;
+        break;
+      }
+    }
+    if (x == -1) {
+      v[i] = u.size();
+    }
+  }
+
+  // for (int i = 1; i < 100; ++i) {
+  //   for (int j = i + 1; j < 100; ++j) {
+  //     if (j % i == 0) {
+  //       assert(v[i] != v[j]);
+  //     }
+  //   }
+  // }
+
+  int n;
+  while (cin >> n) {
+    for (int i = 1; i <= n; ++i) {
+      cout << v[i] << ' ';
+    }
+    cout << endl;
   }
 
   return 0;

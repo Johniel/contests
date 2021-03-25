@@ -1,4 +1,4 @@
-// atcoder/code-festival-2017-quala/A/main.cpp
+// atcoder/abc027/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -29,6 +29,21 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+template<typename T>
+struct PrefixSum {
+  vector<T> sum;
+  PrefixSum(vector<T> v) {
+    sum.push_back(0);
+    for (int i = 0; i < v.size(); ++i) {
+      sum.push_back(sum.back() + v[i]);
+    }
+  }
+  T operator () (size_t begin, size_t end) const {
+    assert(begin <= end);
+    return sum[end] - sum[begin];
+  }
+};
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -38,7 +53,36 @@ int main(int argc, char *argv[])
 
   str s;
   while (cin >> s) {
-    cout << (s.find("YAKI") == 0 ? "Yes" : "No") << endl;
+    vec<int> a;
+    vec<int> b;
+    for (int i = 0; i < s.size(); ++i) {
+      a.push_back(s[i] == '+');
+      b.push_back(s[i] == '-');
+    }
+
+    PrefixSum<int> x(a);
+    PrefixSum<int> y(b);
+    vec<pair<int, int>> v;
+    for (int i = 0; i < s.size(); ++i) {
+      if (s[i] == 'M') {
+        v.push_back(make_pair(x(i, s.size()), y(i, s.size())));
+      }
+    }
+    // cout << v << endl;
+
+    sort(v.begin(), v.end(), [] (auto a, auto b) {
+      return a.first - a.second < b.first - b.second;
+    });
+
+    lli sum = 0;
+    for (int i = 0; i < v.size(); ++i) {
+      if (i < v.size() / 2) {
+        sum -= v[i].first - v[i].second;
+      } else {
+        sum += v[i].first - v[i].second;
+      }
+    }
+    cout << sum << endl;
   }
 
   return 0;
