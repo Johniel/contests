@@ -25,30 +25,42 @@ using point = complex<double>;
 using str = string;
 template<typename T> using vec = vector<T>;
 
+constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
+constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
+  cout.setf(ios_base::fixed);
+  cout.precision(15);
 
-  vec<str> v({"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"});
-  str s;
-  while (cin >> s) {
-    for (int i = 0; i < v.size(); ++i) {
-      if (v[i] == s) {
-        for (int j = 0; j < v.size(); ++j) {
-          int k = (i + j) % v.size();
-          if (v[k] == "Sunday" || v[k] == "Saturday") {
-            cout << j << endl;
-            i = j = 1 << 29;
-            break;
-          }
+  int h, w;
+  h = w = 4;
+  while (true) {
+    int g[h][w];
+    bool f = true;
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        f = f && (cin >> g[i][j]);
+      }
+    }
+    unless (f) break;
+    f = false;
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        for (int d = 0; d < 4; ++d) {
+          int ni = i + di[d];
+          int nj = j + dj[d];
+          unless (0 <= ni && ni < h) continue;
+          unless (0 <= nj && nj < w) continue;
+          f = f || (g[i][j] == g[ni][nj]);
         }
       }
     }
+    cout << (f ? "CONTINUE" : "GAMEOVER") << endl;
   }
-
 
   return 0;
 }
