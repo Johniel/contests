@@ -1,4 +1,4 @@
-// atcoder/arc021/A/main.cpp
+// atcoder/arc115/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,30 +36,19 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int h, w;
-  h = w = 4;
-  while (true) {
-    int g[h][w];
-    bool f = true;
-    for (int i = 0; i < h; ++i) {
-      for (int j = 0; j < w; ++j) {
-        f = f && (cin >> g[i][j]);
-      }
+  lli n;
+  int m;
+  while (cin >> n >> m) {
+    map<int, lli> x;
+    for (int i = 0; i < n; ++i) {
+      str s;
+      cin >> s;
+      int a = count(s.begin(), s.end(), '0');
+      ++x[a % 2];
     }
-    unless (f) break;
-    f = false;
-    for (int i = 0; i < h; ++i) {
-      for (int j = 0; j < w; ++j) {
-        for (int d = 0; d < 4; ++d) {
-          int ni = i + di[d];
-          int nj = j + dj[d];
-          unless (0 <= ni && ni < h) continue;
-          unless (0 <= nj && nj < w) continue;
-          f = f || (g[i][j] == g[ni][nj]);
-        }
-      }
-    }
-    cout << (f ? "CONTINUE" : "GAMEOVER") << endl;
+    lli y = 0;
+    y += x[0] * x[1];
+    cout << y << endl;
   }
 
   return 0;

@@ -1,4 +1,4 @@
-// atcoder/arc021/A/main.cpp
+// atcoder/agc047/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -36,30 +36,62 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int h, w;
-  h = w = 4;
-  while (true) {
-    int g[h][w];
-    bool f = true;
-    for (int i = 0; i < h; ++i) {
-      for (int j = 0; j < w; ++j) {
-        f = f && (cin >> g[i][j]);
+  int n;
+  while (cin >> n) {
+    vec<pair<int, int>> v;
+    for (int i = 0; i < n; ++i) {
+      str s;
+      cin >> s;
+      int idx = s.find('.');
+      lli x = 0;
+      int _2 = 0;
+      int _5 = 0;
+      bool f = false;
+      for (int i = 0; i < s.size(); ++i) {
+        if (s[i] == '.') {
+          f = true;
+        } else {
+          _2 -= f;
+          _5 -= f;
+          x = x * 10 + s[i] - '0';
+        }
       }
+      while (x % 2 == 0) {
+        ++_2;
+        x /= 2;
+      }
+      while (x % 5 == 0) {
+        ++_5;
+        x /= 5;
+      }
+      v.push_back(make_pair(_2, _5));
     }
-    unless (f) break;
-    f = false;
-    for (int i = 0; i < h; ++i) {
-      for (int j = 0; j < w; ++j) {
-        for (int d = 0; d < 4; ++d) {
-          int ni = i + di[d];
-          int nj = j + dj[d];
-          unless (0 <= ni && ni < h) continue;
-          unless (0 <= nj && nj < w) continue;
-          f = f || (g[i][j] == g[ni][nj]);
+
+    const int N = 80;
+    static lli g[N][N];
+    fill(&g[0][0], &g[N - 1][N - 1], 0);
+    each (i, v) {
+      ++g[i.first + N / 2][i.second + N / 2];
+    }
+
+    lli x = 0;
+    for (int i = 0; i < N; ++i) {
+      for (int j = 0; j < N; ++j) {
+        if (g[i][j] == 0) continue;
+        for (int a = 0; a < N; ++a) {
+          for (int b = 0; b < N; ++b) {
+            if (0 <= i + a - N && 0 <= j + b - N) {
+              if (i == a && j == b) {
+                x += g[i][j] * (g[i][j] - 1);
+              } else {
+                x += g[i][j] * g[a][b];
+              }
+            }
+          }
         }
       }
     }
-    cout << (f ? "CONTINUE" : "GAMEOVER") << endl;
+    cout << x / 2 << endl;
   }
 
   return 0;
