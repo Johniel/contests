@@ -456,6 +456,7 @@
 + [710div3/D](710div3/D.md)
 + [710div3/E](710div3/E.md)
 + [710div3/F](710div3/F.md)
++ [712div2/D](712div2/D.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
