@@ -450,6 +450,7 @@
 + [702div3/G](702div3/G.md)
 + [706div1/C](706div1/C.md)
 + [709div1/A](709div1/A.md)
++ [709div1/B](709div1/B.md)
 + [710div3/A](710div3/A.md)
 + [710div3/B](710div3/B.md)
 + [710div3/C](710div3/C.md)
