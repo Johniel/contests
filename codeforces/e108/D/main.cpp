@@ -85,13 +85,11 @@ int main(int argc, char *argv[])
         z += s(0, i);
         z += rec(i, j);
         z += s(j+1, n);
-        // cout << make_pair(i, j) << ' ' << z << ' ' << s(0, i) << "+" << rec(i, j) << "+" << s(j+1, n) << endl;
         setmax(mx, z);
       }
     }
 
     cout << mx << endl;
-    // break;
   }
 
   return 0;
