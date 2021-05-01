@@ -1304,3 +1304,8 @@
 + [yahoo-procon2019-qual/B](yahoo-procon2019-qual/B.md)
 + [yahoo-procon2019-qual/C](yahoo-procon2019-qual/C.md)
 + [yahoo-procon2019-qual/D](yahoo-procon2019-qual/D.md)
++ [zone2021/A](zone2021/A.md)
++ [zone2021/B](zone2021/B.md)
++ [zone2021/C](zone2021/C.md)
++ [zone2021/D](zone2021/D.md)
++ [zone2021/E](zone2021/E.md)
