@@ -469,6 +469,8 @@
 + [719div3/C](719div3/C.md)
 + [719div3/D](719div3/D.md)
 + [719div3/E](719div3/E.md)
++ [720div2/A](720div2/A.md)
++ [720div2/B](720div2/B.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
