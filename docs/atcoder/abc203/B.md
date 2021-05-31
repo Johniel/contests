@@ -1,10 +1,10 @@
-# atcoder/abc205/A
+# atcoder/abc203/B
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/abc205/A/main.cpp
+// atcoder/abc205/B/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,14 +42,16 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int a, b, c;
-  while (cin >> a >> b >> c) {
-    if (a == b) cout << c << endl;
-    else if (b == c) cout << a << endl;
-    else if (a == c) cout << b << endl;
-    else cout << 0 << endl;
+  int n, k;
+  while (cin >> n >> k) {
+    int sum = 0;
+    for (int i = 1; i <= n; ++i) {
+      for (int j = 1; j <= k; ++j) {
+        sum += i * 100 + j;
+      }
+    }
+    cout << sum << endl;
   }
-
 
   return 0;
 }
@@ -58,4 +60,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc205/A)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc203/B)

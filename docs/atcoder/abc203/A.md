@@ -1,10 +1,10 @@
-# atcoder/abc205/C
+# atcoder/abc203/A
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/abc205/C/main.cpp
+// atcoder/abc205/A/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -42,24 +42,14 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n;
-  lli k;
-  while (cin >> n >> k) {
-    vec<pair<lli, lli>> v(n);
-    cin >> v;
-    sort(v.begin(), v.end());
-    lli prev = 0;
-    each (i, v) {
-      if (i.first - prev <= k) {
-        k -= i.first - prev;
-        k += i.second;
-        prev = i.first;
-      } else {
-        break;
-      }
-    }
-    cout << prev + k << endl;
+  int a, b, c;
+  while (cin >> a >> b >> c) {
+    if (a == b) cout << c << endl;
+    else if (b == c) cout << a << endl;
+    else if (a == c) cout << b << endl;
+    else cout << 0 << endl;
   }
+
 
   return 0;
 }
@@ -68,4 +58,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc205/C)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/abc203/A)
