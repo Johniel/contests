@@ -472,6 +472,7 @@
 + [719div3/E](719div3/E.md)
 + [720div2/A](720div2/A.md)
 + [720div2/B](720div2/B.md)
++ [721div2/B](721div2/B.md)
 + [722div2/A](722div2/A.md)
 + [722div2/B](722div2/B.md)
 + [722div2/C](722div2/C.md)
