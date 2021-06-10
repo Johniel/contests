@@ -128,7 +128,6 @@ int main(int argc, char *argv[])
     for (int i = 0; i < n; ++i) {
       idx[p[i]] = i;
     }
-    // cout << idx << endl;
     PrefixSum<lli> sum_a(a);
     PrefixSum<lli> sum_b(b);
     PrefixSum<lli> sum_c(c);
@@ -138,18 +137,13 @@ int main(int argc, char *argv[])
     fill(dp, dp + n, inf);
     for (int i = 0; i < n; ++i) {
       dp[i] = min(sum_b(0, i), seg(0, idx[i]) + sum_a(0, i));
-      // cout << sum_b(0, i) << ' ' << seg(0, p[i]) << '+' << sum_a(0, i) << endl;
       seg.update(idx[i], dp[i] - sum_a(0, i + 1));
-      // for (int j = 0; j < n; ++j) cout << dp[j] << ' '; cout << endl;
-      // for (int j = 0; j < n; ++j) cout << seg(j) << ' '; cout << endl;
     }
     lli mn = inf;
     for (int i = 0; i < n; ++i) {
       setmin(mn, dp[i] + sum_c(i + 1, n));
     }
     cout << mn << endl;
-    // cout << endl;
-    // if (n == 6) break;
   }
 
   return 0;
