@@ -482,6 +482,7 @@
 + [725div3/A](725div3/A.md)
 + [725div3/B](725div3/B.md)
 + [725div3/C](725div3/C.md)
++ [725div3/D](725div3/D.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
