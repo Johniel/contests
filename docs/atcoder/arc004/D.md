@@ -1,13 +1,12 @@
-# ARC056 C
-> setmax(dp[bit], dp[bit ^ B] + dp[B] - (w[bit] - w[bit ^ B] - w[B]));
-
-この式が中々思い付かなかった。ビット表現のサブセットの列挙は久し振りに使った。
+# ARC004 D
+素因数分解してnHmするだけなんだけれど、マイナスの数を何個使えるかを考えるところの2^(m-1)は考えた。
+自由にm-1個に符号を付けて、最後の1つで帳尻を合わせれば良いということ。賢い。
 
 ## Code
 main.cpp
 {% raw %}
 ```cpp
-// atcoder/arc056/C/main.cpp
+// atcoder/arc004/D/main.cpp
 // author: @___Johniel
 // github: https://github.com/johniel/
 
@@ -38,6 +37,43 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
+const int N = 1e5 * 2 + 3;
+
+namespace math {
+  lli fact[N], finv[N], inv[N];
+
+  void init(void)
+  {
+    fact[0] = fact[1] = 1;
+    finv[0] = finv[1] = 1;
+    inv[1] = 1;
+    for (int i = 2; i < N; i++) {
+      fact[i] = fact[i - 1] * i % mod;
+      inv[i] = mod - inv[mod % i] * (mod / i) % mod;
+      finv[i] = finv[i - 1] * inv[i] % mod;
+    }
+  }
+
+  lli mod_comb(int n, int k)
+  {
+    assert(n < N && k < N);
+    if (n < k) return 0;
+    if (n < 0 || k < 0) return 0;
+    return fact[n] * (finv[k] * finv[n - k] % mod) % mod;
+  }
+
+  inline lli nCk(int n, int k)
+  {
+    return mod_comb(n, k);
+  }
+
+  // n個の箱にm個の何かを分配する場合の数
+  inline lli nHm(int n, int m)
+  {
+    return nCk(n + m - 1, m);
+  }
+};
+
 int main(int argc, char *argv[])
 {
   ios_base::sync_with_stdio(0);
@@ -45,45 +81,29 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  int n, k;
-  while (cin >> n >> k) {
-    int g[n][n];
-    for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < n; ++j) {
-        cin >> g[i][j];
+  math::init();
+
+  lli n, m;
+  while (cin >> n >> m) {
+    lli x = abs(n);
+    map<lli, int> cnt;
+    for (lli i = 2; i * i <= x; ++i) {
+      while (x % i == 0) {
+        ++cnt[i];
+        x /= i;
       }
     }
-
-    const int BIT = 1 << 17;
-    static lli w[BIT];
-    fill(w, w + BIT, 0LL);
-
-    static lli dp[BIT];
-    const lli inf = 1LL << 60;
-    fill(dp, dp + BIT, k);
-    dp[0] = 0;
-
-    for (int bit = 0; bit < (1 << n); ++bit) {
-      for (int i = 0; i < n; ++i) {
-        for (int j = i + 1; j < n; ++j) {
-          if ((bit & (1 << i)) && (bit & (1 << j))) {
-            w[bit] += g[i][j];
-          }
-        }
-      }
+    if (x != 1) ++cnt[x];
+    lli z = 1;
+    each (i, cnt) {
+      (z *= math::nHm(m, i.second)) %= mod;
     }
-
-    for (int bit = 0; bit < (1 << n); ++bit) {
-      for (int A = bit; 0 <= A; --A) {
-        A = A & bit;
-        int B = bit - A;
-        if (B == 0 || (bit ^ B) == 0 || (bit ^ B) == B) continue;
-        setmax(dp[bit], dp[bit ^ B] + dp[B] - (w[bit] - w[bit ^ B] - w[B]));
-      }
+    for (int i = 0; i < m - 1; ++i) {
+      (z *= 2) %= mod;
     }
-
-    cout << dp[(1 << n) - 1] << endl;
+    cout << z << endl;
   }
+
 
   return 0;
 }
@@ -92,4 +112,4 @@ int main(int argc, char *argv[])
 ---
 + [toppage](https://johniel.github.io/contests/)
 + [index](https://johniel.github.io/contests/docs/atcoder)
-+ [repository](https://github.com/Johniel/contests/tree/master/atcoder/arc056/C)
++ [repository](https://github.com/Johniel/contests/tree/master/atcoder/arc004/D)

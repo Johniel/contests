@@ -907,6 +907,7 @@
 + [arc004/A](arc004/A.md)
 + [arc004/B](arc004/B.md)
 + [arc004/C](arc004/C.md)
++ [arc004/D](arc004/D.md)
 + [arc006/A](arc006/A.md)
 + [arc006/B](arc006/B.md)
 + [arc006/C](arc006/C.md)
