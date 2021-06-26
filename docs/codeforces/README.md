@@ -483,6 +483,7 @@
 + [725div3/B](725div3/B.md)
 + [725div3/C](725div3/C.md)
 + [725div3/D](725div3/D.md)
++ [727div2/A](727div2/A.md)
 + [727div2/B](727div2/B.md)
 + [727div2/C](727div2/C.md)
 + [728div2/A](728div2/A.md)
