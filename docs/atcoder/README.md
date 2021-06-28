@@ -1315,6 +1315,7 @@
 + [keyence2020/B](keyence2020/B.md)
 + [keyence2020/C](keyence2020/C.md)
 + [keyence2020/D](keyence2020/D.md)
++ [keyence2021/A](keyence2021/A.md)
 + [keyence2021/C](keyence2021/C.md)
 + [m-solutions2019/A](m-solutions2019/A.md)
 + [m-solutions2019/B](m-solutions2019/B.md)
