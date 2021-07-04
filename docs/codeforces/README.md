@@ -486,6 +486,7 @@
 + [727div2/A](727div2/A.md)
 + [727div2/B](727div2/B.md)
 + [727div2/C](727div2/C.md)
++ [727div2/D](727div2/D.md)
 + [728div2/A](728div2/A.md)
 + [728div2/B](728div2/B.md)
 + [728div2/C](728div2/C.md)
