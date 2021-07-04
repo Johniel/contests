@@ -489,6 +489,8 @@
 + [728div2/A](728div2/A.md)
 + [728div2/B](728div2/B.md)
 + [728div2/C](728div2/C.md)
++ [729div2/A](729div2/A.md)
++ [729div2/B](729div2/B.md)
 + [CodeCraft20/A](CodeCraft20/A.md)
 + [CodeCraft20/B](CodeCraft20/B.md)
 + [CodeCraft20/D](CodeCraft20/D.md)
