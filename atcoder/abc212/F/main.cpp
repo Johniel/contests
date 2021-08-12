@@ -31,7 +31,7 @@ constexpr lli mod = 1e9 + 7;
 
 constexpr int N = 2 * 1e5 + 5;
 namespace doubling {
-  constexpr int DEPTH = log2(N) + 2;
+  constexpr int DEPTH = 60;
 
   int T[N][DEPTH];
   function<int(int)> fn;
@@ -66,9 +66,11 @@ namespace doubling {
 }
 
 struct E {
+  int src;
   int dst;
   lli s, t;
   int id;
+  E(int _src, int _dst, lli _s, lli _t, int _id) : src(_src), dst(_dst), s(_s), t(_t), id(_id) {}
 };
 
 int main(int argc, char *argv[])
@@ -82,56 +84,77 @@ int main(int argc, char *argv[])
   while (cin >> n >> m >> q) {
     static vec<E> g[N];
     fill(g, g + N, vec<E>());
-    vec<vec<lli>> u;
-    int cnt = 0;
+    vec<E> es;
     for (int i = 0; i < m; ++i) {
       int a, b;
       lli s, t;
       cin >> a >> b >> s >> t;
       --a;
       --b;
-      g[a].push_back((E){b, s, t, cnt});
-      u.push_back(vec<int>({a, b, s, t, cnt}));
-      ++cnt;
+      E e(a, b, s, t, es.size());
+      g[a].push_back(e);
+      es.push_back(e);
     }
     for (int i = 0; i < n; ++i) {
-      sort(g[i].begin(), g[i].end(), [] (auto a, auto b) {
-        if (a.s != b.s) return a.s < b.s;
-        return a.t < b.t;
-      });
+      const lli inf = 1LL << 60;
+      E e(i, i, inf, inf, es.size());
+      g[i].push_back(e);
+      es.push_back(e);
     }
+    for (int i = 0; i < N; ++i) {
+      sort(g[i].begin(), g[i].end(), [] (auto a, auto b) { return a.s < b.s; });
+    }
+    auto next_one = [] (E e, lli s) { return e.s < s; };
     function<int(int)> fn = [&] (int x) {
-      if (x == -1) return -1;
-      int src = u[x][0];
-      int dst = u[x][1];
-      lli s = u[x][2];
-      lli t = u[x][3];
-      int id = u[x][4];
-      auto itr = lower_bonud(g[dst].begin(), g[dst].end(), t + 1);
-      if (itr == g[dst].end()) return -1;
+      int src = es[x].src;
+      int dst = es[x].dst;
+      lli s = es[x].s;
+      lli t = es[x].t;
+      int id = es[x].id;
+      if (s == t) return x;
+      auto itr = lower_bound(g[dst].begin(), g[dst].end(), t, next_one);
       return itr->id;
     };
-    doubling::build(n, fn);
+    doubling::build(es.size(), fn);
     for (int _ = 0; _ < q; ++_) {
-      lli x, y, z;
+      lli x, z;
+      int y;
       cin >> x >> y >> z;
       --y;
-      auto itr = lower_bound(g[y].begin(), g[y].end(), x);
-      int id = (*itr).id;
-      int small = 0;
-      int large = 1 << 29;
+      auto itr = lower_bound(g[y].begin(), g[y].end(), x, next_one);
+      int id = itr->id;
+      lli small = 0;
+      lli large = 1LL << 30;
       while (small + 1 < large) {
-        int mid = (small + large) / 2;
+        lli mid = (small + large) / 2;
         int p = doubling::query(id, mid);
-        if (p == -1) large = mid;
-        else {
-          if (z < u[p].t) large = mid;
-          else small = mid;
-        }
+        if (z < es[p].t) large = mid;
+        else small = mid;
       }
       int p = doubling::query(id, small);
-      if (u[p].t == z) cout << u[p].dst + 1 << endl;
-      else cout << u[p].src + 1 << ' ' << u[p].dst + 1 << endl;
+      assert(0 <= p && p < es.size());
+      if (es[p].src == es[p].dst) {
+        cout << es[p].src + 1 << endl;
+        continue;
+      }
+      if (z <= es[p].s) {
+        cout << es[p].src + 1 << endl;
+        continue;
+      }
+      if (z <= es[p].t) {
+        cout << es[p].src + 1 << ' ' << es[p].dst + 1 << endl;
+        continue;
+      }
+
+      int w = es[p].dst;
+      itr = lower_bound(g[w].begin(), g[w].end(), es[p].t, next_one);
+      id = itr->id;
+      if (z <= es[id].s) {
+        cout << es[p].dst + 1 << endl;
+        continue;
+      }
+
+      cout << es[id].src + 1 << ' ' << es[id].dst + 1 << endl;
     }
   }
 
