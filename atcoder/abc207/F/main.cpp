@@ -35,7 +35,7 @@ vec<int> g[N];
 
 const int M = 4;
 lli dp[N][N][M];
-int size[N];
+int sz[N];
 const int C = 1;
 const int P = 2;
 const int F = 0;
@@ -43,14 +43,14 @@ void rec(int curr, int prev)
 {
   lli x[N][M] = {};
   x[0][0] = x[1][2] = 1;
-  size[curr] = 1;
+  sz[curr] = 1;
 
   each (next, g[curr]) {
     if (next == prev) continue;
     rec(next, curr);
     lli y[N][M] = {};
-    for (int i = 0; i <= size[curr]; ++i) {
-      for (int j = 0; j <= size[next]; ++j) {
+    for (int i = 0; i <= sz[curr]; ++i) {
+      for (int j = 0; j <= sz[next]; ++j) {
         (y[i + j + 1][P] += x[i][P] * dp[next][j][F]) %= mod;
         (y[i + j][P] += x[i][P] * (dp[next][j][C] + dp[next][j][P])) %= mod;
         (y[i + j][C] += x[i][C] * (dp[next][j][F] + dp[next][j][P] + dp[next][j][C])) %= mod;
@@ -58,7 +58,7 @@ void rec(int curr, int prev)
         (y[i + j][F] += x[i][F] * (dp[next][j][F] + dp[next][j][C])) %= mod;
       }
     }
-    size[curr] += size[next];
+    sz[curr] += sz[next];
     swap(x, y);
   }
   for (int i = 0; i < N; ++i) {
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
   while (cin >> n) {
     fill(&dp[0][0][0], &dp[N - 1][N - 1][4 - 1] + 1, 0);
     fill(g, g + N, vec<int>());
-    fill(size, size + N, 0);
+    fill(sz, sz + N, 0);
     for (int i = 0; i < n - 1; ++i) {
       int a, b;
       cin >> a >> b;
