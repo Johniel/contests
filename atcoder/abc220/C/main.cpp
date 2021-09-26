@@ -42,26 +42,16 @@ int main(int argc, char *argv[])
     lli x;
     cin >> v >> x;
 
-    auto fn = [&] (lli k) {
-      lli z = 0;
-      for (int i = 0; i < v.size(); ++i) {
-        z += v[i] * (k / v.size());
-        if (i < k % v.size()) z += v[i];
-        if (x < z) return true;
-      }
-      return x < z;
-    };
-
-    lli small = 0;
-    lli large = 1LL << 60;
-    while (small + 1 < large) {
-      lli mid = (small + large) / 2;
-      if (fn(mid)) large = mid;
-      else small = mid;
+    lli z = accumulate(v.begin(), v.end(), 0LL);
+    lli y = (x / z) * v.size();
+    x %= z;
+    each (i, v) {
+      x -= i;
+      ++y;
+      if (x < 0) break;
     }
-    cout << large << endl;
+    cout << y << endl;
   }
-
 
   return 0;
 }
