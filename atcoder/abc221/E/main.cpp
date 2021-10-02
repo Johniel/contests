@@ -65,17 +65,12 @@ int main(int argc, char *argv[])
   cout.setf(ios_base::fixed);
   cout.precision(15);
 
-  const int N = 3 * 1e5 + 3;
-  static lli w[N];
-  w[0] = 1;
-  for (int i = 1; i < N; ++i) {
-    w[i] = (w[i - 1] * 2) % mod;
-  }
-
   int n;
   while (cin >> n) {
     vec<lli> a(n);
     cin >> a;
+
+    const int N = 3 * 1e5 + 3;
 
     vec<pair<int, int>> b;
     for (int i = 0; i < a.size(); ++i) {
