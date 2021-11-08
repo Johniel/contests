@@ -51,18 +51,13 @@ int main(int argc, char *argv[])
     pair<lli, lli> mx = {-1, -(1LL << 60)};
     each (i, m) {
       pair<lli, lli> p = make_pair(i.second, -i.first);
-      // pair<int, int> p = make_pair(i.second, i.first);
       setmax(mx, p);
     }
-    // cout << m << endl;
-    // cout << mx << endl;
     if (mx.first == -1) {
       cout << 0 << endl;
     } else {
       lli z = 0;
       z += (abs(mx.first) - 1) * k;
-      // cout << "> " << z << endl;
-      // z += k - abs(mx.second);
       z += k - abs(mx.second) + 1;
       cout << z << endl;
     }
