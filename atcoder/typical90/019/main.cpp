@@ -29,23 +29,22 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 
-const int N = 200 + 3;
+const int N = 400 + 3;
 lli memo[N][N];
 vec<lli> a;
 lli rec(int begin, int end)
 {
-  lli& ret = memo[begin][end];
   if ((end - begin) % 2) return 1LL << 60;
+  unless (begin < end) return 0;
+
+  lli& ret = memo[begin][end];
   if (ret != -1) return ret;
   if (begin == end) return ret = 0;
 
-  lli mn = 1LL << 60;
-  for (int i = begin; i < end; ++i) {
-    for (int j = i + 1; j < end; ++j) {
-      setmin(mn, abs(a[i] - a[j]) + rec(begin, i) + rec(i + 1, j) + rec(j + 1, end));
-    }
+  lli mn = rec(begin + 1, end - 1) + abs(a[begin] - a[end - 1]);
+  for (int i = begin + 1; i < end; ++i) {
+    setmin(mn, rec(begin, i) + rec(i, end));
   }
-
   return ret = mn;
 }
 
