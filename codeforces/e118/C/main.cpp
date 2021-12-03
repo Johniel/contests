@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   while (cin >> n >> h) {
     vec<lli> a(n);
     cin >> a;
-    a.push_back(e18 + 1);
+    a.push_back(2 * e18);
     auto fn = [&] (lli k) {
       lli r = h;
       for (int i = 0; i + 1 < a.size(); ++i) {
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
       return r == 0;
     };
     lli small = 0;
-    lli large = e18 + 1;
+    lli large = 2 * e18;
     while (small + 1 < large) {
       lli mid = (small + large) / 2;
       if (fn(mid)) large = mid;
