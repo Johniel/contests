@@ -118,22 +118,29 @@ int main(int argc, char *argv[])
       continue;
     }
 
+    h %= mod;
+    w %= mod;
+
     static lli dp1[N][2];
     fill(&dp1[0][0], &dp1[N - 1][2 - 1], 0);
-    dp1[0][false] = (x1 != x2);
     dp1[0][true] = (x1 == x2);
+    dp1[0][false] = (x1 != x2);
     for (int i = 0; i <= k; ++i) {
-      dp1[i + 1][true] = dp1[i][false] * (w - 1) % mod;
-      dp1[i + 1][false] = (dp1[i][false] * (w - 2) + dp1[i][true]) % mod;
+      dp1[i + 1][true] = dp1[i][false];
+      lli a = dp1[i][false] * (h - 2) % mod;
+      lli b = dp1[i][true] * (h - 1) % mod;
+      dp1[i + 1][false] = (a + b) % mod;
     }
 
     static lli dp2[N][2];
     fill(&dp2[0][0], &dp2[N - 1][2 - 1], 0);
-    dp2[0][false] = (y1 != y2);
     dp2[0][true] = (y1 == y2);
+    dp2[0][false] = (y1 != y2);
     for (int i = 0; i <= k; ++i) {
-      dp2[i + 1][true] = dp2[i][false] * (h - 1) % mod;
-      dp2[i + 1][false] = (dp2[i][false] * (h - 2) + dp2[i][true]) % mod;
+      dp2[i + 1][true] = dp2[i][false];
+      lli a = dp2[i][false] * (w - 2) % mod;
+      lli b = dp2[i][true] * (w - 1) % mod;
+      dp2[i + 1][false] = (a + b) % mod;
     }
 
     lli z = 0;
