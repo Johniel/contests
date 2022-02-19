@@ -87,6 +87,9 @@ int main(int argc, char *argv[])
       lli w = (1LL << i) % mod;
       set<int> vis;
       for (int j = 0; j < n; ++j) {
+        uf.find(j);
+      }
+      for (int j = 0; j < n; ++j) {
         vis.insert(uf.find(j));
       }
       each (j, vis) {
