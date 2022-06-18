@@ -7,9 +7,6 @@
 + [Topcoder](https://www.topcoder.com/members/___watanabe/)
 + [UVa](http://uhunt.felix-halim.net/id/10883)
 + [kenkoooo](https://kenkoooo.com/atcoder/#/user/Johniel)
++ [yukicoder](https://yukicoder.me/users/9234)
 
 ![](https://projecteuler.net/profile/___Johniel.png)
-
-## Solved Problems
-+ [AtCoder](https://johniel.github.io/contests/docs/atcoder/)
-+ [Codeforces](https://johniel.github.io/contests/docs/codeforces/)
