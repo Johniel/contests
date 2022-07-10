@@ -24,7 +24,6 @@ template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
 
 using lli = long long int;
 using ull = unsigned long long;
-using point = complex<double>;
 using str = string;
 template<typename T> using vec = vector<T>;
 
@@ -32,6 +31,70 @@ constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
+
+namespace geo {
+  using point = complex<double>;
+
+  // [-M_PI,+M_PI]の範囲で偏角を返す。
+  double angle(double x, double y)
+  {
+    return atan2(y, x);
+  }
+  template<typename T>
+  double angle(complex<T> p)
+  {
+    return atan2(p.imag(), p.real());
+  }
+
+  // 点pを原点中心にthだけ回転させた座標を返す。
+  pair<double, double> rot(double x, double y, double th)
+  {
+    double a = x * cos(th) - y * sin(th);
+    double b = x * sin(th) + y * cos(th);
+    return make_pair(a, b);
+  }
+  pair<double, double> rot(pair<double, double> p, double th)
+  {
+    return rot(p.first, p.second, th);
+  }
+  point rot(point p, double th) {
+    auto r = rot(p.real(), p.imag(), th);
+    return point(r.first, r.second);
+  }
+
+  template<typename T>
+  struct Circle {
+    complex<T> p;
+    T r;
+    Circle(complex<T> p_, T r_) : p(p_), r(r_) {}
+    Circle(T x, T y, T r_) : p(complex<T>(x, y)), r(r_) {}
+    T x() const { return p.real(); }
+    T y() const { return p.imag(); }
+  };
+
+
+  template<typename T>
+  bool intersectCC(const Circle<T>& a, const Circle<T>& b) {
+    assert(false);
+    return false;
+  }
+
+  // verified at: abc259/D
+  template<>
+  bool intersectCC(const Circle<long long int>& a, const Circle<long long int>& b) {
+    long long int x = a.x() - b.x();
+    long long int y = a.y() - b.y();
+    long long int D = x * x + y * y;
+
+    long long int mn = a.r - b.r;
+    mn *= mn;
+
+    long long int mx = a.r + b.r;
+    mx *= mx;
+
+    return mn <= D && D <= mx;
+  }
+};
 
 int main(int argc, char *argv[])
 {
@@ -60,14 +123,9 @@ int main(int argc, char *argv[])
     static bool g[N][N];
     for (int i = 0; i < n; ++i) {
       for (int j = i + 1; j < n; ++j) {
-        lli a = x[i] - x[j];
-        lli b = y[i] - y[j];
-        lli D = a * a + b * b;
-
-        lli mn = min(r[i], r[j]);
-        lli mx = max(r[i], r[j]);
-
-        g[i][j] = g[j][i] = ((mx - mn) * (mx - mn) <= D && D <= (r[i] + r[j]) * (r[i] + r[j]));
+        geo::Circle<lli> a(x[i], y[i], r[i]);
+        geo::Circle<lli> b(x[j], y[j], r[j]);
+        g[i][j] = g[j][i] = geo::intersectCC<lli>(a, b);
       }
     }
 
