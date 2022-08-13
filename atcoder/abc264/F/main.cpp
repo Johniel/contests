@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
         dp[0][0][(g[0][0] ^ i ^ j)][i][j] = c;
       }
     }
-    // dp(今どこ、縦が反転、横が反転、移動向き)
+    // dp(今どこ、縦が反転、横が反転)
     for (int i = 0; i < h; ++i) {
       for (int j = 0; j < w; ++j) {
         for (int x = 0; x < 2; ++x) {
