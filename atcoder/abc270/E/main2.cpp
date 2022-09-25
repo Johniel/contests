@@ -44,35 +44,51 @@ int main(int argc, char *argv[])
     vec<lli> a(n);
     cin >> a;
 
-    vec<lli> b;
-    auto fn = [&] (lli x) {
-      b = a;
-      lli z = k;
-      each (i, b) {
-        lli y = min(i, max(x - 1, 0LL));
-        i -= y;
-        z -= y;
+    vec<pair<lli, int>> b;
+    for (int i = 0; i < a.size(); ++i) {
+      b.push_back({a[i], i});
+    }
+    sort(b.begin(), b.end());
+
+    lli y = 0;
+    vec<lli> v(a.size(), 0);
+    for (int i = 0; i < b.size(); ++i) {
+      lli size = (b.size() - i);
+      lli x = (b[i].first - y);
+      lli rm = x * size;
+      if (rm <= k) {
+        y += x;
+        v[i] += x;
+        k -= rm;
+      } else {
+        break;
       }
-      each (i, b) {
-        if (z <= 0) break;
+    }
+    lli z = 0;
+    for (int i = 0; i < b.size(); ++i) {
+      z += v[i];
+      a[b[i].second] -= z;
+    }
+
+    int nz = a.size() - count(a.begin(), a.end(), 0LL);
+    if (nz) {
+      lli w = (k / nz);
+      each (i, a) {
         if (i) {
-          --i;
-          --z;
+          i -= w;
+          k -= w;
         }
       }
-      return z;
-    };
-
-    lli small = 0;
-    lli large = 1e12 + 1;
-    while (small + 1 < large) {
-      lli mid = (small + large) / 2;
-      if (fn(mid) <= 0) large = mid;
-      else small = mid;
     }
-    if (fn(small) == 0) ;
-    else fn(large);
-    each (i, b) cout << i << ' '; cout << endl;
+
+    for (int i = 0; k; ++i) {
+      int j = i % a.size();
+      if (a[j]) {
+        --a[j];
+        --k;
+      }
+    }
+    each (i, a) cout << i << ' '; cout << endl;
   }
 
   return 0;
