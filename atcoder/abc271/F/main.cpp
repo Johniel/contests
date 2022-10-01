@@ -85,20 +85,6 @@ int main(int argc, char *argv[])
     rec1(0, 0, g[0][0]);
     rec2(n - 1, n - 1, g[n - 1][n - 1]);
 
-    if (0) {
-      for (int k = 0; k <= 3; ++k) {
-        cout << "k:" << k << endl;
-        for (int i = 0; i < n; ++i) {
-          for (int j = 0; j < n; ++j) {
-            cout << m1[i][j][k] << ' ';
-          }
-          cout << endl;
-        }
-        cout << endl;
-      }
-      return 0;
-    }
-
     lli z = 0;
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
