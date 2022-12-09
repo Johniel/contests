@@ -34,66 +34,6 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
 
-template<typename T>
-struct SegTree {
-  int n;
-  int origin_size;
-  vector<T> v;
-  using F = function<T(T, T)>;
-  F fn;
-  T e;
-  SegTree(int n_, T e_, F fn_) {
-    origin_size = n_;
-    e = e_;
-    fn = fn_;
-    n = 1;
-    while (n < n_) n *= 2;
-    v.resize(2 * n - 1, e);
-  }
-
-  void update(size_t k, T a) {
-    k += n - 1;
-    v[k] = a;
-    while (k > 0) {
-      k = (k - 1) / 2;
-      v[k] = fn(v[k * 2 + 1], v[k * 2 + 2]);
-    }
-    return ;
-  }
-
-  T operator [] (size_t idx) const {
-    return v.at(idx + n - 1);
-  }
-
-  inline T operator () () const {
-    return query(0, origin_size, 0, 0, n);
-  }
-
-  inline T operator () (size_t a) const {
-    return query(a, a+1, 0, 0, n);
-  }
-
-  inline T operator () (size_t a, size_t b) const {
-    return query(a, b, 0, 0, n);
-  }
-
-  inline T query(size_t a, size_t b) const {
-    assert(a < b);
-    assert(b <= origin_size);
-    return query(a, b, 0, 0, n);
-  }
-
-  T query(size_t a, size_t b, size_t k, size_t l, size_t r) const {
-    if (r <= a || b <= l) return e;
-    if (a <= l && r <= b) return v.at(k);
-
-    T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
-    T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
-
-    return fn(vl, vr);
-  }
-};
-
 int main(int argc, char *argv[])
 {
   int _;
