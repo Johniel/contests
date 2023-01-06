@@ -6,4 +6,4 @@
 	url = https://github.com/hasipon/icfpc2017
 [submodule "ac-library"]
 	path = ac-library
-	url = git@github.com:atcoder/ac-library.git
+	url = https://github.com/atcoder/ac-library
