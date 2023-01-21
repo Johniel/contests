@@ -34,75 +34,79 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
 
-// https://qiita.com/drken/items/ae02240cd1f8edfc86fd
-namespace {
-  inline long long mod(long long a, long long m) {
-    return (a % m + m) % m;
+namespace math {
+  lli extgcd(lli a, lli b, lli& x, lli& y)
+  {
+    lli g = a;
+    x = 1;
+    y = 0;
+    if (b != 0) {
+      g = extgcd(b, a % b, y, x);
+      y -= (a / b) * x;
+    }
+    return g;
   }
 
-  long long extGcd(long long a, long long b, long long &p, long long &q) {
-    if (b == 0) { p = 1; q = 0; return a; }
-    long long d = extGcd(b, a%b, q, p);
-    q -= a/b * p;
-    return d;
+  lli mod_inverse(lli a, lli m)
+  {
+    lli x, y;
+    extgcd(a, m, x, y);
+    return (m + x % m) % m;
   }
 
-// 中国剰余定理
-// リターン値を (r, m) とすると解は x ≡ r (mod. m)
-// 解なしの場合は (0, -1) をリターン
-  pair<long long, long long> ChineseRem(const vector<long long> &b, const vector<long long> &m) {
-    long long r = 0, M = 1;
-    for (int i = 0; i < (int)b.size(); ++i) {
-      long long p, q;
-      long long d = extGcd(M, m[i], p, q); // p is inv of M/d (mod. m[i]/d)
+  lli mod_pow(lli n, lli p, lli M = mod)
+  {
+    if (p == 0) return 1;
+    if (p == 1) return n % M;
+    lli m = mod_pow(n, p / 2, M);
+    m *= m;
+    m %= M;
+    if (p % 2) m = (m * n) % M;
+    return m;
+  }
+
+  // ai * x = bi (mod mi)
+  // 蟻本P.261
+  // x=b(mod m)の(b,m)を返す
+  pair<lli, lli> liner_congruence(const vector<lli>& A, const vector<lli>& B, const vector<lli>& M)
+  {
+    lli x = 0, m = 1;
+    for (int i = 0; i < A.size(); ++i) {
+      lli a = A[i] * m;
+      lli b = B[i] - A[i] * x;
+      lli d = __gcd(M[i], a);
+      if (b % d) return make_pair(-1, -1);
+      lli t = b / d * mod_inverse(a / d, M[i] / d) % (M[i] / d);
+      x = x + m * t;
+      m *= M[i] / d;
+    }
+    return {x % m, m};
+  }
+
+  // x = r (mod m)となる(r,m)を返す
+  // 解なしなら(0,-1)
+  pair<lli, lli> chinese_remainder_theorem(const vector<lli> &b, const vector<lli> &m)
+  {
+    lli r = 0;
+    lli M = 1;
+    for (int i = 0; i < b.size(); ++i) {
+      lli p, q;
+      lli d = extgcd(M, m[i], p, q);
       if ((b[i] - r) % d != 0) return make_pair(0, -1);
-      long long tmp = (b[i] - r) / d * p % (m[i]/d);
+      lli tmp = (b[i] - r) / d * p % (m[i]/d);
       r += M * tmp;
       M *= m[i]/d;
     }
-    return make_pair(mod(r, M), M);
+    return make_pair((r + M) % M, M);
   }
-}
-
-vec<lli> rot(vec<lli> a, int N)
-{
-  vec<lli> c(a.size());
-  iota(c.begin(), c.end(), 0LL);
-  for (int _ = 0; _ < N; ++_) {
-    // cout << "c" << ":" << c << endl;
-    vec<lli> b = c;
-    for (int i = 0; i < b.size(); ++i) {
-      b[i] = a[b[i]];
-    }
-    c = b;
-  }
-  return c;
-}
+};
 
 int main(int argc, char *argv[])
 {
-  if (0) {
-    vec<lli> a({2, 3, 4, 4});
-    vec<lli> b({3, 4, 4, 4});
-    each (i, a) --i;
-    vec<lli> c = rot(a, 2);
-    each (i, a) ++i;
-    each (i, c) ++i;
-    cout << a << endl;
-    cout << b << endl;
-    cout << c << endl;
-    assert(c == b);
-  }
   vec<lli> p({4, 9, 5, 7, 11, 13, 17, 19, 23});
   sort(p.begin(), p.end());
-  if (1) {
-    lli x = 1;
-    each (i, p) x *= i;
-    assert(1e9 <= x);
-  }
   while (true) {
     const int M = accumulate(p.begin(), p.end(), 0);
-    // assert(M <= 110);
     vec<lli> a(M);
     {
       iota(a.begin(), a.end(), 0);
@@ -115,24 +119,6 @@ int main(int argc, char *argv[])
         x += p[i];
       }
     }
-
-    if (0) {
-      for (int i = 0; i <= 10; ++i) {
-        vec<lli> v = rot(a, i);
-        each (i, v) cout << i+1 << ' '; cout << endl;
-      }
-      {
-        vec<lli> v = rot(a, 108);
-        each (i, v) cout << i+1 << ' '; cout << endl;
-      }
-      {
-        vec<lli> v = rot(a, 89);
-        each (i, v) cout << i+1 << ' '; cout << endl;
-      }
-      cout << endl;
-      return 0;
-    }
-
 
     cout << M << endl;
     each (i, a) cout << i+1 << ' ' ; cout << endl;
@@ -167,21 +153,11 @@ int main(int argc, char *argv[])
       int j = w[i];
       int x = j - u[src[j]];
       int y = dst[j] - u[src[j]];
-      // cout << j << ' ' << x << ' ' << y <<' ' << (x - y) << endl;
       c.push_back(p[i] - (y - x + p[i]) % p[i]);
     }
 
-    // cout << v << endl;
-    // cout << u << endl;
-    // cout << w << endl;
-    // cout << "a:" << a << endl;
-    // cout << "b:" << b << endl;
-    // cout << "c: " << c << endl;
-
-    pair<lli, lli> z = ChineseRem(c, p);
-    // cout << z << endl;
+    pair<lli, lli> z = math::chinese_remainder_theorem(c, p);
     cout << z.first % z.second<< endl;
-    // break;
   }
   return 0;
 }
