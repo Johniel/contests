@@ -83,7 +83,7 @@ namespace math {
     return {x % m, m};
   }
 
-  // x = r (mod m)となる(r,m)を返す
+  // bi = r (mod mi)となる(r,mod)を返す
   // 解なしなら(0,-1)
   pair<lli, lli> chinese_remainder_theorem(const vector<lli> &b, const vector<lli> &m)
   {
