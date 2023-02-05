@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/abc287/E/main.cpp
+// atcoder/abc288/C/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -34,39 +34,55 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
 
-const int N = 5 * 1e5 + 3;
-int z[N];
-vec<str> s;
-
-void rec(vec<int> v, int nth)
-{
-  if (v.size() < 2) return ;
-  each (i, v) {
-    setmax(z[i], nth);
+struct UnionFind {
+  vector<int> r, p;
+  UnionFind(int n) {
+    r.resize(n, 0);
+    p.resize(n, -1);
   }
-  map<char, vec<int>> m;
-  each (i, v) {
-    if (nth < s[i].size()) m[s[i][nth]].push_back(i);
+  void unite(int a, int b) {
+    a = find(a);
+    b = find(b);
+    if (a == b) return ;
+    if (r[a] > r[b]) {
+      p[a] += p[b];
+      p[b] = a;
+    } else {
+      p[b] += p[a];
+      p[a] = b;
+      if (r[a] == r[b]) ++r[b];
+    }
+    return ;
   }
-  each (i, m) {
-    rec(i.second, nth + 1);
+  int find(int a) {
+    return (p[a] < 0) ? a : p[a] = find(p[a]);
   }
-  return ;
-}
+  bool same(int a, int b) {
+    return find(a) == find(b);
+  }
+  size_t size(int n) {
+    return -p.at(find(n));
+  }
+};
 
 int main(int argc, char *argv[])
 {
-  int n;
-  while (cin >> n) {
-    s.resize(n);
-    cin >> s ;
-    vec<int> v(n);
-    iota(v.begin(), v.end(), 0);
-    fill(z, z + N, -1);
-    rec(v, 0);
-    for (int i = 0; i < n; ++i) {
-      cout << z[i] << endl;
+  int n, m;
+  while (cin >> n >> m) {
+    vec<pair<int, int>> v(m);
+    cin >> v;
+    each (i, v) --i.first, --i.second;
+
+    UnionFind uf(n);
+    int x = 0;
+    each (i, v) {
+      if (uf.same(i.first, i.second)) {
+        continue;
+      }
+      ++x;
+      uf.unite(i.first, i.second);
     }
+    cout << m - x << endl;
   }
   return 0;
 }

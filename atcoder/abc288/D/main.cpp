@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/abc287/E/main.cpp
+// atcoder/abc288/D/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -34,38 +34,57 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
 
-const int N = 5 * 1e5 + 3;
-int z[N];
-vec<str> s;
-
-void rec(vec<int> v, int nth)
-{
-  if (v.size() < 2) return ;
-  each (i, v) {
-    setmax(z[i], nth);
+template<typename T>
+struct PrefixSum {
+  vector<T> sum;
+  PrefixSum() {}
+  PrefixSum(vector<T> v) {
+    sum.push_back(0);
+    for (int i = 0; i < v.size(); ++i) {
+      sum.push_back(sum.back() + v[i]);
+    }
   }
-  map<char, vec<int>> m;
-  each (i, v) {
-    if (nth < s[i].size()) m[s[i][nth]].push_back(i);
+  T operator () (size_t begin, size_t end) const {
+    assert(begin <= end);
+    return sum[end] - sum[begin];
   }
-  each (i, m) {
-    rec(i.second, nth + 1);
-  }
-  return ;
-}
+};
 
 int main(int argc, char *argv[])
 {
-  int n;
-  while (cin >> n) {
-    s.resize(n);
-    cin >> s ;
-    vec<int> v(n);
-    iota(v.begin(), v.end(), 0);
-    fill(z, z + N, -1);
-    rec(v, 0);
-    for (int i = 0; i < n; ++i) {
-      cout << z[i] << endl;
+  int n, k, q;
+  while (cin >> n >> k) {
+    vec<lli> a(n);
+    cin >> a >> q;
+    vec<pair<int, int>> v(q);
+    cin >> v;
+    each (i, v) --i.first;
+    map<int, vec<lli>> m;
+    for (int i = 0; i < a.size(); ++i) {
+      for (int j = 0; j < k; ++j) {
+        m[j].push_back(0);
+      }
+      m[i % k].pop_back();
+      m[i % k].push_back(a[i]);
+    }
+
+    PrefixSum<lli> sum[10];
+    each (i, m) {
+      sum[i.first] = PrefixSum(i.second);
+    }
+
+
+    each (i, v) {
+      bool f = true;
+      set<int> vis;
+      for (int j = i.second - k + 1; j <= i.second; ++j) {
+        int x = i.first;
+        int y = i.second;
+        f = f && (sum[j % k](x, y) == 0);
+        vis.insert(sum[j % k](x, y));
+      }
+      f = (vis.size() == 1);
+      cout << (f ? "Yes" : "No") << endl;
     }
   }
   return 0;

@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/abc287/E/main.cpp
+// atcoder/abc288/A/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -34,38 +34,13 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
 
-const int N = 5 * 1e5 + 3;
-int z[N];
-vec<str> s;
-
-void rec(vec<int> v, int nth)
-{
-  if (v.size() < 2) return ;
-  each (i, v) {
-    setmax(z[i], nth);
-  }
-  map<char, vec<int>> m;
-  each (i, v) {
-    if (nth < s[i].size()) m[s[i][nth]].push_back(i);
-  }
-  each (i, m) {
-    rec(i.second, nth + 1);
-  }
-  return ;
-}
-
 int main(int argc, char *argv[])
 {
   int n;
   while (cin >> n) {
-    s.resize(n);
-    cin >> s ;
-    vec<int> v(n);
-    iota(v.begin(), v.end(), 0);
-    fill(z, z + N, -1);
-    rec(v, 0);
     for (int i = 0; i < n; ++i) {
-      cout << z[i] << endl;
+      lli a, b;cin >> a >> b;
+      cout << a + b << endl;
     }
   }
   return 0;

@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/abc287/E/main.cpp
+// atcoder/abc287/F/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -31,41 +31,54 @@ template<typename T> using heap = priority_queue<T>;
 
 constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
-constexpr lli mod = 1e9 + 7;
-// constexpr lli mod = 998244353;
+constexpr lli mod = 998244353;
 
-const int N = 5 * 1e5 + 3;
-int z[N];
-vec<str> s;
+const int N = 5000 + 3;
+vec<int> g[N];
 
-void rec(vec<int> v, int nth)
+using T = array<vec<lli>, 2>;
+
+T rec(int curr, int prev)
 {
-  if (v.size() < 2) return ;
-  each (i, v) {
-    setmax(z[i], nth);
+  T t;
+  t[0] = t[1] = vec<lli>(2, 0);
+  t[0][0] = t[1][1] = 1;
+  each (next, g[curr]) {
+    if (next == prev) continue;
+    T u = rec(next, curr);
+
+    T dp;
+    dp[0] = dp[1] = vec<lli>(t[0].size() + u[0].size() - 1, 0);
+    for (int i = 0; i < t[0].size(); ++i) {
+      for (int j = 0; j < u[0].size(); ++j) {
+        dp[0][i + j] += t[0][i] * (u[0][j] + u[1][j]) % mod;
+        dp[1][i + j] += t[1][i] * u[0][j] % mod;
+        dp[0][i + j] %= mod;
+        dp[1][i + j] %= mod;
+        if (i + j) (dp[1][i + j - 1] += t[1][i] * u[1][j] % mod) %= mod;
+      }
+    }
+    t = dp;
   }
-  map<char, vec<int>> m;
-  each (i, v) {
-    if (nth < s[i].size()) m[s[i][nth]].push_back(i);
-  }
-  each (i, m) {
-    rec(i.second, nth + 1);
-  }
-  return ;
+  return t;
 }
 
 int main(int argc, char *argv[])
 {
   int n;
   while (cin >> n) {
-    s.resize(n);
-    cin >> s ;
-    vec<int> v(n);
-    iota(v.begin(), v.end(), 0);
-    fill(z, z + N, -1);
-    rec(v, 0);
-    for (int i = 0; i < n; ++i) {
-      cout << z[i] << endl;
+    fill(g, g + N, vec<int>());
+    for (int i = 0; i < n - 1; ++i) {
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      g[a].push_back(b);
+      g[b].push_back(a);
+    }
+    auto t = rec(0, 0);
+    for (int i = 1; i <= n; ++i) {
+      cout << (t[0].at(i) + t[1].at(i)) % mod << endl;
     }
   }
   return 0;
