@@ -120,7 +120,6 @@ int main(int argc, char *argv[])
         a = uf.find(a);
         b = uf.find(b);
         while (a != b) {
-          mn[a] = mn[b] = min(mn[a], mn[b]);
           uf.unite(a, b);
           a = uf.find(parent[a]);
         }
@@ -129,7 +128,8 @@ int main(int argc, char *argv[])
         int x;
         cin >> x;
         --x;
-        cout << mn[uf.find(x)] + 1 << endl;
+        x = uf.find(x);
+        cout << abs(uf.r[x]) + 1 << endl;
       }
     }
   }
