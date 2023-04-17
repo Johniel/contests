@@ -36,6 +36,7 @@ constexpr lli mod = 1e9 + 7;
 template<typename T>
 struct PrefixSum2D {
   vector<vector<T>> sum;
+  PrefixSum2D() {}
   PrefixSum2D(vector<vector<T>> v) {
     const int H = v.size() + 1;
     const int W = v[0].size() + 1;
@@ -71,84 +72,36 @@ const int H = 7;
 const int W = 7;
 const int K = 40;
 using P = pair<pair<lli, lli>, pair<lli, lli>>;
-P memo[H][W][H][W][K];
-const P nil = {{-1, -1}, {-1, -1}};
+PrefixSum2D<lli> sum;
+lli memo[H][W][H][W][K];
+lli at_least;
+const lli inf = 1LL << 62;
 
-pair<lli, lli> merge(pair<lli, lli> a, pair<lli, lli> b)
+lli rec(int bi, int bj, int ei, int ej, int k)
 {
-  return make_pair(max(a.first, b.first), min(a.second, b.second));
-}
+  if (sum.query(bi, bj, ei, ej) < at_least) return inf;
+  if (k == 0) return sum.query(bi, bj, ei, ej);
+  lli& ret = memo[bi][bj][ei][ej][k];
+  if (ret != -1) return ret;
 
-P conquer(P best, pair<lli, lli> large, pair<lli, lli> small)
-{
-  lli cost = abs(best.first.second - best.first.first);
-  lli cost_l = abs(large.second - large.first);
-  lli cost_s = abs(small.second - small.first);
-  if (0) {
-  } else if (cost > cost_s && cost_l > cost_s) {
-    best.first = small;
-    best.second = small;
-  } else if (cost > cost_l && cost_s > cost_l) {
-    best.first = large;
-    best.second = large;
-  } else if (cost > cost_l && cost_s == cost_l) {
-    best.first = large;
-    best.second = small;
-  }
-
-  cost = abs(best.first.second - best.first.first);
-  cost_l = abs(large.second - large.first);
-  cost_s = abs(small.second - small.first);
-  if (cost == cost_l && best.first.first < large.first) {
-    best.first = large;
-  }
-  if (cost == cost_s && best.second.second > small.second) {
-    best.first = small;
-  }
-  return best;
-};
-
-P rec(int bi, int bj, int ei, int ej, int k)
-{
-  P& ret = memo[bi][bj][ei][ej][k];
-  if (ret != nil) return ret;
-  const lli inf = 1LL << 60;
-
-  const pair<lli, lli> none = make_pair(inf, 0);
-  P best = {none, none};
+  lli mn = inf;
 
   for (int i = bi + 1; i < ei; ++i) {
     for (int c = 0; c < k; ++c) {
-      P a = rec(bi, bj, i, ej, c);
-      P b = rec(i, bj, ei, ej, (k - 1) - c);
-
-      if (0) {
-        cout << make_pair(make_pair(bi, bj), make_pair(ei, ej)) << k << ' '
-             << make_pair(make_pair(bi, bj), make_pair(i, ej)) << c << ' ' << a
-             << make_pair(make_pair(i, bj), make_pair(ei, ej)) << k-c << ' ' << b << endl;
-      }
-
-      if (a.first == none || a.second == none) continue;
-      if (b.first == none || b.second == none) continue;
-      pair<lli, lli> large = merge(a.first, b.first);
-      pair<lli, lli> small = merge(a.second, b.second);
-      best = conquer(best, large, small);
+      lli a = rec(bi, bj, i, ej, c);
+      lli b = rec(i, bj, ei, ej, (k - 1) - c);
+      setmin(mn, max(a, b));
     }
   }
   for (int j = bj + 1; j < ej; ++j) {
     for (int c = 0; c < k; ++c) {
-      P a = rec(bi, bj, ei, j, c);
-      P b = rec(bi, j, ei, ej, (k - 1) - c);
-      if (a.first == none || a.second == none) continue;
-      if (b.first == none || b.second == none) continue;
-      pair<lli, lli> large = merge(a.first, b.first);
-      pair<lli, lli> small = merge(a.second, b.second);
-      best = conquer(best, large, small);
+      lli a = rec(bi, bj, ei, j, c);
+      lli b = rec(bi, j, ei, ej, (k - 1) - c);
+      setmin(mn, max(a, b));
     }
   }
 
-  // cout << make_pair(make_pair(bi, bj), make_pair(ei, ej)) << k << ' ' << best << endl;
-  return ret = best;
+  return ret = mn;
 }
 
 int main(int argc, char *argv[])
@@ -161,21 +114,27 @@ int main(int argc, char *argv[])
         cin >> v[i][j];
       }
     }
-    fill(&memo[0][0][0][0][0], &memo[H - 1][W - 1][H - 1][W - 1][K - 1], nil);
-    PrefixSum2D<lli> sum(v);
+    sum = PrefixSum2D<lli>(v);
+    vec<lli> u;
     for (int i = 0; i < h; ++i) {
       for (int j = 0; j < w; ++j) {
-        for (int a = i; a <= h; ++a) {
-          for (int b = j; b <= w; ++b) {
-            lli x = sum.query(i, j, a, b);
-            memo[i][j][a][b][0] = {{x, x}, {x, x}};
+        for (int a = i + 1; a <= h; ++a) {
+          for (int b = j + 1; b <= w; ++b) {
+            u.push_back(sum.query(i, j, a, b));
           }
         }
       }
     }
-    P p = rec(0, 0, h, w, t);
-    cout << abs(p.first.second - p.first.first) << endl;
-    // break;
+    sort(u.begin(), u.end());
+    u.erase(unique(u.begin(), u.end()), u.end());
+    lli z = inf;
+    each (i, u) {
+      at_least = i;
+      fill(&memo[0][0][0][0][0], &memo[H - 1][W - 1][H - 1][W - 1][K - 1], -1);
+      lli mx = rec(0, 0, h, w, t);
+      setmin(z, mx - at_least);
+    }
+    cout << z << endl;
   }
   return 0;
 }
