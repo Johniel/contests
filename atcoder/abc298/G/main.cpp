@@ -58,7 +58,8 @@ struct PrefixSum2D {
       }
     }
   }
-  T query(int ai, int aj, int bi, int bj) {
+  T operator () (int ai, int aj, int bi, int bj) const { return this->query(ai, aj, bi, bj); }
+  T query(int ai, int aj, int bi, int bj) const {
     assert(0 <= ai && ai < sum.size());
     assert(0 <= bi && bi < sum.size());
     assert(0 <= aj && aj < sum[0].size());
@@ -79,8 +80,8 @@ const lli inf = 1LL << 62;
 
 lli rec(int bi, int bj, int ei, int ej, int k)
 {
-  if (sum.query(bi, bj, ei, ej) < at_least) return inf;
-  if (k == 0) return sum.query(bi, bj, ei, ej);
+  if (sum(bi, bj, ei, ej) < at_least) return inf;
+  if (k == 0) return sum(bi, bj, ei, ej);
   lli& ret = memo[bi][bj][ei][ej][k];
   if (ret != -1) return ret;
 
@@ -120,7 +121,7 @@ int main(int argc, char *argv[])
       for (int j = 0; j < w; ++j) {
         for (int a = i + 1; a <= h; ++a) {
           for (int b = j + 1; b <= w; ++b) {
-            u.push_back(sum.query(i, j, a, b));
+            u.push_back(sum(i, j, a, b));
           }
         }
       }
