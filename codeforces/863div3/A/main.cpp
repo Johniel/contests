@@ -42,13 +42,19 @@ int main(int argc, char *argv[])
   str s;
   char c;
   while (cin >> n >> c >> s) {
-    str mx;
-    for (int i = 0; i <= s.size(); ++i) {
-      str t = s;
-      t.insert(i, str(1, c));
-      setmax(mx, t);
+    int x = -1;
+    for (int i = 0; i < s.size(); ++i) {
+      if (s[i] < c) {
+        x = i;
+        break;
+      }
     }
-    cout << mx << endl;
+    for (int i = 0; i < s.size(); ++i) {
+      if (i == x) cout << c;
+      cout << s[i];
+    }
+    if (x == -1) cout << c;
+    cout << endl;
   }
 
   return 0;
