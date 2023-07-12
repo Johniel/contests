@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// abc268/C/main.cpp
+// atcoder/arc163/B/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -16,10 +16,12 @@ template<typename T> istream& operator >> (istream& is, vector<T>& v) { for (aut
 template<typename T> ostream& operator << (ostream& os, set<T> s) { os << "#{"; for (auto& i: s) os << i << ","; os << "}"; return os; }
 template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m) { os << "{"; for (auto& i: m) os << i << ","; os << "}"; return os; }
 template<typename E, size_t N> istream& operator >> (istream& is, array<E, N>& a) { for (auto& i: a) is >> i; return is; }
-template<typename E, size_t N> ostream& operator << (ostream& os, array<E, N>& a) { os << "[]{"; for (auto& i: a) os << i << ","; os << "}"; return os; }
+template<typename E, size_t N> ostream& operator << (ostream& os, array<E, N>& a) { os << "[" << N << "]{"; for (auto& i: a) os << i << ","; os << "}"; return os; }
 
 template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
 template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+__attribute__((constructor)) static void ___initio(void) { ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.setf(ios_base::fixed); cout.precision(15); return ; }
 
 using lli = long long int;
 using ull = unsigned long long;
@@ -33,26 +35,18 @@ constexpr lli mod = 1e9 + 7;
 
 int main(int argc, char *argv[])
 {
-  ios_base::sync_with_stdio(false);
-  cin.tie(nullptr);
-  cout.setf(ios_base::fixed);
-  cout.precision(15);
-
-  int n;
-  while (cin >> n) {
-    vec<int> a(n);
-    cin >> a;
-    vec<int> b(n, 0);
-
-    for (int i = 0; i < a.size(); ++i) {
-      ++b[(a[i] - i + n - 1 + n) % n];
-      ++b[(a[i] - i + n) % n];
-      ++b[(a[i] - i + n + 1 + n) % n];
+  int n, m;
+  while (cin >> n >> m) {
+    int x, y;
+    vec<int> a(n - 2);
+    cin >> x >> y >> a;
+    sort(a.begin(), a.end());
+    lli z = 1LL << 60;
+    for (int i = 0; i + m - 1 < a.size(); ++i) {
+      lli c = max(0, x - a[i]) + max(0, a[i + m - 1] - y);
+      setmin(z, c);
     }
-    int mx = *max_element(b.begin(), b.end());
-    cout << mx << endl;
+    cout << z << endl;
   }
-
-
   return 0;
 }

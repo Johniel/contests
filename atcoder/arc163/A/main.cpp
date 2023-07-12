@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// abc268/B/main.cpp
+// atcoder/arc163/A/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -16,10 +16,12 @@ template<typename T> istream& operator >> (istream& is, vector<T>& v) { for (aut
 template<typename T> ostream& operator << (ostream& os, set<T> s) { os << "#{"; for (auto& i: s) os << i << ","; os << "}"; return os; }
 template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m) { os << "{"; for (auto& i: m) os << i << ","; os << "}"; return os; }
 template<typename E, size_t N> istream& operator >> (istream& is, array<E, N>& a) { for (auto& i: a) is >> i; return is; }
-template<typename E, size_t N> ostream& operator << (ostream& os, array<E, N>& a) { os << "[]{"; for (auto& i: a) os << i << ","; os << "}"; return os; }
+template<typename E, size_t N> ostream& operator << (ostream& os, array<E, N>& a) { os << "[" << N << "]{"; for (auto& i: a) os << i << ","; os << "}"; return os; }
 
 template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
 template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+__attribute__((constructor)) static void ___initio(void) { ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.setf(ios_base::fixed); cout.precision(15); return ; }
 
 using lli = long long int;
 using ull = unsigned long long;
@@ -33,18 +35,20 @@ constexpr lli mod = 1e9 + 7;
 
 int main(int argc, char *argv[])
 {
-  ios_base::sync_with_stdio(false);
-  cin.tie(nullptr);
-  cout.setf(ios_base::fixed);
-  cout.precision(15);
+  int _;
+  cin >> _;
 
-  str a, b;
-  while (cin >> a >> b) {
-    int n = 0;
-    for (int i = 0; i < min(a.size(), b.size()); ++i) {
-      n += (a[i] == b[i]);
+  int n;
+  str s;
+  while (cin >> n >> s) {
+    str t;
+    bool f = false;
+    for (int i = 0; i < s.size(); ++i) {
+      t += s[i];
+      str u = s.substr(i + 1);
+      if (t.size() && u.size() && t < u) f = true;
     }
-    cout << (a.size() == n ? "Yes" : "No") << endl;
+    cout << (f ? "Yes" : "No") << endl;
   }
 
   return 0;
