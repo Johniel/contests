@@ -30,11 +30,12 @@ template<typename T> using vec = vector<T>;
 
 constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
+constexpr lli mod = 1e9 + 7;
+// constexpr lli mod = 998244353;
 
 template<typename T>
 struct PrefixSum2D {
   vector<vector<T>> sum;
-  PrefixSum2D() {}
   PrefixSum2D(vector<vector<T>> v) {
     const int H = v.size() + 1;
     const int W = v[0].size() + 1;
@@ -67,124 +68,113 @@ struct PrefixSum2D {
   }
 };
 
-template<typename T>
-struct CartesianTree {
-  // abc311G
-  vector<int> parent;
-  CartesianTree() {}
-  CartesianTree(const vector<T>& a) : parent(a.size(), -1) {
-    vector<int> st;
-    for (int i = 0; i < a.size(); ++i) {
-      int prev = -1;
-      while (st.size() && a[i] < a[st.back()]) {
-        prev = st.back();
-        st.pop_back();
+namespace max_rectangle {
+  const int H = 300 + 2;
+  const int W = 300 + 2;
+  bool g[H][W];
+  void init(bool ini)
+  {
+    fill(&g[0][0], &g[H - 1][W - 1] + 1, ini);
+    return ;
+  }
+
+  vec<pair<int, int>> run(const vec<lli>& h)
+  {
+    // see:
+    // + 蟻本P.300
+    // + https://drken1215.hatenablog.com/entry/2023/07/23/190400
+    vec<int> left(h.size(), 0), right(h.size(), h.size());
+    {
+      vec<pair<lli, int>> v;
+      for (int i = 0; i < h.size(); ++i) {
+        while (v.size() && h[i] <= v.back().first) v.pop_back();
+        if (v.size()) left[i] = v.back().second + 1;
+        v.push_back(make_pair(h[i], i));
       }
-      if (prev != -1) parent[prev] = i;
-      if (st.size()) parent[i] = st.back();
-      st.push_back(i);
     }
-  }
-};
-
-const int H = 300 + 2;
-const int W = 300 + 2;
-vec<vec<int>> g;
-tuple<int, int, int> rect[H][W];
-void fn(const int h, const int w)
-{
-  static int dp[H][W];
-  for (int i = 0; i < h; ++i) {
-    for (int j = 0; j < w; ++j) {
-      dp[i][j] = (g[i][j] != -1);
+    {
+      vec<pair<lli, int>> v;
+      for (int i = h.size() - 1; 0 <= i; --i) {
+        while (v.size() && h[i] <= v.back().first) v.pop_back();
+        if (v.size()) right[i] = v.back().second;
+        v.push_back(make_pair(h[i], i));
+      }
     }
+    vec<pair<int, int>> v;
+    for (int i = 0; i < h.size(); ++i) {
+      v.push_back(make_pair(left[i], right[i]));
+    }
+    return v;
   }
 
-  for (int i = 1; i < h; ++i) {
-    for (int j = 0; j < w; ++j) {
-      if (dp[i][j]) dp[i][j] = dp[i - 1][j] + 1;
+  // g[i][j]を含む最大長方形の高さ、[左端、右端)
+  tuple<int, int, int> rect[H][W];
+  void run(const int h, const int w)
+  {
+    fill(&rect[0][0], &rect[H - 1][W - 1] + 1, make_tuple(-1, -1, -1));
+    static int dp[H][W];
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        if (dp[i][j] = !!g[i][j]) rect[i][j] = make_tuple(1, 1, 1);
+      }
     }
-  }
+    for (int i = 1; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        if (dp[i][j]) dp[i][j] = dp[i - 1][j] + 1;
+      }
+    }
 
-  const int N = H;
-  static vec<int> tree[N];
-  vec<pair<int, int>> u;
-  function<void(int, int, int)> fn = [&] (int curr, int begin, int end) {
-    u[curr] = make_pair(begin, end);
-    each (next, tree[curr]) {
-      if (curr < next) {
-        fn(next, curr + 1, end);
-      } else {
-        fn(next, begin, curr);
+    for (int i = 0; i < h; ++i) {
+      vec<lli> v;
+      for (int j = 0; j < w; ++j) {
+        v.push_back(dp[i][j]);
+      }
+      vec<pair<int, int>> u = run(v);
+      for (int j = 0; j < w; ++j) {
+        rect[i][j] = make_tuple(v[j], u[j].first, u[j].second);
       }
     }
     return ;
-  };
-
-  const int inf = 1 << 29;
-  for (int i = 0; i < h; ++i) {
-    vec<int> v;
-    for (int j = 0; j < w; ++j) {
-      v.push_back(dp[i][j] ? dp[i][j] : -inf);
-    }
-    CartesianTree<int> ct(v);
-    // cout << "v:" << v << endl;
-    // cout << "ct.parent" << ct.parent << endl;
-    fill(tree, tree + H, vec<int>());
-    int root;
-    for (int i = 0; i < ct.parent.size(); ++i) {
-      if (ct.parent[i] != -1) tree[ct.parent[i]].push_back(i);
-      else root = i;
-    }
-    u.resize(N);
-    fn(root, 0, v.size());
-    for (int j = 0; j < w; ++j) {
-      rect[i][j] = make_tuple(v[j], u[j].first, u[j].second);
-    }
   }
-  return ;
-}
+};
 
 int main(int argc, char *argv[])
 {
   int h, w;
   while (cin >> h >> w) {
-    g.resize(H, vec<int>(W));
+    max_rectangle::init(false);
+
+    vec<vec<lli>> g(h, vec<lli>(w));
     for (int i = 0; i < h; ++i) {
       for (int j = 0; j < w; ++j) {
         cin >> g[i][j];
+        max_rectangle::g[i][j] = true;
       }
     }
-    map<int, vec<pair<int, int>>> m;
+    PrefixSum2D<lli> sum(g);
+
+    map<lli, vec<pair<int, int>>> m;
     for (int i = 0; i < h; ++i) {
       for (int j = 0; j < w; ++j) {
         m[g[i][j]].push_back(make_pair(i, j));
       }
     }
 
-    PrefixSum2D<int> sum(g);
-
     lli mx = 0;
     each (k, m) {
-      // cout << k.first << endl;
-      fn(h, w);
+      max_rectangle::run(h, w);
       for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
-          if (g[i][j] != -1) {
-            auto [a, wbegin, wend] = rect[i][j];
+          if (max_rectangle::g[i][j]) {
+            auto [a, wbegin, wend] = max_rectangle::rect[i][j];
             lli z = sum(i - (a - 1), wbegin, i + 1, wend);
-            if (k.first == 3) {
-              // cout << make_pair(i - (a - 1), i + 1) << ' ' << wbegin <<' ' << wend << endl;
-              // cout << make_pair(i - (a - 1), wbegin) << ' ' << make_pair(i + 1, wend)<< endl;
-            }
             setmax(mx, z * k.first);
           }
         }
       }
-      each (p, k.second) g[p.first][p.second] = -1;
+      each (j, k.second) max_rectangle::g[j.first][j.second] = false;
     }
     cout << mx << endl;
-    // break;
   }
   return 0;
 }
