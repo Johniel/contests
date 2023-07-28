@@ -1,0 +1,9 @@
+/opt/homebrew/Cellar/gcc/13.1.0/include/c++/13/bits/locale_facets.h:1092:7:virtual std::ctype<char>::char_type std::ctype<char>::do_widen(char) const	0	static
+/opt/homebrew/Cellar/gcc/13.1.0/include/c++/13/bits/stl_vector.h:728:7:std::vector<_Tp, _Alloc>::~vector() [with _Tp = long long int; _Alloc = std::allocator<long long int>]	0	static
+./main.cpp:39:10:void __tcf_0(void*)	32	static
+./main.cpp:42:5:0(int)	80	static
+./main.cpp:42:5:lli rec(int)	0	static
+/opt/homebrew/Cellar/gcc/13.1.0/include/c++/13/bits/vector.tcc:634:5:void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = long long int; _Alloc = std::allocator<long long int>]	80	static
+/opt/homebrew/Cellar/gcc/13.1.0/include/c++/13/bits/vector.tcc:634:5:void std::vector<_Tp, _Alloc>::_M_default_append(size_type) [with _Tp = int; _Alloc = std::allocator<int>]	80	static
+./main.cpp:53:5:int main(int, char**)	128	static
+./main.cpp:83:1:_sub_I_65535_0	32	static
