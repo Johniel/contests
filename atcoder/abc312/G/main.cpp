@@ -51,16 +51,12 @@ lli rec(int curr, int prev)
   lli x = n - (descendant[curr] + 1);
   if (curr == 0) assert(descendant[curr] + 1 == n);
 
-  lli a = 0;
-  a = descendant[curr] * x;
   z += descendant[curr] * x;
   each (next, g[curr]) {
     if (next == prev) continue;
     lli w = descendant[next] + 1;
     z += (n - w - 1) * w;
-    a += (n - w - 1) * w;
   }
-  // cout << make_pair(curr, prev) << ' ' <<  a << endl;
 
   return descendant[curr];
 }
