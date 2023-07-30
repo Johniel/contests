@@ -64,6 +64,8 @@ int main(int argc, char *argv[])
           v[i].push_back(make_tuple(x, y2[i] - 1, z));
         }
       }
+      sort(v[i].begin(), v[i].end());
+      v[i].erase(unique(v[i].begin(), v[i].end()), v[i].end());
       each (k, v[i]) m[k] = i;
     }
 
