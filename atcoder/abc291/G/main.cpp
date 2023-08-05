@@ -1,0 +1,77 @@
+// github.com/Johniel/contests
+// atcoder/abc291/G/main.cpp
+
+#include <bits/stdc++.h>
+
+#define each(i, c) for (auto& i : c)
+#define unless(cond) if (!(cond))
+// #define endl "\n"
+
+using namespace std;
+
+template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p) { os << "(" << p.first << "," << p.second << ")"; return os; }
+template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p) { is >> p.first >> p.second; return is; }
+template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; for (auto& i: v) os << i << ","; os << ")"; return os; }
+template<typename T> istream& operator >> (istream& is, vector<T>& v) { for (auto& i: v) is >> i; return is; }
+template<typename T> ostream& operator << (ostream& os, set<T> s) { os << "#{"; for (auto& i: s) os << i << ","; os << "}"; return os; }
+template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m) { os << "{"; for (auto& i: m) os << i << ","; os << "}"; return os; }
+template<typename E, size_t N> istream& operator >> (istream& is, array<E, N>& a) { for (auto& i: a) is >> i; return is; }
+template<typename E, size_t N> ostream& operator << (ostream& os, array<E, N>& a) { os << "[" << N << "]{"; for (auto& i: a) os << i << ","; os << "}"; return os; }
+
+template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
+template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+__attribute__((constructor)) static void ___initio(void) { ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.setf(ios_base::fixed); cout.precision(15); return ; }
+
+using lli = long long int;
+using ull = unsigned long long;
+using str = string;
+template<typename T> using vec = vector<T>;
+
+constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
+constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
+constexpr lli mod = 1e9 + 7;
+// constexpr lli mod = 998244353;
+
+#include <atcoder/all>
+using namespace std;
+using namespace atcoder;
+
+int main(int argc, char *argv[])
+{
+
+  // maximize sum{A[i]|B[i]}
+
+  // https://github.com/atcoder/ac-library/blob/master/document_ja/convolution.md
+  // ci=sum{a[j]*b[i-j]}
+  // b' = reversed b
+
+  // sum{A[(i+j)%n]|B[i]}
+
+  // x|y=1-~x&~y
+
+  int n;
+  while (cin >> n) {
+    vec<int> a(n), b(n);
+    cin >> a >> b;
+    reverse(b.begin(), b.end());
+    for (int i = 0; i < n; ++i) {
+      a.push_back(a[i]);
+    }
+
+    vec<int> c(n, 0);
+    for (int k = 0; k < 5; ++k) {
+      vec<int> x;
+      each (i, a) x.push_back((~i >> k) & 1);
+      vec<int> y;
+      each (i, b) y.push_back((~i >> k) & 1);
+      vec<int> z = convolution(x, y);
+      for (int i = 0; i < n; ++i) {
+        c[i] += (n - z[n + i - 1]) << k;
+      }
+    }
+    cout << *max_element(c.begin(), c.end()) << endl;
+  }
+
+  return 0;
+}
