@@ -51,10 +51,7 @@ inline lli rec(int curr, int m)
     return ret = rec(curr + 1, (m + bus[curr].second) % M) + bus[curr].second;
   } else {
     lli x = (m / bus[curr].first + 1) * bus[curr].first;
-
-    return ret = rec(curr + 1, (x+ bus[curr].second) % M) + bus[curr].second + (x - m);
-
-    // return ret = rec(curr, x % M) + (x - m);
+    return ret = rec(curr + 1, (x + bus[curr].second) % M) + bus[curr].second + (x - m);
   }
 }
 
@@ -65,13 +62,24 @@ int main(int argc, char *argv[])
   while (cin >> n >> x >> y) {
     bus.resize(n - 1);
     cin >> bus;
-    fill(&memo[0][0], &memo[N - 1][M - 1] + 1, -1);
+    // fill(&memo[0][0], &memo[N - 1][M - 1] + 1, -1);
+
+    static lli z[M];
+    fill(z, z + M, x + y);
+    for (int k = 0; k < M; ++k) {
+      lli t = (k + x) % M;
+      for (int i = 0; i < bus.size(); ++i) {
+        lli nt = (t + bus[i].first - 1) / bus[i].first * bus[i].first;
+        z[k] += (nt - t) + bus[i].second;
+        t = (nt + bus[i].second) % M;
+      }
+    }
+
     int q;
     cin >> q;
     while (q--) {
-      lli z;
-      cin >> z;
-      cout << z + rec(0, (z + x) % M) + x + y << endl;
+      // lli z; cin >> z; cout << z + rec(0, (z + x) % M) + x + y << endl;
+      lli a; cin >> a; cout << a + z[a % M] << endl;
     }
   }
   return 0;
