@@ -45,31 +45,37 @@ int main(int argc, char *argv[])
 
     auto fn = [&] (lli w) {
       lli sum = 0;
-      lli line = 1;
+      lli line = 0;
       each (i, v) {
-        if (sum + (1 + i) <= w) {
-          sum += (1 + i);
-        } else {
+        // cout << i << ' ' << sum << ' ' << line << endl;
+        if (0) {
+        } else if (sum + !!sum + i == w) {
+          if (sum == 0) ++line; // 行頭
+          sum = 0;
+        } else if (sum + !!sum + i < w) {
+          if (sum == 0) ++line; // 行頭
+          else ++sum;
+          sum += i;
+        } else if (sum + 1 + i > w) {
           ++line;
-          sum = i+1;
+          sum = i;
         }
       }
+      // cout << make_pair(w, line) << endl;
       return line;
     };
 
+
     lli small = *max_element(v.begin(), v.end());
-    lli large = accumulate(v.begin(), v.end(), 0LL) + v.size();
-
-    // fn(w):=幅wで表示する場合の行数。広義単調減少。
-
+    lli large = 1LL << 60;
     while (small + 1 < large) {
       lli mid = (small + large) / 2;
       if (m < fn(mid)) small = mid;
       else large = mid;
     }
 
-    if (fn(small) == m) cout << small-1 << endl;
-    else cout << large-1 << endl;
+    if (fn(small) <= m) cout << small << endl;
+    else cout << large << endl;
 
     // cout << make_pair(small, large) << endl;
     // cout << fn(27) << endl;
