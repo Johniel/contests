@@ -69,13 +69,8 @@ int main(int argc, char *argv[])
       function<lli(lli)> fn = [&] (lli k) {
         return (x * k * (k + 1) / 2) + (k * b) + a;
       };
-      if (0 < x) {
-        setmax(mx, fn(1));
-        setmax(mx, fn(y));
-      } else {
-        lli i = trinaly_search(1, y + 1, fn);
-        setmax(mx, fn(i));
-      }
+      lli i = trinaly_search(1, y + 1, fn);
+      setmax(mx, fn(i));
       a = fn(y);
       b = b + x * y;
     }
