@@ -39,15 +39,8 @@ int main(int argc, char *argv[])
 {
   vec<lli> v;
   {
-    const lli N = 1e14;
-    // map<int, int> m;
-    for (lli i = 0; i * i < N; ++i) {
-      str s = to_string(i * i);
-      if (s.size() < 14) v.push_back(i * i);
-      else break;
-      // ++m[s.size()];
-    }
-    // cout << m << endl;
+    const lli N = 1e13;
+    for (lli i = 0; i * i < N; ++i) v.push_back(i * i);
   }
 
   map<str, lli> m;
