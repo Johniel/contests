@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/arc165/C/main.cpp
+// atcoder/abc325/B/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -35,73 +35,24 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
-const int N = 2 * 1e5 + 3;
-vec<pair<int, lli>> g[N];
-
 int main(int argc, char *argv[])
 {
-  int n, m;
-  while (cin >> n >> m) {
-    fill(g, g + n, vec<pair<int, lli>>());
-    for (int i = 0; i < m; ++i) {
-      int a, b;
-      lli w;
-      cin >> a >> b >> w;
-      --a;
-      --b;
-      g[a].push_back(make_pair(b, w));
-      g[b].push_back(make_pair(a, w));
-    }
-
-    auto fn = [&] (const lli x) {
-      static int color[N];
-      fill(color, color + n, -1);
-      for (int src = 0; src < n; ++src) {
-        if (color[src] != -1) continue;
-        queue<int> q;
-        color[src] = 0;
-        for (q.push(src); q.size(); q.pop()) {
-          int curr = q.front();
-          each (e, g[curr]) {
-            auto [next, w] = e;
-            if (x <= w) continue;
-            // 同じ色で塗られた相異なる 2 頂点を結ぶどの単純パスについても、単純パスの重みは X 以上である。
-            if (color[next] == -1) {
-              color[next] = color[curr] ^ 1;
-              q.push(next);
-            }
-            if (color[next] == color[curr]) return false;
-          }
+  int n;
+  while (cin >> n) {
+    vec<pair<lli, int>> v(n);
+    cin >> v;
+    lli mx = 0;
+    for (int k = 0; k <= 24; ++k) {
+      lli x = 0;
+      each (i, v) {
+        int t = (k + i.second) % 24;
+        if (9 <= t && t < 18) {
+          x += i.first;
         }
       }
-
-      for (int i = 0; i < n; ++i) {
-        vec<lli> v;
-        each (e, g[i]) {
-          auto [_, w] = e;
-          if (x <= w) continue;
-          v.push_back(w);
-        }
-        if (2 <= v.size()){
-          sort(v.begin(), v.end());
-          if (v[v.size() - 1] + v[v.size() - 2] < x) return false;
-        }
-      }
-
-      return true;
-    };
-
-    lli small = 0;
-    lli large = 1LL << 40;
-    while (small + 1 < large) {
-      lli mid = (small + large) / 2;
-      if (fn(mid)) small = mid;
-      else large = mid;
+      setmax(mx, x);
     }
-    if (0) ;
-    else if (fn(large)) cout << large << endl;
-    else if (fn(small)) cout << small << endl;
-    else assert(0);
+    cout << mx << endl;
   }
   return 0;
 }

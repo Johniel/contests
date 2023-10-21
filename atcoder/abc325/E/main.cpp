@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/arc165/C/main.cpp
+// atcoder/abc325/E/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -35,73 +35,55 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
-const int N = 2 * 1e5 + 3;
-vec<pair<int, lli>> g[N];
-
 int main(int argc, char *argv[])
 {
-  int n, m;
-  while (cin >> n >> m) {
-    fill(g, g + n, vec<pair<int, lli>>());
-    for (int i = 0; i < m; ++i) {
-      int a, b;
-      lli w;
-      cin >> a >> b >> w;
-      --a;
-      --b;
-      g[a].push_back(make_pair(b, w));
-      g[b].push_back(make_pair(a, w));
+  int n;
+  lli a, b, c;
+  while (cin >> n >> a >> b >> c) {
+    // 車
+    // 電車
+    // 車->電車
+    const int N = 1000 + 3;
+    static int d[N][N];
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        cin >> d[i][j];
+      }
     }
-
-    auto fn = [&] (const lli x) {
-      static int color[N];
-      fill(color, color + n, -1);
-      for (int src = 0; src < n; ++src) {
-        if (color[src] != -1) continue;
-        queue<int> q;
-        color[src] = 0;
-        for (q.push(src); q.size(); q.pop()) {
-          int curr = q.front();
-          each (e, g[curr]) {
-            auto [next, w] = e;
-            if (x <= w) continue;
-            // 同じ色で塗られた相異なる 2 頂点を結ぶどの単純パスについても、単純パスの重みは X 以上である。
-            if (color[next] == -1) {
-              color[next] = color[curr] ^ 1;
-              q.push(next);
-            }
-            if (color[next] == color[curr]) return false;
-          }
+    const int M = 2;
+    static lli dist[N][M];
+    const lli inf = 1LL << 61;
+    fill(&dist[0][0], &dist[N - 1][M - 1] + 1, inf);
+    const int C = 0;
+    const int T = 1;
+    priority_queue<pair<lli, pair<int, int>>> q;
+    dist[0][C] = dist[0][T] = 0;
+    q.push(make_pair(0, make_pair(0, C)));
+    q.push(make_pair(0, make_pair(0, T)));
+    while (q.size()) {
+      auto p = q.top();
+      q.pop();
+      lli cost = abs(p.first);
+      int curr = p.second.first;
+      int type = p.second.second;
+      if (dist[curr][type] != cost) continue;
+      for (int next = 0; next < n; ++next) {
+        lli w = inf;
+        if (0) ;
+        else if (type == C) w = d[curr][next] * a;
+        else if (type == T) w = d[curr][next] * b + c;
+        else assert(0);
+        if (dist[next][type] > dist[curr][type] + w) {
+          dist[next][type] = dist[curr][type] + w;
+          q.push(make_pair(-dist[next][type], make_pair(next, type)));
         }
       }
-
-      for (int i = 0; i < n; ++i) {
-        vec<lli> v;
-        each (e, g[i]) {
-          auto [_, w] = e;
-          if (x <= w) continue;
-          v.push_back(w);
-        }
-        if (2 <= v.size()){
-          sort(v.begin(), v.end());
-          if (v[v.size() - 1] + v[v.size() - 2] < x) return false;
-        }
+      if (dist[curr][T] > dist[curr][C]) {
+        dist[curr][T] = dist[curr][C];
+        q.push(make_pair(-dist[curr][T], make_pair(curr, T)));
       }
-
-      return true;
-    };
-
-    lli small = 0;
-    lli large = 1LL << 40;
-    while (small + 1 < large) {
-      lli mid = (small + large) / 2;
-      if (fn(mid)) small = mid;
-      else large = mid;
     }
-    if (0) ;
-    else if (fn(large)) cout << large << endl;
-    else if (fn(small)) cout << small << endl;
-    else assert(0);
+    cout << min(dist[n - 1][C], dist[n - 1][T]) << endl;
   }
   return 0;
 }

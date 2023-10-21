@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/arc165/C/main.cpp
+// atcoder/abc325/D/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -35,73 +35,52 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
+void show(priority_queue<lli> q)
+{
+  while (q.size()) {
+    cout << q.top() << ' ';
+    q.pop();
+  }
+  cout << endl;
+  return ;
+}
+
 const int N = 2 * 1e5 + 3;
-vec<pair<int, lli>> g[N];
 
 int main(int argc, char *argv[])
 {
-  int n, m;
-  while (cin >> n >> m) {
-    fill(g, g + n, vec<pair<int, lli>>());
-    for (int i = 0; i < m; ++i) {
-      int a, b;
-      lli w;
-      cin >> a >> b >> w;
-      --a;
-      --b;
-      g[a].push_back(make_pair(b, w));
-      g[b].push_back(make_pair(a, w));
-    }
-
-    auto fn = [&] (const lli x) {
-      static int color[N];
-      fill(color, color + n, -1);
-      for (int src = 0; src < n; ++src) {
-        if (color[src] != -1) continue;
-        queue<int> q;
-        color[src] = 0;
-        for (q.push(src); q.size(); q.pop()) {
-          int curr = q.front();
-          each (e, g[curr]) {
-            auto [next, w] = e;
-            if (x <= w) continue;
-            // 同じ色で塗られた相異なる 2 頂点を結ぶどの単純パスについても、単純パスの重みは X 以上である。
-            if (color[next] == -1) {
-              color[next] = color[curr] ^ 1;
-              q.push(next);
-            }
-            if (color[next] == color[curr]) return false;
-          }
-        }
+  int n;
+  while (cin >> n) {
+    vec<pair<lli, lli>> v(n);
+    cin >> v;
+    sort(v.begin(), v.end());
+    reverse(v.begin(), v.end());
+    priority_queue<lli> q; // 出る時刻
+    lli t = 0; // current time
+    int z = 0;
+    while (q.size() || v.size()) {
+      while (v.size() && v.back().first <= t) {
+        lli w = v.back().first + v.back().second;
+        if (t <= w) q.push(-w);
+        v.pop_back();
       }
-
-      for (int i = 0; i < n; ++i) {
-        vec<lli> v;
-        each (e, g[i]) {
-          auto [_, w] = e;
-          if (x <= w) continue;
-          v.push_back(w);
-        }
-        if (2 <= v.size()){
-          sort(v.begin(), v.end());
-          if (v[v.size() - 1] + v[v.size() - 2] < x) return false;
-        }
+      while (q.size() && abs(q.top()) < t) q.pop();
+      // cout << make_pair(t, z) << ": "; show(q);
+      if (q.size()) {
+        q.pop();
+        ++t;
+        ++z;
+      } else {
+        const lli inf = 1LL << 62;
+        lli mn = inf;
+        if (q.size()) setmin(mn, abs(q.top()));
+        if (v.size()) setmin(mn, v.back().first);
+        if (mn == t) ++t;
+        else t = mn;
       }
-
-      return true;
-    };
-
-    lli small = 0;
-    lli large = 1LL << 40;
-    while (small + 1 < large) {
-      lli mid = (small + large) / 2;
-      if (fn(mid)) small = mid;
-      else large = mid;
     }
-    if (0) ;
-    else if (fn(large)) cout << large << endl;
-    else if (fn(small)) cout << small << endl;
-    else assert(0);
+    cout << z << endl;
+    // break;
   }
   return 0;
 }

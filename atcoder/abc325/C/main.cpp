@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/arc165/C/main.cpp
+// atcoder/abc325/C/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -35,73 +35,43 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
-const int N = 2 * 1e5 + 3;
-vec<pair<int, lli>> g[N];
-
 int main(int argc, char *argv[])
 {
-  int n, m;
-  while (cin >> n >> m) {
-    fill(g, g + n, vec<pair<int, lli>>());
-    for (int i = 0; i < m; ++i) {
-      int a, b;
-      lli w;
-      cin >> a >> b >> w;
-      --a;
-      --b;
-      g[a].push_back(make_pair(b, w));
-      g[b].push_back(make_pair(a, w));
+  int h, w;
+  while (cin >> h >> w) {
+    const int H = 1000 + 3;
+    const int W = 1000 + 3;
+    static char g[H][W];
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        cin >> g[i][j];
+      }
     }
-
-    auto fn = [&] (const lli x) {
-      static int color[N];
-      fill(color, color + n, -1);
-      for (int src = 0; src < n; ++src) {
-        if (color[src] != -1) continue;
-        queue<int> q;
-        color[src] = 0;
-        for (q.push(src); q.size(); q.pop()) {
-          int curr = q.front();
-          each (e, g[curr]) {
-            auto [next, w] = e;
-            if (x <= w) continue;
-            // 同じ色で塗られた相異なる 2 頂点を結ぶどの単純パスについても、単純パスの重みは X 以上である。
-            if (color[next] == -1) {
-              color[next] = color[curr] ^ 1;
-              q.push(next);
+    static int color[H][W];
+    fill(&color[0][0], &color[H - 1][W - 1] + 1, 0);
+    int c = 0;
+    for (int i = 0; i < h; ++i) {
+      for (int j = 0; j < w; ++j) {
+        if (g[i][j] == '#' && color[i][j] == 0) {
+          color[i][j] = ++c;
+          queue<pair<int, int>> q;
+          for (q.push(make_pair(i, j)); q.size(); q.pop()) {
+            auto p = q.front();
+            for (int d = 0; d < 8; ++d) {
+              int ni = p.first + di[d];
+              int nj = p.second + dj[d];
+              unless (0 <= ni && ni < h) continue;
+              unless (0 <= nj && nj < w) continue;
+              if (g[ni][nj] == '#' && color[ni][nj] == 0) {
+                color[ni][nj] = c;
+                q.push(make_pair(ni, nj));
+              }
             }
-            if (color[next] == color[curr]) return false;
           }
         }
       }
-
-      for (int i = 0; i < n; ++i) {
-        vec<lli> v;
-        each (e, g[i]) {
-          auto [_, w] = e;
-          if (x <= w) continue;
-          v.push_back(w);
-        }
-        if (2 <= v.size()){
-          sort(v.begin(), v.end());
-          if (v[v.size() - 1] + v[v.size() - 2] < x) return false;
-        }
-      }
-
-      return true;
-    };
-
-    lli small = 0;
-    lli large = 1LL << 40;
-    while (small + 1 < large) {
-      lli mid = (small + large) / 2;
-      if (fn(mid)) small = mid;
-      else large = mid;
     }
-    if (0) ;
-    else if (fn(large)) cout << large << endl;
-    else if (fn(small)) cout << small << endl;
-    else assert(0);
+    cout << c << endl;
   }
   return 0;
 }
