@@ -52,10 +52,10 @@ int main(int argc, char *argv[])
       }
     }
     dp[0][1] = 0;
-    each_with_index (i, e, a) {
+    for (int i = 0; i < a.size(); ++i) {
       for (int j = 0; j < m; ++j) {
         for (int k = 0; k < m; ++k) {
-          setmin(dp[i + 1][(j * (e + k)) % m],  dp[i][j] + k);
+          setmin(dp[i + 1][(j * (a[i] + k)) % m],  dp[i][j] + k);
         }
       }
     }
