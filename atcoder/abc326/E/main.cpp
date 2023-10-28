@@ -166,20 +166,17 @@ int main(int argc, char *argv[])
 
     const int N = 3 * 1e5 + 3;
     SegTree<mint> seg(n + 1, mint(0), [] (auto a, auto b) { return a + b; });
-    seg.update(0, 1);
-    for (int i = 1; i <= n; ++i) {
-      const int begin = 0;
-      const int end = i;
-      mint x = seg.query(begin, end) / mint(n);
+    for (int i = n; 0 < i; --i) {
+      mint x = seg.query(i + 1, n + 1) / mint(n) + (mint(a[i - 1]) / mint(n));
       seg.update(i, x);
     }
-    // cout << seg << endl;
+    //cout << seg << endl;
 
     mint z(0);
     for (int i = 0; i < n; ++i) {
-      z += seg[i + 1] * mint(a[i]);
+      z += seg[i + 1] / mint(i + 1) / mint(n);
     }
-    cout << z << endl;
+    cout << seg(0,  n+ 1) << endl;
   }
   return 0;
 }
