@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
       seg.apply(begin, end, add);
       return ;
     };
+    auto add = [&] (pair<int, int> p) { fn(p, +1); };
+    auto sub = [&] (pair<int, int> p) { fn(p, -1); };
 
     int mx = 1;
     --interval;
@@ -79,17 +81,15 @@ int main(int argc, char *argv[])
     each (i, v) {
       {
         q.push_back(i);
-        fn(q.back(), +1);
+        add(q.back());
       }
       while (q.size() && interval < abs(q.front().first - q.back().first)) {
-        fn(q.front(), -1);
+        sub(q.front());
         q.pop_front();
       }
-      // for (int i = 0; i < 10; ++i) cout << make_pair(i, seg.get(i)) << ' '; cout << endl; cout << q << endl;
       setmax(mx, seg.all_prod());
     }
     cout << mx << endl;
-    break;
   }
   return 0;
 }
