@@ -58,6 +58,13 @@ struct SegTree {
     v.resize(2 * n - 1, e);
   }
 
+  void init(const vector<T>& v) {
+    for (size_t i = 0; i < v.size(); ++i) {
+      update(i, v[i]);
+    }
+    return ;
+  }
+
   void update(size_t k, T a) {
     k += n - 1;
     v[k] = a;
@@ -99,10 +106,29 @@ struct SegTree {
 
     return fn(vl, vr);
   }
+
+  size_t size(void) const { return origin_size; }
 };
 template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.n; ++i) { T t; is >> t; seg.update(i, t); } return is; }
 template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
 
+template<typename T>
+int max_right(SegTree<T>& seg, const int left, function<bool(T)> fn)
+{
+  // verified: ABC330E
+  assert(left <= seg.size());
+  int small = left;
+  int large = seg.size();
+  while (small + 1 < large) {
+    int mid = (small + large) / 2;
+    if (fn(seg.query(left, mid))) small = mid;
+    else large = mid;
+  }
+  return fn(seg.query(left, large)) ? large : small;
+  // MEX:
+  // SegTree<int> seg(N, (1 << 29), [] (auto i, auto j) { return min(i, j); });
+  // max_right<int>(seg, 0, [] (int x) { return (0 < x); })
+}
 
 int main(int argc, char *argv[])
 {
@@ -112,39 +138,19 @@ int main(int argc, char *argv[])
     cin >> a;
 
     const int N = 2 * 1e5 + 3;
-    map<int, int> m;
-    each (i, a) ++m[i];
-    SegTree<int> seg(N, 0, [] (auto i, auto j) { return i + j; });
-    each (i, m) {
-      if (i.second && i.first < N) seg.update(i.first, 1);
-    }
+    vec<int> b(N, 0);
+    each (i, a) if (i < N) ++b[i];
+    SegTree<int> seg(N, (1 << 29), [] (auto i, auto j) { return min(i, j); });
+    seg.init(b);
     while (q--) {
       int idx, x;
       cin >> idx >> x;
       --idx;
-
-      if (m[a[idx]] == 1) {
-        if (a[idx] < N) seg.update(a[idx], 0);
-      }
-      --m[a[idx]];
+      if (a[idx] < N) seg.update(a[idx], seg[a[idx]] - 1);
       a[idx] = x;
-      ++m[a[idx]];
-      if (m[a[idx]] == 1) {
-        if (a[idx] < N) seg.update(a[idx], 1);
-      }
+      if (a[idx] < N) seg.update(a[idx], seg[a[idx]] + 1);
 
-      // cout << a << endl;
-      // for (int i = 0; i < 20; ++i) cout << seg.query(i, i + 1) << ' '; cout << endl;
-
-      int small = 0;
-      int large = N;
-      while (small + 1 < large) {
-        int mid = (small + large) / 2;
-        if (seg.query(0, mid+1) == mid+1) small = mid;
-        else large = mid;
-      }
-      if (seg.query(0, small+1) != small+1) cout << small << endl;
-      else cout << large << endl;
+      cout << max_right<int>(seg, 0, [] (int x) { return (0 < x); }) << endl;
     }
   }
 
