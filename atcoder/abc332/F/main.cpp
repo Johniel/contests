@@ -48,6 +48,8 @@ using namespace std;
 using namespace atcoder;
 
 using mint = modint998244353;
+template<int m> ostream& operator << (ostream& os, static_modint<m> x) { os << x.val(); return os; }
+template<int m> ostream& operator << (ostream& os, dynamic_modint<m> x) { os << x.val(); return os; }
 
 struct S {
   mint y;
@@ -107,7 +109,7 @@ int main(int argc, char *argv[])
       const mint t = x[i] * p;
       seg.apply(begin[i], end[i], F{s, t});
     }
-    for (int i = 0; i < n; ++i) cout << seg.get(i).y.val() << ' '; cout << endl;
+    for (int i = 0; i < n; ++i) cout << seg.get(i).y << ' '; cout << endl;
   }
   return 0;
 }
