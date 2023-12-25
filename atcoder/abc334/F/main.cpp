@@ -48,14 +48,8 @@ public:
   using mapping_fn = function<S(F, S)>;
   using composition_fn = function<F(F, F)>; // composition(f(x), g(x)):=f(g(x))
 
-  LazySegTree(int n_, op_fn op_, mapping_fn mapping_, composition_fn composition_, S e_, F id_)
-    : size(n_), op(op_), mapping(mapping_), composition(composition_), e(e_), id(id_) {
-    n = 1;
-    lgn = 0;
-    while (n < n_) {
-      ++lgn;
-      n *= 2;
-    }
+  LazySegTree(size_t n_, op_fn op_, mapping_fn mapping_, composition_fn composition_, S e_, F id_)
+    : size(n_), op(op_), mapping(mapping_), composition(composition_), e(e_), id(id_), n(bit_ceil(n_)) {
     value.resize(n * 2 - 1, e);
     lazy.resize(n * 2 - 1, id);
   }
@@ -79,6 +73,8 @@ public:
     assert(end <= size);
     return query(begin, end, 0, 0, n);
   }
+  S prod(size_t begin, size_t end) { return query(begin, end); }
+  S all_prod(void) { return query(); }
 
   inline S apply(size_t i, F f) { return apply(i, i + 1, f); }
   S apply(size_t begin, size_t end, F f) {
@@ -87,11 +83,11 @@ public:
     return apply(begin, end, f, 0, 0, n);
   }
 
-  void show(int idx = 0, int depth = 0) const {
+  void show(ostream& os, int idx = 0, int depth = 0) const {
     if (idx < value.size()) {
-      cout << string(depth, ' ') << make_pair(value[idx], lazy[idx]) << endl;
-      show(idx * 2 + 1, depth + 2);
-      show(idx * 2 + 2, depth + 2);
+      os << string(depth, ' ') << make_pair(value[idx], lazy[idx]) << endl;
+      show(os, idx * 2 + 1, depth + 2);
+      show(os, idx * 2 + 2, depth + 2);
     }
     return ;
   }
@@ -117,8 +113,7 @@ public:
 private:
   vector<S> value;
   vector<F> lazy;
-  int n;
-  int lgn;
+  const int n;
   const size_t size;
 
   op_fn op;
@@ -165,85 +160,7 @@ private:
     }
   }
 };
-
-template<typename T>
-struct SegTree {
-  int n;
-  const int origin_size;
-  vector<T> v;
-  using F = function<T(T, T)>;
-  const F fn;
-  const T e;
-
-  SegTree(int n_, T e_, F fn_) : e(e_), origin_size(n_), fn(fn_) {
-    n = 1;
-    while (n < n_) n *= 2;
-    v.resize(2 * n - 1, e);
-  }
-
-  SegTree(const vector<T>& v, T e_, F fn_) : SegTree(v.size(), e_, fn_) {
-    for (int i = 0; i < v.size(); ++i) update(i, v[i]);
-  }
-
-  void init(const vector<T>& v) {
-    assert(origin_size == v.size());
-    for (size_t i = 0; i < v.size(); ++i) update(i, v[i]);
-    return ;
-  }
-
-  void update(size_t k, T a) {
-    k += n - 1;
-    v[k] = a;
-    while (k > 0) {
-      k = (k - 1) / 2;
-      v[k] = fn(v[k * 2 + 1], v[k * 2 + 2]);
-    }
-    return ;
-  }
-
-  inline T operator [] (size_t idx) const { return v.at(idx + n - 1); }
-  inline T operator () () const { return query(0, origin_size, 0, 0, n); }
-  inline T operator () (size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
-
-  inline T query(size_t begin, size_t end) const {
-    assert(begin <= end);
-    assert(end <= origin_size);
-    return query(begin, end, 0, 0, n);
-  }
-
-  T query(size_t a, size_t b, size_t k, size_t l, size_t r) const {
-    if (r <= a || b <= l) return e;
-    if (a <= l && r <= b) return v.at(k);
-
-    T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
-    T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
-
-    return fn(vl, vr);
-  }
-
-  size_t size(void) const { return origin_size; }
-};
-template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.update(i, t); } return is; }
-template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
-
-template<typename T>
-int max_right(SegTree<T>& seg, const int left, function<bool(T)> pred)
-{
-  // verified: ABC330E
-  assert(left <= seg.size());
-  assert(pred(seg.e));
-  int small = left;
-  int large = seg.size();
-  while (small + 1 < large) {
-    int mid = (small + large) / 2;
-    if (pred(seg(left, mid))) small = mid;
-    else large = mid;
-  }
-  return pred(seg(left, large)) ? large : small;
-  // MEX:
-  // SegTree<int> seg(N, (1 << 29), [] (auto i, auto j) { return min(i, j); });
-  // max_right<int>(seg, 0, [] (int x) { return (0 < x); })
-}
+template<typename S, typename F> ostream& operator << (ostream& os, LazySegTree<S, F> seg) { seg.show(os); return os; }
 
 double fn(pair<int, int> a, pair<int, int> b) {
   double x = a.first - b.first;
