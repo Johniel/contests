@@ -43,30 +43,29 @@ constexpr lli mod = 998244353;
 
 template<typename T>
 struct SegTree {
-  int n;
+  const int n;
   const int origin_size;
   vector<T> v;
   using F = function<T(T, T)>;
   const F fn;
   const T e;
 
-  SegTree(int n_, T e_, F fn_) : e(e_), origin_size(n_), fn(fn_) {
-    n = 1;
-    while (n < n_) n *= 2;
+  SegTree(size_t n_, T e_, F fn_) : e(e_), origin_size(n_), fn(fn_), n(bit_ceil(n_)) {
+    assert(fn(e, e) == e);
     v.resize(2 * n - 1, e);
   }
 
   SegTree(const vector<T>& v, T e_, F fn_) : SegTree(v.size(), e_, fn_) {
-    for (int i = 0; i < v.size(); ++i) update(i, v[i]);
+    for (int i = 0; i < v.size(); ++i) set(i, v[i]);
   }
 
   void init(const vector<T>& v) {
     assert(origin_size == v.size());
-    for (size_t i = 0; i < v.size(); ++i) update(i, v[i]);
+    for (size_t i = 0; i < v.size(); ++i) set(i, v[i]);
     return ;
   }
 
-  void update(size_t k, T a) {
+  void set(size_t k, T a) {
     k += n - 1;
     v[k] = a;
     while (k > 0) {
@@ -76,9 +75,12 @@ struct SegTree {
     return ;
   }
 
-  inline T operator [] (size_t idx) const { return v.at(idx + n - 1); }
+  inline T get(size_t idx) const { return v.at(idx + n - 1); }
+  inline T operator [] (size_t idx) const { return get(idx); }
   inline T operator () () const { return query(0, origin_size, 0, 0, n); }
   inline T operator () (size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
+  inline T all_prod(void) const { return query(0, origin_size, 0, 0, n); }
+  inline T prod(size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
 
   inline T query(size_t begin, size_t end) const {
     assert(begin <= end);
@@ -92,13 +94,12 @@ struct SegTree {
 
     T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
     T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
-
     return fn(vl, vr);
   }
 
   size_t size(void) const { return origin_size; }
 };
-template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.update(i, t); } return is; }
+template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.set(i, t); } return is; }
 template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
 
 template<typename T>
@@ -140,17 +141,17 @@ int main(int argc, char *argv[])
     }
 
     for (int i = 0; i < b.size(); ++i) {
-      seg.update(i, b[i]);
+      seg.set(i, b[i]);
     }
 
     lli mx = 0;
     for (int i = 0; i < a.size(); ++i) {
       each (j, taboo[i]) {
-        seg.update(j, -inf);
+        seg.set(j, -inf);
       }
       setmax(mx, a[i] + seg());
       each (j, taboo[i]) {
-        seg.update(j, b[j]);
+        seg.set(j, b[j]);
       }
     }
     cout << mx << endl;
