@@ -41,29 +41,55 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
+namespace math {
+  template<std::integral T>
+  T floor(T x, T div) {
+    // ABC334B
+    assert(div != T(0));
+    T r = !!(x % div);
+    return x / div - ((x < 0) != (div < 0) ? r : 0);
+  }
+
+  template<std::integral T>
+  T ceil(T x, T div) {
+    // ABC334B
+    assert(div != T(0));
+    T r = !!(x % div);
+    return x / div + ((x < 0) == (div < 0) ? r : 0);
+  }
+}
+
 int main(int argc, char *argv[])
 {
-  lli a, m, l, r;
-  while (cin >> a >> m >> l >> r) {
-    lli x = (l - a) / m;
-    lli y = (r - a) / m;
+  assert(math::floor(4, 2) == 2);
+  assert(math::floor(4, -2) == -2);
+  assert(math::floor(-4, 2) == -2);
+  assert(math::floor(-4, -2) == 2);
 
-    lli s = max(a + x * m, l);
-    lli t = min(a + y * m, r);
+  assert(math::ceil(4, 2) == 2);
+  assert(math::ceil(4, -2) == -2);
+  assert(math::ceil(-4, 2) == -2);
+  assert(math::ceil(-4, -2) == 2);
 
-    lli z = 0;
-    unless ((s < 0 && t < 0) || (0 < s && 0 < t)) ++z;
+  assert(math::floor(3, 2) == 1);
+  assert(math::floor(3, -2) == -2);
+  assert(math::floor(-3, 2) == -2);
+  assert(math::floor(-3, -2) == 1);
 
-    // cout << make_pair(x, y) << ' ' << make_pair(a + x * m, a + y * m) << ' ' << make_pair(s, t) << endl;
-    if (s <= t) {
-      cout << (t - s) / m + 1 << endl;
-    } else {
-      cout << 0 << endl;
-    }
+  assert(math::ceil(3, 2) == 2);
+  assert(math::ceil(3, -2) == -1);
+  assert(math::ceil(-3, 2) == -1);
+  assert(math::ceil(-3, -2) == 2);
 
-    // lli z = 0;
-    // unless ((x < 0 && y < 0) || (0 < x && 0 < y)) ++z;
-    // cout << max(0LL, y - x + z) << endl;
+  lli A, M, L, R;
+  while (cin >> A >> M >> L >> R) {
+    // L <= A+kM
+    // (L-A)/M <= k
+    // lli x = (L - A + M - 1) / M;
+    // A+kM <= R
+    // k <= (R-A)/M
+    // lli y = (R - A) / M;
+    cout << math::floor(R - A, M) - math::ceil(L - A, M) + 1 << endl;
   }
   return 0;
 }
