@@ -53,7 +53,9 @@ int main(int argc, char *argv[])
     each (i, v) if (i == 2) i = 0;
     vec<int> b;
     for (int i = 0; i < v.size(); ++i) {
-      if (v[i]) b.push_back(i);
+      for (int j = 0; j < v[i]; ++j) {
+        b.push_back(i);
+      }
     }
     const int N = 2 * 1e5 + 3;
     static int dp[N][2];
