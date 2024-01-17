@@ -78,4 +78,7 @@ min_leftとmax_rightが頂点からk以上離れているのでok
 min_leftとmax_rightが頂点と近いのでng
 
 ## 感想2
++ この解法はlogが多いので厳しいかもしれない。
 + a-bが賢い。
++ 差が一致するような階差の扱いに詳しく慣れた。
++ min_leftとmax_rightでなく範囲のminだけで良いとあとから気付いた。

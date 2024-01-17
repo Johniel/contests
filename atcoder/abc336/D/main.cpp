@@ -43,37 +43,188 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
+template<typename S, typename F>
+class LazySegTree {
+public:
+  using op_fn = function<S(S, S)>;
+  using mapping_fn = function<S(F, S)>;
+  using composition_fn = function<F(F, F)>; // composition(f(x), g(x)):=f(g(x))
+
+  LazySegTree(size_t n_, op_fn op_, mapping_fn mapping_, composition_fn composition_, S e_, F id_)
+    : size(n_), op(op_), mapping(mapping_), composition(composition_), e(e_), id(id_), n(bit_ceil(n_)) {
+    value.resize(n * 2 - 1, e);
+    lazy.resize(n * 2 - 1, id);
+  }
+
+  void set(const vector<S>& v) {
+    assert(size == v.size());
+    for (int i = 0; i < v.size(); ++i) set(i, v[i]);
+    return ;
+  }
+
+  void set(size_t i, S x) {
+    assert(0 <= i && i < size);
+    get(i);
+    i += n - 1;
+    value[i] = x;
+    while (0 < i) {
+      i = (i - 1) / 2;
+      value[i] = op(value.at(i * 2 + 1), value.at(i * 2 + 2));
+    }
+    return ;
+  }
+
+  inline S get(size_t i) { return query(i, i + 1); }
+  inline S query(void) { return query(0, size); };
+  S query(size_t begin, size_t end) {
+    assert(begin <= end);
+    assert(end <= size);
+    return query(begin, end, 0, 0, n);
+  }
+  S prod(size_t begin, size_t end) { return query(begin, end); }
+  S all_prod(void) { return query(); }
+
+  inline S apply(size_t i, F f) { return apply(i, i + 1, f); }
+  S apply(size_t begin, size_t end, F f) {
+    assert(begin <= end);
+    assert(end <= size);
+    return apply(begin, end, f, 0, 0, n);
+  }
+
+  void show(ostream& os, int idx = 0, int depth = 0) const {
+    if (idx < value.size()) {
+      os << string(depth, ' ') << make_pair(value[idx], lazy[idx]) << endl;
+      show(os, idx * 2 + 1, depth + 2);
+      show(os, idx * 2 + 2, depth + 2);
+    }
+    return ;
+  }
+
+  int max_right(int i, function<bool(S)> pred) {
+    assert(pred(e));
+    int small = i;
+    int large = size;
+    while (small + 1 < large) {
+      int mid = (small + large) / 2;
+      if (pred(query(i, mid))) small = mid;
+      else large = mid;
+    }
+    if (pred(query(i, large))) return large;
+    return small;
+  }
+
+  int min_left(int i, function<bool(S)> pred) {
+    assert(pred(e));
+    int small = 0;
+    int large = i;
+    while (small + 1 < large) {
+      int mid = (small + large) / 2;
+      if (pred(query(mid, i))) large = mid;
+      else small = mid;
+    }
+    if (pred(query(small, i))) return small;
+    return large;
+  }
+
+private:
+  vector<S> value;
+  vector<F> lazy;
+  const int n;
+  const size_t size;
+
+  op_fn op;
+  composition_fn composition;
+  mapping_fn mapping;
+  const S e;
+  const F id;
+
+  inline void push(int k) {
+    if(2 * k + 2 < lazy.size()) {
+      lazy[2 * k + 1] = composition(lazy[k], lazy[2 * k + 1]);
+      lazy[2 * k + 2] = composition(lazy[k], lazy[2 * k + 2]);
+    }
+    value[k] = mapping(lazy[k], value[k]);
+    lazy[k] = id;
+    return ;
+  }
+
+  S apply(size_t begin, size_t end, F f, size_t k, size_t l, size_t r) {
+    push(k);
+    if (r <= begin || end <= l) return value[k];
+
+    if (begin <= l && r <= end) {
+      lazy[k] = composition(f, lazy[k]);
+      push(k);
+      return value[k];
+    } else {
+      S vl = apply(begin, end, f, k * 2 + 1, l, (l + r) / 2);
+      S vr = apply(begin, end, f, k * 2 + 2, (l + r) / 2, r);
+      return value[k] = op(vl, vr);
+    }
+  }
+
+  S query(size_t begin, size_t end, size_t k, size_t l, size_t r) {
+    if (r <= begin || end <= l) return e;
+    push(k);
+
+    if (begin <= l && r <= end) {
+      return value[k];
+    } else {
+      S vl = query(begin, end, k * 2 + 1, l, (l + r) / 2);
+      S vr = query(begin, end, k * 2 + 2, (l + r) / 2, r);
+      return op(vl, vr);
+    }
+  }
+};
+template<typename S, typename F> ostream& operator << (ostream& os, LazySegTree<S, F> seg) { seg.show(os); return os; }
+
+    using S = lli;
+    using F = lli;
+    using lazy_segtree = LazySegTree<S, F>;
+    lazy_segtree::op_fn op = [] (S a, S b) { return min(a, b); };
+    lazy_segtree::mapping_fn mapping = [] (F a, S b) { return a + b; };
+    lazy_segtree::composition_fn composition = [] (F a, F b) { return a + b; };
+const int N = 2 * 1e5 + 3;
+    lazy_segtree seg(N, op, mapping, composition, +(1LL << 60), 0);
+
+
 int main(int argc, char *argv[])
 {
   int n;
   while (cin >> n) {
-    vec<int> a(n);
+    vec<lli> a(n);
     cin >> a;
 
-    vec<int> b = a;
-    reverse(b.begin(), b.end());
+    auto fn = [&] (int k) {
+      for (int i = 0; i < n; ++i) {
+        int j = (k - 1);
+        int b = k - abs(j - i);
+        int c = a[i] - b;
+        seg.set(i, c);
+      }
+      for (int i = (k - 1); i < n; ++i) {
+        const int begin = i - (k - 1);
+        const int end = i + k;
+        if (0 <= begin && end <= n) {
+          if (0 <= seg.prod(begin, end)) return true;
+          seg.apply(0, i+1, F{+1});
+          seg.apply(i+1, n, F{-1});
+        } else {
+          break;
+        }
+      }
+      return false;
+    };
 
-    vec<int> v(a.size(), 1);
-    for (int i = 1; i < a.size(); ++i) {
-      v[i] = min(a[i], v[i - 1] + 1);
+    int small = 1;
+    int large = (n + 3) / 2;
+    while (small + 1 < large) {
+      int mid = (small + large) / 2;
+      if (fn(mid)) small = mid;
+      else large = mid;
     }
-
-    vec<int> u(b.size(), 1);
-    for (int i = 1; i < b.size(); ++i) {
-      u[i] = min(b[i], u[i - 1] + 1);
-    }
-    reverse(u.begin(), u.end());
-
-    // for (int i = 0; i < v.size(); ++i) cout << v[i] << ' ' << u[i] << endl;
-
-
-    int z = 1;
-    for (int i = 0; i < n; ++i) {
-      setmax(z, min(u[i], v[i]));
-    }
-    cout << z << endl;
-
-    // cout << endl;
+    if (fn(large)) cout << large << endl;
+    else cout << small << endl;
   }
   return 0;
 }
