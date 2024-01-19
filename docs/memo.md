@@ -37,14 +37,14 @@
 + 木の2乗DP。律儀にVまで回すと$`O(V^{3})`$になりそうなDPも部分木のサイズに比例するなら$`O(V^{2})`$になる。 ABC287F
 + 完全二部マッチングの個数の数え上げはNP困難だが偶奇だけなら高速に求めることができる。 ARC054C
 + 列を見たらindexのmodでグループ分けしてみる。ABC288D
-+ An+1 = x * An + 1 := [An+1 \\ 1] := [x && 1 \\ 0 && 1] * [An \\ 1]; ABC293E
++ $`A_{n+1} = x * A_{n} + 1`$ のとき $`\left(\begin{array}{c}A_{n+1} \\ 1\end{array}\right) = \begin{pmatrix}x & 1 \\ 0 & 1\end{pmatrix} \left(\begin{array}{c}A_{n} \\ 1\end{array}\right)`$ ABC293E
 + 2分探索で間違いそうなら別の方法を考える ABC290E,ABC294E
 + 置換の偶奇,偶置換,奇置換,置換グラフのサイクルの偶奇 ABC296F
 + rをpに対する原始根という。r^1,r^2...r^(p-1) (mod p)が相異なる。r^(p-1)=1 (mod p)。素数pに対して必ず存在する。ABC212G
 + ３つの非負整数$`x&lt;y&lt;z`$に対して$`min({x}\oplus{y},{y}\oplus{z})&lt;{x}\oplus{z}`$。 ABC308G
-+ gcdを見たら差分を思い出す。GCD(x,y)=GCD(x,y-x)※x<=y ARC148A
++ gcdを見たら差分を思い出す。$`GCD(x,y)=GCD(x,y-x)`$。 ARC148A
 + lazy segtreeで過去の範囲をまとめて更新することで貰うdpができる。ARC056D
-+ N!=N*(N-1)!にすると見えるものがあるARC047C
++ $`N!=N*(N-1)!`$にすると見えるものがあるARC047C
 + y=ax+cの両辺をmod aしてaxを消す。ABC335F
 + 貰うDPと配るDPを同時に行う。ABC335F
 + `N=1のときについては考えましたか？` ABC211F
