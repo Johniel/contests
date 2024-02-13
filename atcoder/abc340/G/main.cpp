@@ -39,147 +39,39 @@ template<typename T> using vec = vector<T>;
 
 constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
-// constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
-
-namespace LCA {
-  const int N = 2 * 1e5 + 3;
-  int parent[N];
-
-  const int LOG2N = log2(N) + 1;
-  int T[N][LOG2N], L[N];
-
-  int addLevel(int node)
-  {
-    if (L[node] != -1) return L[node];
-    else return L[node] = addLevel(parent[node]) + 1;
-  }
-
-  // ! keep parent[root] = root
-  void build(int n)
-  {
-    const int root = 0;
-    fill(L, L + n, -1);
-    L[root] = 0;
-    for (int i = 0; i < n; ++i) {
-      L[i] = addLevel(i);
-    }
-
-    fill(&T[0][0], &T[N - 1][LOG2N], -1);
-    for (int i = 0; i < n; ++i) {
-      T[i][0] = parent[i];
-    }
-    for (int j = 1; (1 << j) < n; ++j) {
-      for (int i = 0; i < n; ++i) {
-        if (T[i][j - 1] != -1) {
-          T[i][j] = T[T[i][j - 1]][j - 1];
-        }
-      }
-    }
-    return ;
-  }
-
-  int query(int a, int b)
-  {
-    if (L[a] < L[b]) swap(a, b);
-
-    int lg = 1;
-    while ((1 << lg) <= L[a]) ++lg;
-    --lg;
-
-    for (int i = lg; 0 <= i; --i) {
-      if (L[a] - (1 << i) >= L[b]) {
-        a = T[a][i];
-      }
-    }
-
-    if (a == b) return a;
-    for (int i = lg; 0 <= i; --i) {
-      if (T[a][i] != -1 && T[a][i] != T[b][i]) {
-        a = T[a][i];
-        b = T[b][i];
-      }
-    }
-    return parent[a];
-  }
-};
-
-// 指定された頂点集合の最小共通祖先関係を保ったまま木を圧縮した補助的な木
-// 頂点集合Xに対して構築がO(|X|*log元の木のサイズ)
-// a.k.a VirtualTree
-namespace auxiliary_tree {
-  // ABC340G
-  const int N = 2 * 1e5 + 3;
-  int preord[N];
-  int preord_end[N];
-  vec<int> g[N];
-  int cnt;
-  void rec(int curr, int prev)
-  {
-    LCA::parent[curr] = prev;
-    preord[curr] = cnt++;
-    each (next, g[curr]) {
-      if (next == prev) continue;
-      rec(next, curr);
-    }
-    preord_end[curr] = cnt;
-    return ;
-  }
-
-  void init(const int n) {
-    fill(g, g + n, vec<int>());
-    return ;
-  }
-  void build(const int n) {
-    fill(preord, preord + n, -1);
-    cnt = 0;
-    for (int i = 0; i < n; ++i) {
-      if (preord[i] == -1) rec(i, i);
-    }
-    LCA::build(n);
-    return ;
-  }
-
-  // 圧縮後の木の頂点列（preord順）
-  vector<int> vertexes(vector<int> x) {
-    sort(x.begin(), x.end(), [&] (int a, int b) { return preord[a] < preord[b]; });
-    vector<int> y = x;
-    for (int i = 0; i + 1 < x.size(); ++i) {
-      y.push_back(LCA::query(x[i], x[i + 1]));
-    }
-    sort(y.begin(), y.end());
-    y.erase(unique(y.begin(), y.end()), y.end());
-    sort(y.begin(), y.end(), [&] (int a, int b) { return preord[a] < preord[b]; });
-    return y;
-  }
-
-  // 圧縮後の木の{根,辺}
-  pair<int, vector<pair<int, int>>> edges(vector<int> x) {
-    vector<int> vs = vertexes(x);
-    vector<int> stk;
-    vector<pair<int, int>> es;
-    for (const auto& i: vs) {
-      while (stk.size() && preord_end[stk.back()] <= preord[i]) {
-        stk.pop_back();
-      }
-      if (stk.size()) {
-        es.push_back(make_pair(stk.back(), i));
-      }
-      stk.push_back(i);
-    }
-    return make_pair(stk.front(), es);
-  }
-};
 
 const int N = 2 * 1e5 + 3;
 vec<int> g[N];
-void rec(int curr, int prev)
+vec<int> a;
+map<int, lli> m[N];
+lli z;
+void rec(const int curr, const int prev)
 {
-
   each (next, g[curr]) {
-    if (next != prev) continue;
+    if (next == prev) continue;
     rec(next, curr);
+    {
+      auto itr = m[next].find(a[curr]);
+      if (itr != m[next].end()) {
+        (z += itr->second) %= mod;
+      }
+    }
+    unless (m[curr].size() > m[next].size()) m[curr].swap(m[next]);
+    each (k, m[next]) {
+      const auto [color, cnt] = k;
+      lli x = 0;
+      {
+        auto itr = m[curr].find(color);
+        if (itr != m[curr].end()) x = itr->second;
+      }
+      lli y = cnt * x % mod;
+      (z += y) %= mod;
+      (m[curr][color] += (y + cnt) % mod) %= mod;
+    }
   }
+  ++z;
+  ++m[curr][a[curr]];
   return ;
 }
 
@@ -187,59 +79,21 @@ int main(int argc, char *argv[])
 {
   int n;
   while (cin >> n) {
-    vec<int> a(n);
+    a.resize(n);
     cin >> a;
-    auxiliary_tree::init(n);
+    fill(g, g + n, vec<int>());
     for (int i = 0; i < n - 1; ++i) {
-      int x, y;
-      cin >> x >> y;
-      --x;
-      --y;
-      auxiliary_tree::g[x].push_back(y);
-      auxiliary_tree::g[y].push_back(x);
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      g[a].push_back(b);
+      g[b].push_back(a);
     }
+    fill(m, m + n, map<int, lli>());
+    z = 0;
     rec(0, 0);
-    auxiliary_tree::build(n);
-    map<int, vec<int>> m;
-    for (int i = 0; i < n; ++i) {
-      m[a[i]].push_back(i);
-    }
-    lli z = 0;
-    each (k, m) {
-      auto [root, es] = auxiliary_tree::edges(k.second);
-      map<int, vec<int>> g;
-      each (e, es) g[e.first].push_back(e.second);
-      map<int, pair<lli, lli>> r;
-      function<pair<lli, lli>(int)> rec = [&] (int curr) {
-        if (a[curr] == k.first) {
-          lli x = 1;
-          lli y = 1;
-          each (next, g[curr]) {
-            auto p = rec(next);
-            (x *= p.second + 1) %= mod;
-            (y *= p.second + 1) %= mod;
-          }
-          return r[curr] = make_pair(x, y);
-        } else {
-          lli x = 1;
-          lli y = 1;
-          lli w = 0;
-          each (next, g[curr]) {
-            auto p = rec(next);
-            (x *= p.second + 1) %= mod;
-            (y *= p.second + 1) %= mod;
-            (w += p.second) %= mod;
-          }
-          (x += mod - w - 1) %= mod;
-          (y += mod - 1) %= mod;
-          return r[curr] = make_pair(x, y);
-        }
-        return make_pair(0LL, 0LL);
-      };
-      rec(root);
-      each (i, r) (z += i.second.first) %= mod;
-    }
-    cout << z << endl;
+    cout << z % mod << endl;
   }
   return 0;
 }
