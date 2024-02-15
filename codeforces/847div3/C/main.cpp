@@ -34,19 +34,17 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 constexpr lli mod = 1e9 + 7;
 // constexpr lli mod = 998244353;
 
-struct E{ int src, dst; };
-typedef vector<vector<E>> G;
+using Graph = vector<vector<int>>;
 
-bool visit(const G &g, int curr, vector<int> &order, vector<int> &color)
+bool visit(const Graph &g, int curr, vector<int> &order, vector<int> &color)
 {
   constexpr int CLOSED = 1;
   constexpr int VISITED = 2;
-
   color[curr] = CLOSED;
-  each (e, g[curr]) {
-    if (color[e.dst] == VISITED) continue;
-    if (color[e.dst] == CLOSED) return false;
-    if (!visit(g, e.dst, order, color)) return false;
+  each (next, g[curr]) {
+    if (color[next] == VISITED) continue;
+    if (color[next] == CLOSED) return false;
+    if (!visit(g, next, order, color)) return false;
   }
   order.push_back(curr);
   color[curr] = VISITED;
@@ -54,10 +52,10 @@ bool visit(const G &g, int curr, vector<int> &order, vector<int> &color)
 }
 
 // verified Codeforces Round #847 C
-bool toporogical_sort(const G &g, vector<int> &order)
+bool toporogical_sort(const Graph &g, vector<int> &order)
 {
   const int size = g.size();
-  vec<int> color(size, 0);
+  vector<int> color(size, 0);
   for (int i = 0; i < size; ++i) {
     if (!color[i] && !visit(g, i, order, color)) {
       return false;
@@ -86,12 +84,12 @@ int main(int argc, char *argv[])
       }
     }
 
-    G g(n);
+    Graph g(n);
     each (i, m) {
       if (i.second == n - 2) {
         int src = i.first.first;
         int dst = i.first.second;
-        g[src].push_back(E{src, dst});
+        g[src].push_back(dst);
       }
     }
     vec<int> ord;

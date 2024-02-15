@@ -42,30 +42,27 @@ constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
-struct E{ int src, dst; };
-typedef vector<vector<E>> G;
-
-bool visit(const G &g, int curr, vector<int> &order, vector<int> &color)
+using Graph = vector<vector<int>>;
+bool visit(const Graph &g, int curr, vector<int> &order, vector<int> &color)
 {
   constexpr int CLOSED = 1;
   constexpr int VISITED = 2;
-
   color[curr] = CLOSED;
-  each (e, g[curr]) {
-    if (color[e.dst] == VISITED) continue;
-    if (color[e.dst] == CLOSED) return false;
-    if (!visit(g, e.dst, order, color)) return false;
+  each (next, g[curr]) {
+    if (color[next] == VISITED) continue;
+    if (color[next] == CLOSED) return false;
+    if (!visit(g, next, order, color)) return false;
   }
-    order.push_back(curr);
+  order.push_back(curr);
   color[curr] = VISITED;
   return true;
 }
 
 // verified Codeforces Round #847 C
-bool toporogical_sort(const G &g, vector<int> &order)
+bool toporogical_sort(const Graph &g, vector<int> &order)
 {
   const int size = g.size();
-  vec<int> color(size, 0);
+  vector<int> color(size, 0);
   for (int i = 0; i < size; ++i) {
     if (!color[i] && !visit(g, i, order, color)) {
       return false;
@@ -83,11 +80,11 @@ int main(int argc, char *argv[])
     vec<vec<int>> v(k, vec<int>(n));
     cin >> v;
     each (i, v) each (j, i) --j;
-    G g(n);
+    Graph g(n);
     map<pair<int, int>, int> m;
     for (int i = 0; i < v.size(); ++i) {
       for (int j = 1; j + 1 < v[i].size(); ++j) {
-        g[v[i][j]].push_back(E{v[i][j], v[i][j + 1]});
+        g[v[i][j]].push_back(v[i][j + 1]);
       }
     }
     vec<int> ord;
