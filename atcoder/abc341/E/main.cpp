@@ -50,16 +50,13 @@ struct SegTree {
   using F = function<T(T, T)>;
   const F fn;
   const T e;
-
   SegTree(size_t n_, T e_, F fn_) : e(e_), origin_size(n_), fn(fn_), n(bit_ceil(n_)) {
     assert(fn(e, e) == e);
     v.resize(2 * n - 1, e);
   }
-
   SegTree(const vector<T>& v, T e_, F fn_) : SegTree(v.size(), e_, fn_) {
     for (int i = 0; i < v.size(); ++i) set(i, v[i]);
   }
-
   void set(size_t k, T a) {
     k += n - 1;
     v[k] = a;
@@ -69,20 +66,17 @@ struct SegTree {
     }
     return ;
   }
-
   inline T get(size_t idx) const { return v.at(idx + n - 1); }
   inline T operator [] (size_t idx) const { return get(idx); }
   inline T operator () (void) const { return query(0, origin_size, 0, 0, n); }
   inline T operator () (size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
   inline T all_prod(void) const { return query(0, origin_size, 0, 0, n); }
   inline T prod(size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
-
   inline T query(size_t begin, size_t end) const {
     assert(begin <= end);
     assert(end <= origin_size);
     return query(begin, end, 0, 0, n);
   }
-
   T query(size_t a, size_t b, size_t k, size_t l, size_t r) const {
     if (r <= a || b <= l) return e;
     if (a <= l && r <= b) return v.at(k);
@@ -90,100 +84,35 @@ struct SegTree {
     T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
     return fn(vl, vr);
   }
-
   size_t size(void) const { return origin_size; }
 };
 template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.set(i, t); } return is; }
 template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
-
-template<typename T>
-int max_right(SegTree<T>& seg, const int left, function<bool(T)> pred)
-{
-  // verified: ABC330E
-  assert(left <= seg.size());
-  assert(pred(seg.e));
-  int small = left;
-  int large = seg.size();
-  while (small + 1 < large) {
-    int mid = (small + large) / 2;
-    if (pred(seg(left, mid))) small = mid;
-    else large = mid;
-  }
-  return pred(seg(left, large)) ? large : small;
-  // MEX:
-  // SegTree<int> seg(N, (1 << 29), [] (auto i, auto j) { return min(i, j); });
-  // max_right<int>(seg, 0, [] (int x) { return (0 < x); })
-}
-
-
-
-#include "atcoder/lazysegtree"
-#include "atcoder/modint"
-
-using namespace std;
-using namespace atcoder;
-
-using S1 = int;
-using F1 = int;
-S1 op1(S1 l, S1 r) { return l ^ r; }
-S1 e1() { return 0; }
-S1 mapping1(F1 l, S1 r) { return l ^ r; }
-F1 composition1(F1 l, F1 r) { return l ^ r; } // lが後。
-F1 id1() { return 0; }
-
-using S2 = int;
-using F2 = int;
-S2 op2(S2 l, S2 r) { return l && r; }
-S2 e2() { return 0; }
-S2 mapping2(F2 l, S2 r) { return l ^ r; }
-F2 composition2(F2 l, F2 r) { return l ^ r; } // lが後。
-F2 id2() { return 1; }
-
 
 int main(int argc, char *argv[])
 {
   int n, q;
   str s;
   while (cin >> n >> q >> s) {
-    vec<S1> ini1;
-    for (int i = 0; i < s.size(); ++i) ini1.push_back(s[i] - '0');
-    lazy_segtree<S1, op1, e1, F1, mapping1, composition1, id1> exor(ini1);
-
-    // vec<S2> ini2;
-    // for (int i = 0; i + 1 < s.size(); ++i) ini2.push_back(s[i] != s[i + 1]);
-    // lazy_segtree<S2, op2, e2, F2, mapping2, composition2, id2> good(ini2);
-
     vec<int> v;
     for (int i = 0; i + 1 < s.size(); ++i) {
       v.push_back(s[i] != s[i + 1]);
     }
-    SegTree<int> good(v.size(), 1, [] (auto i, auto j) { return i && j; });
-    for (int i = 0; i < v.size(); ++i) {
-      good.set(i, v[i]);
-    }
-    // cout << good << endl;
-    // for (int i = 0; i < ini1.size(); ++i) cout << exor.get(i); cout << endl;
-    // for (int i = 0; i < ini2.size(); ++i) cout << good.get(i); cout << endl;
+    SegTree<int> good(v, 1, [] (auto i, auto j) { return i && j; });
 
     while (q--) {
       int op, begin, end;
       cin >> op >> begin >> end;
       --begin;
       if (op == 1) {
-        exor.apply(begin, end, 1);
         if (begin) {
-          int a = exor.get(begin - 1);
-          int b = exor.get(begin);
-          good.set(begin - 1, a != b);
+          good.set(begin - 1, good.get(begin - 1) ^ 1);
         }
         if (end < n) {
-          int a = exor.get(end - 1);
-          int b = exor.get(end);
-          good.set(end - 1, a != b);
+          good.set(end - 1, good.get(end - 1) ^ 1);
         }
       }
       if (op == 2) {
-        // cout << good << ' ' << good.prod(begin, end - 1) << ' ' << good.prod(0, 1) << endl;
         cout << (good.prod(begin, end - 1) ? "Yes" : "No") << endl;
       }
     }
