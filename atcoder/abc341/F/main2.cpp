@@ -37,47 +37,75 @@ using ull = unsigned long long;
 using str = string;
 template<typename T> using vec = vector<T>;
 
+constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
+constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
+
+const int N = 5000 + 5;
+vec<int> g[N];
+vec<lli> w;
+
+lli memo[N];
+lli rec(int curr)
+{
+  lli& ret = memo[curr];
+  if (ret != -1) return ret;
+  if (g[curr].empty()) return 1;
+
+  each (next, g[curr]) rec(next);
+
+  const int K = 5000 + 5;
+  static lli dp[K][K];
+
+  const int N = g[curr].size() + 3;
+  const int M = w[curr] + 3;
+  const lli inf = (1LL << 61);
+  for (int i = 0; i < N; ++i) {
+    for (int j = 0; j < M; ++j) {
+      dp[i][j] = -inf;
+    }
+  }
+  dp[0][0] = 0;
+  for (int i = 0; i < g[curr].size(); ++i) {
+    int next = g[curr][i];
+    for (int j = 0; j <= w[curr]; ++j) {
+      if (j + w[next] < w[curr]) {
+        setmax(dp[i + 1][j + w[next]], dp[i][j] + rec(next));
+      }
+      setmax(dp[i + 1][j], dp[i][j]);
+    }
+  }
+
+  lli z = 0;
+  for (int j = 0; j < M; ++j) setmax(z, dp[g[curr].size()][j]);
+  return ret = z + 1;
+}
 
 int main(int argc, char *argv[])
 {
   int n, m;
   while (cin >> n >> m) {
+    vec<lli> a(n);
+    fill(g, g + N, vec<int>());
     vec<pair<int, int>> es(m);
-    vec<int> w(n);
-    vec<int> a(n);
-    cin >> es >> w >> a;
-
-    each (e, es) --e.first, --e.second;
-    vec<int> g[n];
+    cin >> es;
     each (e, es) {
-      g[e.first].push_back(e.second);
-      g[e.second].push_back(e.first);
+      --e.first;
+      --e.second;
+    }
+    w.resize(n);
+    cin >> w >> a;
+
+    each (e, es) {
+      if (w[e.first] < w[e.second]) swap(e.first, e.second);
+      if (w[e.first] != w[e.second]) g[e.first].push_back(e.second);
     }
 
-    const int N = 5000 + 3;
-    vec<pair<int, int>> v;
-    for (int i = 0; i < w.size(); ++i) {
-      v.push_back(make_pair(w[i], i));
-    }
-    sort(v.begin(), v.end());
-
-    const lli inf = 1LL << 60;
-    vec<lli> u(n);
-    each (k, v) {
-      const int curr = k.second;
-      vec<lli> dp(w[curr]+1, 0);
-      each (next, g[curr]) {
-        for (int i = w[curr]; 0 <= i; --i) {
-          if (i + w[next] < w[curr]) setmax(dp[i + w[next]], dp[i] + u[next]);
-        }
-      }
-      u[curr] = *max_element(dp.begin(), dp.end()) + 1;
-    }
+    fill(memo, memo + N, -1);
     lli z = 0;
     for (int i = 0; i < a.size(); ++i) {
-      z += u[i] * a[i];
+      z += rec(i) * a[i];
     }
     cout << z << endl;
   }
