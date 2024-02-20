@@ -37,33 +37,83 @@ using ull = unsigned long long;
 using str = string;
 template<typename T> using vec = vector<T>;
 
+constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
+constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
+
+template<typename T>
+struct SegTree {
+  const int n;
+  const int origin_size;
+  vector<T> v;
+  using F = function<T(T, T)>;
+  const F fn;
+  const T e;
+  SegTree(size_t n_, T e_, F fn_) : e(e_), origin_size(n_), fn(fn_), n(bit_ceil(n_)) {
+    assert(fn(e, e) == e);
+    v.resize(2 * n - 1, e);
+  }
+  SegTree(const vector<T>& v, T e_, F fn_) : SegTree(v.size(), e_, fn_) {
+    for (int i = 0; i < v.size(); ++i) set(i, v[i]);
+  }
+  void set(size_t k, T a) {
+    k += n - 1;
+    v[k] = a;
+    while (k > 0) {
+      k = (k - 1) / 2;
+      v[k] = fn(v[k * 2 + 1], v[k * 2 + 2]);
+    }
+    return ;
+  }
+  inline T get(size_t idx) const { return v.at(idx + n - 1); }
+  inline T operator [] (size_t idx) const { return get(idx); }
+  inline T operator () (void) const { return query(0, origin_size, 0, 0, n); }
+  inline T operator () (size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
+  inline T all_prod(void) const { return query(0, origin_size, 0, 0, n); }
+  inline T prod(size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
+  inline T query(size_t begin, size_t end) const {
+    assert(begin <= end);
+    assert(end <= origin_size);
+    return query(begin, end, 0, 0, n);
+  }
+  T query(size_t a, size_t b, size_t k, size_t l, size_t r) const {
+    if (r <= a || b <= l) return e;
+    if (a <= l && r <= b) return v.at(k);
+    T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
+    T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
+    return fn(vl, vr);
+  }
+  size_t size(void) const { return origin_size; }
+};
+template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.set(i, t); } return is; }
+template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
 
 int main(int argc, char *argv[])
 {
   int n, q;
   str s;
   while (cin >> n >> q >> s) {
-    set<int> t;
+    vec<int> v;
     for (int i = 0; i + 1 < s.size(); ++i) {
-      if (s[i] == s[i + 1]) t.insert(i);
+      v.push_back(s[i] != s[i + 1]);
     }
+    SegTree<int> good(v, 1, [] (auto i, auto j) { return i && j; });
+
     while (q--) {
       int op, begin, end;
       cin >> op >> begin >> end;
       --begin;
       if (op == 1) {
         if (begin) {
-          if (t.find(begin - 1) == t.end()) t.insert(begin - 1);
-          else t.erase(begin - 1);
+          good.set(begin - 1, good.get(begin - 1) ^ 1);
         }
-        if (t.find(end-1) == t.end()) t.insert(end-1);
-        else t.erase(end-1);
+        if (end < n) {
+          good.set(end - 1, good.get(end - 1) ^ 1);
+        }
       }
       if (op == 2) {
-        auto itr = t.lower_bound(begin);
-        cout << (itr == t.end() || end - 1 <= *itr ? "Yes" : "No") << endl;
+        cout << (good.prod(begin, end - 1) ? "Yes" : "No") << endl;
       }
     }
   }
