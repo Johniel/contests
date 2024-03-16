@@ -60,3 +60,4 @@
   + $`fn(i+1,x)=min(fn(i,y)-y)+x`$
   + $`fn(i+1,x)=min(fn(i,y)+y)-x`$
 + 上位数件だけ記憶しておけば充分な場合がある。いつも忘れる。ABC345E
++ vectorをarrayに置き換えたら割と早くなる。ABC345E
