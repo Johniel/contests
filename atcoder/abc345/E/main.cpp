@@ -59,7 +59,8 @@ inline pair<lli, int> append(const array<pair<lli, int>, 2>& x, pair<lli, int> p
 
 inline array<pair<lli, int>, 2> merge(const array<pair<lli, int>, 2>& x, const pair<lli, int>& a, const pair<lli, int> b = P)
 {
-  array<pair<lli, int>, 4> v;
+  vec<pair<lli, int>> v(4);
+  v.shrink_to_fit();
   v[0] = x[0];
   v[1] = x[1];
   v[2] = a;
