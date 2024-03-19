@@ -31,6 +31,7 @@
 + $`(x^{n}-1)|(x-1)`$ ABC044D
 + $`|a|=N`$ かつ $`\sum a=M`$な数列aについてありえる$`\prod a_{i}`$の総和は$`\left(\begin{array}{c}M+N-1 \\ N+N-1\end{array}\right)`$。M以下なら捨てる分を増やして$`\left(\begin{array}{c}M+N \\ N+N\end{array}\right)`$。ARC110D
 + 期待値の計算ではDAGの末端に到達するまでの確率の総積を知りたいのでループを使うなら後ろから。でなければメモ化。確率を求めて後から計算でも。ABC280E/ABC326E
++ ゲームの勝敗は後ろから考えると良いことがある。ABC342F
 + e(x)=Σ{(c+e(xi))/pi}, f(x)=Σ{f(xi)/p} ABC314E
 + BFS木/DFS木 ABC281G
 + チェビシェフ距離 $max(|x_{i}-x_{j}|, |y_{i}-y_{j}|, |z_{i}-z_{j}|, ...)$
