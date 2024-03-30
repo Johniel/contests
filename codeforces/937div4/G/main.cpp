@@ -40,25 +40,25 @@ template<typename T> using vec = vector<T>;
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
-lli rhash(str s) {
-  lli h = 0;
-  each (c, s) {
-    lli x = c - 'a' + 1;
-    h = h * mod + x;
-  }
-  return h;
-}
-
 int main(int argc, char *argv[])
 {
   { int _; cin >> _; }
   int n;
   while (cin >> n) {
-    vec<pair<lli, lli>> v;
+    map<str, int> label;
+    vec<pair<int, int>> v;
     for (int i = 0; i < n; ++i) {
       str a, b;
       cin >> a >> b;
-      v.push_back(make_pair(rhash(a), rhash(b)));
+      if (!label.count(a)) {
+        int sz = label.size();
+        label[a] = sz;
+      }
+      if (!label.count(b)) {
+        int sz = label.size();
+        label[b] = sz;
+      }
+      v.push_back(make_pair(label[a], label[b]));
     }
     const int N = 16;
     const int B = (1 << N) + 3;
