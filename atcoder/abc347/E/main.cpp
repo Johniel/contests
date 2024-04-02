@@ -48,86 +48,80 @@ public:
   using composition_fn = function<F(F, F)>; // composition(f(x), g(x)):=f(g(x))
 
   LazySegTree(size_t n_, op_fn op_, mapping_fn mapping_, composition_fn composition_, S e_, F id_)
-    : size(n_), op(op_), mapping(mapping_), composition(composition_), e(e_), id(id_), n(bit_ceil(n_)) {
-    value.resize(n * 2 - 1, e);
-    lazy.resize(n * 2 - 1, id);
+    : n(n_), op(op_), mapping(mapping_), composition(composition_), e(e_), id(id_), bitceiln(bit_ceil(n_)) {
+    value.resize(bitceiln * 2, e);
+    lazy.resize(bitceiln * 2, id);
   }
 
-  void set(size_t i, S x) {
-    assert(0 <= i && i < size);
+  S set(size_t i, S x) {
+    assert(i < n);
     get(i);
-    i += n - 1;
+    i += bitceiln;
     value[i] = x;
-    while (0 < i) {
-      i = (i - 1) / 2;
-      value[i] = op(value.at(i * 2 + 1), value.at(i * 2 + 2));
+    while (1 < i) {
+      i /= 2;
+      value[i] = op(value.at(i * 2 + 0), value.at(i * 2 + 1));
     }
-    return ;
+    return x;
   }
 
-  inline S get(size_t i) { return query(i, i + 1); }
-  inline S query(void) { return query(0, size); };
+  S get(size_t i) {
+    assert(i < n);
+    i += bitceiln;
+    for (int j = 30; 0 <= j; --j) push(i >> j);
+    return value.at(i);
+  }
+
   S query(size_t begin, size_t end) {
     assert(begin <= end);
-    assert(end <= size);
-    return query(begin, end, 0, 0, n);
+    assert(end <= n);
+    return query(begin + 1, end + 1, 1, 1, n + 1);
   }
   S prod(size_t begin, size_t end) { return query(begin, end); }
-  S all_prod(void) { return query(); }
+  S operator () (size_t begin, size_t end) { return query(begin, end); };
 
-  inline S apply(size_t i, F f) { return apply(i, i + 1, f); }
+  S query(void) { return query(0, n); };
+  S all_prod(void) { return query(0, n); }
+  S operator () (void) { return query(0, n); };
+
+  S apply(size_t i, F f) { return apply(i, i + 1, f); }
   S apply(size_t begin, size_t end, F f) {
     assert(begin <= end);
-    assert(end <= size);
-    return apply(begin, end, f, 0, 0, n);
+    assert(end <= n);
+    return apply(begin + 1, end + 1, f, 1, 1, n + 1);
   }
 
-  void show(ostream& os, int idx = 0, int depth = 0) const {
+  void show(ostream& os, int idx = 1, int indent = 0) const {
     if (idx < value.size()) {
-      os << string(depth, ' ') << make_pair(value[idx], lazy[idx]) << endl;
-      show(os, idx * 2 + 1, depth + 2);
-      show(os, idx * 2 + 2, depth + 2);
+      os << string(indent, ' ') << make_pair(value[idx], lazy[idx]) << endl;
+      show(os, idx * 2 + 0, indent + 2);
+      show(os, idx * 2 + 1, indent + 2);
     }
     return ;
   }
 
-  int max_right(int i, function<bool(S)> pred) {
-    assert(pred(e));
-    int small = i;
-    int large = size;
-    while (small + 1 < large) {
-      int mid = (small + large) / 2;
-      if (pred(query(i, mid))) small = mid;
-      else large = mid;
-    }
-    // unless (pred(query(i, small))) return i;
-    return small;
-  }
-
-  int min_left() {
-    assert("not implemented");
-    return 0;
-  }
+  size_t size(void) const { return n; }
 
 private:
+  // 1-origin
   vector<S> value;
   vector<F> lazy;
-  const int n;
-  const size_t size;
+  const int bitceiln;
+  const size_t n;
 
-  op_fn op;
-  composition_fn composition;
-  mapping_fn mapping;
+  const op_fn op;
+  const composition_fn composition;
+  const mapping_fn mapping;
   const S e;
   const F id;
 
-  inline void push(int k) {
-    if(2 * k + 2 < lazy.size()) {
+  void push(int k) {
+    if(2 * k + 1 < lazy.size()) {
+      lazy[2 * k + 0] = composition(lazy[k], lazy[2 * k + 0]);
       lazy[2 * k + 1] = composition(lazy[k], lazy[2 * k + 1]);
-      lazy[2 * k + 2] = composition(lazy[k], lazy[2 * k + 2]);
     }
-    value[k] = mapping(lazy[k], value[k]);
-    lazy[k] = id;
+    value.at(k) = mapping(lazy.at(k), value.at(k));
+    lazy.at(k) = id;
     return ;
   }
 
@@ -140,8 +134,8 @@ private:
       push(k);
       return value[k];
     } else {
-      S vl = apply(begin, end, f, k * 2 + 1, l, (l + r) / 2);
-      S vr = apply(begin, end, f, k * 2 + 2, (l + r) / 2, r);
+      S vl = apply(begin, end, f, k * 2 + 0, l, (l + r) / 2);
+      S vr = apply(begin, end, f, k * 2 + 1, (l + r) / 2, r);
       return value[k] = op(vl, vr);
     }
   }
@@ -153,8 +147,8 @@ private:
     if (begin <= l && r <= end) {
       return value[k];
     } else {
-      S vl = query(begin, end, k * 2 + 1, l, (l + r) / 2);
-      S vr = query(begin, end, k * 2 + 2, (l + r) / 2, r);
+      S vl = query(begin, end, k * 2 + 0, l, (l + r) / 2);
+      S vr = query(begin, end, k * 2 + 1, (l + r) / 2, r);
       return op(vl, vr);
     }
   }
@@ -168,45 +162,30 @@ int main(int argc, char *argv[])
     vec<int> v(q);
     cin >> v;
 
-    const int enable = 0;
-    const int disable = 1;
-    const int nil = 2;
-
-    using S = pair<int, lli>; // 有無,sum
+    using S = pair<bool, lli>; // 有無,sum
     using F = lli;
     using lazy_segtree = LazySegTree<S, F>;
-    lazy_segtree::op_fn op = [&] (S a, S b) {
-      if (a.first != nil) return a;
-      if (b.first != nil) return b;
-      return make_pair(nil, 0LL);
-    };
+    lazy_segtree::op_fn op = [&] (S a, S b) { return make_pair(false, -(1LL)); };
     lazy_segtree::mapping_fn mapping = [] (F a, S b) {
-      if (b.first == enable) b.second += a;
+      if (b.first) b.second += a;
       return b;
     };
-    lazy_segtree::composition_fn composition = [] (F a, F b) { return a + b; }; // composition(f(x), g(x)):=f(g(x))
-    const int N = 2 * 1e5 + 3;
-    lazy_segtree seg(n+1, op, mapping, composition, make_pair(nil, 0LL), 0);
-    for (int i = 1; i <= n; ++i) {
-      seg.set(i, make_pair(disable, 0LL));
-    }
+    lazy_segtree::composition_fn composition = [] (F a, F b) { return a + b; };
+    lazy_segtree seg(n+1, op, mapping, composition, make_pair(false, 0LL), 0);
 
     set<int> vis;
     each (i, v) {
-      if (vis.count(i)) {
-        pair<bool, lli> p = seg.get(i);
-        p.first = disable;
-        seg.set(i, p);
-        vis.erase(i);
-      } else {
-        pair<bool, lli> p = seg.get(i);
-        p.first = enable;
-        seg.set(i, p);
-        vis.insert(i);
-      }
+      pair<bool, lli> p = seg.get(i);
+      if (vis.count(i)) vis.erase(i);
+      else              vis.insert(i);
+      p.first = !p.first;
+      seg.set(i, p);
       seg.apply(0, n+1, vis.size());
+      // cout << seg << endl;
     }
     for (int i = 1; i <= n; ++i) cout << seg.get(i).second << ' '; cout << endl;
+    // cout << seg << endl;
+    // break;
   }
   return 0;
 }
