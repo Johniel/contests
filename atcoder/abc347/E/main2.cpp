@@ -75,20 +75,18 @@ public:
   S query(size_t begin, size_t end) {
     assert(begin <= end);
     assert(end <= n);
-    return query(begin + 1, end + 1, 1, 1, n + 1);
+    return query(begin, end, 1, 0, bitceiln);
   }
   S prod(size_t begin, size_t end) { return query(begin, end); }
-  S operator () (size_t begin, size_t end) { return query(begin, end); };
 
   S query(void) { return query(0, n); };
   S all_prod(void) { return query(0, n); }
-  S operator () (void) { return query(0, n); };
 
   S apply(size_t i, F f) { return apply(i, i + 1, f); }
   S apply(size_t begin, size_t end, F f) {
     assert(begin <= end);
     assert(end <= n);
-    return apply(begin + 1, end + 1, f, 1, 1, n + 1);
+    return apply(begin, end, f, 1, 0, bitceiln);
   }
 
   void show(ostream& os, int idx = 1, int indent = 0) const {
@@ -124,7 +122,7 @@ private:
     return ;
   }
 
-  S apply(size_t begin, size_t end, F f, size_t k, size_t l, size_t r) {
+  S apply(size_t begin, size_t end, F f, size_t k, size_t l, size_t r) { // kだけ1origin,他は0origin
     push(k);
     if (r <= begin || end <= l) return value[k];
 
@@ -139,7 +137,7 @@ private:
     }
   }
 
-  S query(size_t begin, size_t end, size_t k, size_t l, size_t r) {
+  S query(size_t begin, size_t end, size_t k, size_t l, size_t r) { // kだけ1origin,他は0origin
     if (r <= begin || end <= l) return e;
     push(k);
 
