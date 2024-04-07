@@ -70,23 +70,18 @@ vec<int> g[N];
 vec<lli> c;
 
 vec<lli> dist;
-vec<int> preord;
-vec<int> post;
-map<int, int> inv;
 
 vec<int> A(N,0);
 vec<int> B(N,0);
 void rec1(int curr, int prev)
 {
   A[curr] = preord.size();
-  preord.push_back(curr);
   if (curr) dist[curr] = dist[prev] + 1;
   each (next, g[curr]) {
     if (next == prev) continue;
     rec1(next, curr);
   }
   B[curr] = preord.size();
-  post.push_back(curr);
   return ;
 }
 
@@ -101,7 +96,6 @@ void rec(int curr, int prev, lazy_segtree<S, op, e, F, mapping, composition, id>
   each (next, g[curr]) {
     if (next == prev) continue;
     int begin, end;
-    begin = inv[next];
 
     begin = A[next];
     end = B[next];
@@ -131,8 +125,6 @@ int main(int argc, char *argv[])
     c.resize(n);
     cin >> c;
     dist.resize(n, 0);
-    preord.clear();
-    inv.clear();
     rec1(0, 0);
     for (int i = 0; i < preord.size(); ++i) {
       inv[preord[i]] = i;
@@ -140,7 +132,7 @@ int main(int argc, char *argv[])
     r.clear();
     vec<S> ini(n);
     for (int i = 0; i < n; ++i) {
-      ini[inv[i]] = make_pair(dist[i] * c[i], c[i]);
+      ini[A[i]] = make_pair(dist[i] * c[i], c[i]);
     }
     lazy_segtree<S, op, e, F, mapping, composition, id> seg(ini);
     rec(0, 0, seg);

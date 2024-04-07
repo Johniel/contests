@@ -40,53 +40,30 @@ template<typename T> using vec = vector<T>;
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
-const int H = 200 + 3;
-const int W = 200 + 3;
-const int N = 300 + 3;
-char g[H][W];
-int cost[H][W];
-const int inf = 1 << 29;
-int h, w;
-void bfs(int si, int sj)
-{
-  queue<pair<int, int>> q;
-  fill(&cost[0][0], &cost[H - 1][W - 1], inf);
-  cost[si][sj] = 0;
-  for (q.push(make_pair(si, sj)); q.size(); q.pop()) {
-    auto [i, j] = q.front();
-    int di[] = {0, 0, -1, +1};
-    int dj[] = {-1, +1, 0, 0};
-    for (int d = 0; d < 4; ++d) {
-      int ni = i + di[d];
-      int nj = j + dj[d];
-      unless (0 <= ni && ni < h) continue;
-      unless (0 <= nj && nj < w) continue;
-      if (g[ni][nj] == '#') continue;
-      if (cost[ni][nj] > cost[i][j] + 1) {
-        cost[ni][nj] = cost[i][j] + 1;
-        q.push(make_pair(ni, nj));
-      }
-    }
-  }
-  return ;
-}
-
 int main(int argc, char *argv[])
 {
+  int h, w;
   while (cin >> h >> w) {
+    const int H = 200 + 3;
+    const int W = 200 + 3;
+    const int N = 300 + 3;
+    static char g[H][W];
+
     for (int i = 0; i < h; ++i) {
       for (int j = 0; j < w; ++j) {
         cin >> g[i][j];
       }
     }
+    static int e[H][W];
+    fill(&e[0][0], &e[H - 1][W - 1] + 1, 0);
     int n;
     cin >> n;
-    vec<pair<int, int>> v(n);
-    vec<int> e(n);
-    for (int i = 0; i < v.size(); ++i) {
-      cin >> v[i] >> e[i];
-      --v[i].first;
-      --v[i].second;
+    for (int i = 0; i < n; ++i) {
+      int a, b;
+      cin >> a >> b;
+      --a;
+      --b;
+      cin >> e[a][b];
     }
 
     pair<int, int> src, dst;
@@ -96,67 +73,38 @@ int main(int argc, char *argv[])
         if (g[i][j] == 'T') dst = make_pair(i, j);
       }
     }
-    v.push_back(src);
-    v.push_back(dst);
-    static lli x[N][N];
-    for (int i = 0; i < v.size(); ++i) {
-      bfs(v[i].first, v[i].second);
-      for (int j = 0; j < v.size(); ++j) {
-        x[i][j] = cost[v[j].first][v[j].second];
-      }
-    }
 
-    // cout << src << ' ' << dst << endl;
-    // for (int i = 0; i < v.size(); ++i) {
-    //   for (int j = 0; j < v.size(); ++j) {
-    //     cout << x[i][j] << ' ';
-    //   }
-    //   cout << endl;
-    // }
-
-    static lli y[H][W];
-    fill(&y[0][0], &y[H - 1][W - 1], 0);
-    for (int i = 0; i < n; ++i) {
-      y[v[i].first][v[i].second] = e[i];
-    }
-
-    static lli mx[N];
-    fill(mx, mx + N, -inf);
-    const int s = v.size() - 2;
-    const int d = v.size() - 1;
-    mx[s] = 0;
-    priority_queue<pair<lli, int>> q;
-    q.push(make_pair(mx[s], s));
-    bool vis[N];
-    fill(vis, vis + N, false);
+    const int inf = 1 << 29;
+    static int r[H][W];
+    fill(&r[0][0], &r[H - 1][W - 1] + 1, -inf);
+    r[src.first][src.second] = 0;
+    priority_queue<pair<int, pair<int, int>>> q;
+    q.push(make_pair(0, src));
     while (q.size()) {
-      auto [remained, curr] = q.top();
+      auto [rem, p] = q.top();
+      auto [i, j] = p;
       q.pop();
-      if (vis[curr]) continue;
-      if (mx[curr] != remained) continue;
-      vis[curr] = true;
-      for (int next = 0; next < v.size(); ++next) {
-        if (next == curr) continue;
-        auto [i, j] = v[curr];
-        if (vis[next]) continue;
-        {
-          lli r = y[i][j] - x[curr][next];
-          if (mx[next] < r && 0 <= r) {
-            mx[next] = r;
-            q.push(make_pair(mx[next], next));
-          }
+      if (rem < 0) continue;
+      if (rem != r[i][j]) continue;
+      int di[] = {0, 0, -1, +1};
+      int dj[] = {-1, +1, 0, 0};
+      for (int d = 0; d < 4; ++d) {
+        int ni = i + di[d];
+        int nj = j + dj[d];
+        unless (0 <= ni && ni < h) continue;
+        unless (0 <= nj && nj < w) continue;
+        if (g[ni][nj] == '#') continue;
+        if (r[ni][nj] < r[i][j] - 1) {
+          r[ni][nj] = r[i][j] - 1;
+          q.push(make_pair(r[ni][nj], make_pair(ni, nj)));
         }
-        {
-          lli r = mx[curr] - x[curr][next];
-          if (mx[next] < r && 0 <= r) {
-            mx[next] = r;
-            q.push(make_pair(mx[next], next));
-          }
+        if (r[ni][nj] < e[i][j] - 1) {
+          r[ni][nj] = e[i][j] - 1;
+          q.push(make_pair(r[ni][nj], make_pair(ni, nj)));
         }
       }
     }
-    // for (int i = 0; i < v.size(); ++i) cout << mx[i] << ' '; cout << endl;
-    cout << (vis[d] ? "Yes" : "No") << endl;
+    cout << (0 <= r[dst.first][dst.second] ? "Yes" : "No") << endl;
   }
-  return 0;
+return 0;
 }
