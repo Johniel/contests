@@ -83,91 +83,91 @@ struct SegTree {
 template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.set(i, t); } return is; }
 template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
 
-template<typename T = long long int>
-struct BIT {
-  vector<T> v;
-  const int n;
-
-  BIT(int n_ = 0) : n(n_), v(n_ + 1, 0) {}
-
-  T operator () (int i) const {
-    T s = 0;
-    while (i > 0) {
-      s += v.at(i);
-      i -= i & -i;
-    }
-    return s;
+template<typename F>
+struct DualSegTree {
+  // ABC017D,ABC347E
+  using composition_fn = function<F(F, F)>; // composition(f(x), g(x)):=f(g(x))
+  DualSegTree(size_t n_, composition_fn composition_, F e_)
+    : n(n_), composition(composition_), e(e_), bit_ceiled_n(bit_ceil(n_)) {
+    lazy.resize(2 * bit_ceiled_n, e);
   }
-
-  T query(int begin, int end) const {
+  void apply(size_t begin, size_t end, F f) {
+    assert(0 <= begin && begin < n);
+    assert(0 <= end && end <= n);
     assert(begin <= end);
-    return (*this)(end) - (*this)(begin);
-  }
-
-  T operator () (int begin, int end) const {
-    return query(begin, end);
-  }
-
-  void add(int i, T x) {
-    ++i;
-    while (i <= n) {
-      v.at(i) += x;
-      i += i & -i;
+    size_t a = begin + bit_ceiled_n;
+    size_t b = end + bit_ceiled_n;
+    push((a >> __builtin_ctz(a)));
+    push((b >> __builtin_ctz(b)) - 1);
+    for (; a < b; a /= 2, b /= 2 ) {
+      if (a & 1) {
+        lazy[a] = composition(f, lazy[a]);
+        ++a;
+      }
+      if (b & 1) {
+        --b;
+        lazy[b] = composition(f, lazy[b]);
+      }
     }
     return ;
   }
-
-  size_t lower_bound(const T query) const {
-    int small = 0;
-    int large = v.size();
-    while (small + 1 < large) {
-      auto mid = (small + large) / 2;
-      if ((*this)(mid) <= query) small = mid;
-      else large = mid;
-    }
-    if (query <= (*this)(small)) return small;
-    if (query <= (*this)(large)) return large;
-    return size();
+  void set(size_t idx, F f) {
+    assert(idx < n);
+    push(idx + bit_ceiled_n);
+    lazy[idx + bit_ceiled_n] = f;
+    return ;
   }
-
-  size_t size(void) const { return n; }
+  F get(size_t idx) {
+    assert(idx < n);
+    push(idx + bit_ceiled_n);
+    return lazy[idx + bit_ceiled_n];
+  }
+  void clear(size_t idx) {
+    assert(idx < n);
+    get(idx);
+    set(idx, e);
+    return ;
+  }
+  size_t size(void) const { return n; } ;
+  vector<F> lazy;
+  const composition_fn composition;
+  const F e;
+  const size_t n;
+  const size_t bit_ceiled_n;
+  void push(size_t idx) {
+    int depth = bit_width(idx);
+    for (int d = depth - 1; 0 < d; --d) {
+      size_t i = idx >> d;
+      if (lazy[i] != e) {
+        lazy[i * 2 + 0] = composition(lazy[i], lazy.at(i * 2 + 0));
+        lazy[i * 2 + 1] = composition(lazy[i], lazy.at(i * 2 + 1));
+        lazy[i] = e;
+      }
+    }
+    return ;
+  }
 };
 
 double fn(int n, int l, int d)
 {
   vec<double> dealer(n + 1, 0);
-  {
-    BIT<double> bit(n + d + 1);
-    bit.add(0, +1);
-    bit.add(1, -1);
-    for (int i = 0; i < l; ++i) {
-      double sum = bit(i + 1);
-      bit.add(i + 1,     +sum / d);
-      bit.add(i + d + 1, -sum / d);
-    }
-    for (int i = l; i <= n && i < bit.size(); ++i) {
-      dealer[i] = bit(0, i + 1);
-    }
-  }
   vec<double> player(n + 1, 0);
   {
-    BIT<double> bit(n + d + 1);
-    bit.add(0, +1);
-    bit.add(1, -1);
-    for (int i = 0; i < n; ++i) {
-      double sum = bit(i + 1);
-      bit.add(i + 1,     +sum / d);
-      bit.add(i + d + 1, -sum / d);
+    DualSegTree<double> seg(n + d + 1, [] (auto x, auto y) { return x + y; }, 0.0);
+    seg.set(0, +1);
+    for (int i = 0; i < l; ++i) {
+      double sum = seg.get(i);
+      seg.apply(i + 1, i + d + 1, sum / d);
     }
-    for (int i = 0; i <= n && bit.size(); ++i) {
-      player[i] = bit(0, i + 1);
+    for (int i = l; i <= n && i < seg.size(); ++i) {
+      dealer[i] = seg.get(i);
+    }
+    for (int i = 0; i <= n && seg.size(); ++i) {
+      player[i] = seg.get(i);
     }
   }
 
-  SegTree<double> D(dealer.size(), 0.0, [] (auto a, auto b) { return a + b; });
-  for (int i = 0; i < dealer.size(); ++i) {
-    D.set(i, dealer[i]);
-  }
+  SegTree<double> D(dealer, 0.0, [] (auto a, auto b) { return a + b; });
   SegTree<double> P(player.size(), 0.0, [] (auto a, auto b) { return a + b; });
 
   for (int i = n; 0 <= i; --i) {
