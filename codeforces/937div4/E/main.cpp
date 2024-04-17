@@ -39,38 +39,50 @@ template<typename T> using vec = vector<T>;
 
 int main(int argc, char *argv[])
 {
-  { int _; cin >> _; }
+  { int _; scanf("%d\n", &_); }
   int n;
-  str s;
-  while (cin >> n >> s) {
+  const int N = 2 * 1e5 + 3;
+  static char s[N];
+  while (scanf("%d\n%s\n", &n, s) == 2) {
     int mn = n;
+    static map<char, int> m[N];
     for (int k = 1; k <= n; ++k) {
       if (n % k == 0) {
+        for (int i = 0; i <= k; ++i) m[i].clear();
         const int x = n / k;
-        map<char, int> m[k];
+        int mx = 0;
         for (int i = 0; i < n; ++i) {
           ++m[i % k][s[i]];
+          setmax<int>(mx, m[i % k].size());
+          if (2 < mx) break;
         }
-        str t;
+        if (2 < mx) continue;
+        static char t[N];
+        int tsize = 0;
         for (int i = 0; i < k; ++i) {
           if (m[i].size() == 1) {
-            t += m[i].begin()->first;
+            t[tsize] = m[i].begin()->first;
           } else {
             if (m[i].begin()->second < m[i].rbegin()->second) {
-              t += m[i].rbegin()->first;
+              t[tsize] = m[i].rbegin()->first;
             } else {
-              t += m[i].begin()->first;
+              t[tsize] = m[i].begin()->first;
             }
           }
+          ++tsize;
         }
         int diff = 0;
-        for (int i = 0; i < s.size(); ++i) {
-          diff += (s[i] != t[i % t.size()]);
+        for (int i = 0; i < n; ++i) {
+          diff += (s[i] != t[i % tsize]);
+          if (1 < diff) break;
         }
-        if (diff <= 1) setmin(mn, k);
+        if (diff <= 1) {
+          setmin(mn, k);
+          break;
+        }
       }
     }
-    cout << mn << endl;
+    printf("%d\n", mn);
   }
   return 0;
 }
