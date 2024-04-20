@@ -62,3 +62,4 @@
   + $`fn(i+1,x)=min(fn(i,y)+y)-x`$
 + 上位数件だけ記憶しておけば充分な場合がある。いつも忘れる。ABC345E
 + 固定長ならvectorをarrayに置き換えたら割と早くなる。[shrink_to_fit](https://cpprefjp.github.io/reference/vector/vector/shrink_to_fit.html)でも少しだけ効果がある。ABC345E
++ [2-SATで密な節を解消する方法](https://drken1215.hatenablog.com/entry/2023/08/04/021846)
