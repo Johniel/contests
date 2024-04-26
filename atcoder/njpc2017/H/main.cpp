@@ -43,50 +43,79 @@ constexpr lli mod = 998244353;
 template<typename T>
 struct link_cut_tree {
 public:
-  // https://www.slideshare.net/iwiwi/2-12188845
+  // njpc2017H
   struct node_t {
+  public:
+    T value;
+    const int index;
+    bool rev;
     node_t* parent;
     node_t* right;
     node_t* left;
-    T value;
-    node_t(T v) : value(v), parent(nullptr), left(nullptr), right(nullptr) {}
-    // splay木の根であるか親への編がpreferredでない場合にtrue
-    bool is_root(void) const {
+    int sz;
+    node_t(T v, int idx) :
+      value(v),
+      parent(nullptr),
+      left(nullptr),
+      right(nullptr),
+      index(idx),
+      sz(1),
+      rev(false) {}
+
+    bool is_root(void) {
+      // 親を持たない||親への辺がpreferred-edgeでない
       return parent == nullptr || (parent->left != this && parent->right != this);
     }
+
     void rotr(void) {
       node_t* x = parent;
-      node_t* y = parent->parent;
+      node_t* y = x->parent;
       if (x->left = right) right->parent = x;
       right = x;
       x->parent = this;
+      x->update();
+      update();
       if (parent = y) {
         if (y->left == x) y->left = this;
         if (y->right == x) y->right = this;
+        y->update();
       }
       return ;
     }
+
     void rotl(void) {
       node_t* x = parent;
-      node_t* y = parent->parent;
+      node_t* y = x->parent;
       if (x->right = left) left->parent = x;
       left = x;
       x->parent = this;
+      x->update();
+      update();
       if (parent = y) {
         if (y->left == x) y->left = this;
         if (y->right == x) y->right = this;
+        y->update();
       }
       return ;
     }
+
     // 自身をpreferred pathsを管理する木の根にまで移動させる
     void splay(void) {
+      push();
       while (!is_root()) {
         node_t* x = parent;
         if (x->is_root()) {
+          // 根に近い方からpush
+          x->push();
+          push();
           if (x->left == this) rotr();
           else rotl();
         } else {
           node_t* y = x->parent;
+          // 根に近い方からpush
+          y->push();
+          x->push();
+          push();
           if (y->left == x) {
             if (x->left == this) { x->rotr(); rotr(); }
             else { rotl(); rotr(); }
@@ -96,8 +125,42 @@ public:
           }
         }
       }
+      push();
       return ;
     }
+
+    void update(void) {
+      sz = 1;
+      if (left) {
+        left->push();
+        sz += left->size();
+      }
+      if (right) {
+        right->push();
+        sz += right->size();
+      }
+      return ;
+    }
+
+    // 作用を伝搬させる。
+    void push(void) {
+      if (rev) {
+        swap(left, right);
+        if (left) left->reverse();
+        if (right) right->reverse();
+        rev = 0;
+      }
+      return ;
+    }
+
+    // 左右を反転させる。
+    void reverse(void) {
+      rev = !rev;
+      return ;
+    }
+
+    // 部分木の大きさ
+    size_t size(void) const { return sz; }
   };
 
   vec<node_t*> nodes;
@@ -115,8 +178,8 @@ public:
     }
   };
 
-  size_t insert(T v) {
-    nodes.push_back(new node_t(v));
+  int insert(T v) {
+    nodes.push_back(new node_t(v, nodes.size()));
     return nodes.size() - 1;
   }
 
@@ -125,8 +188,10 @@ public:
     return ;
   }
 
-  void link(int c, int p) {
-    link(nodes[c], nodes[p]);
+  void link(int a, int b) {
+    assert(!is_connected(a, b));
+    evert(a);
+    link(nodes[a], nodes[b]);
     return ;
   }
 
@@ -134,37 +199,115 @@ public:
     if (a == b) return true;
     expose(nodes[a]);
     expose(nodes[b]);
-    return nodes[a]->parent != nullptr;
+    // expose(a)でaを根に移動させる。
+    // expose(b)でbを根に移動させる。
+    // aの代わりにbが根になっていたら同じ木にいるはず。
+    return nodes[a]->parent;
   }
 
+  // パスの集合として扱っていた元々の木の根を変更する。
+  void evert(int x) {
+    // exposeして左右を反転させると元々の木の根を変えることができる。信じられない。
+    expose(nodes[x]);
+    nodes[x]->reverse();
+    nodes[x]->push();
+    return ;
+  }
+
+  // 連結ならLCAの頂点番号を返す。そうでなければ-1。
+  int lca(int a, int b) {
+    if (a == b) return a;
+    expose(nodes[a]);
+    node_t* c = expose(nodes[b]);
+    return nodes[a]->parent ? c->index : -1;
+  }
+
+  // 頂点aから頂点bに向けてkだけ進んだところに存在する頂点zを返す。なければ-1。
+  int get_kth(int a, int b, int k) {
+    if (!is_connected(a, b)) return -1;
+    if (k == 0) return a;
+    evert(b);
+    expose(nodes[a]);
+    node_t* x = nodes[a];
+    while (x) {
+      x->push();
+      if (x->right && k < x->right->size()) {
+        x = x->right;
+      } else {
+        if (x->right) k -= x->right->size();
+        if (k == 0) return x->index;
+        --k;
+        x = x->left;
+      }
+    }
+    return -1;
+  }
+
+  // この頂点を根とした部分木の大きさ。
   size_t size(void) const { return nodes.size(); }
 
+  void show(void) {
+    for (int i = 0; i < nodes.size(); ++i) {
+      if (nodes[i]->is_root()) {
+        vec<pair<int, int>> v;
+        v.push_back(make_pair(i, 0));
+        while (v.size()) {
+          auto [x, depth] = v.back();
+          v.pop_back();
+          nodes[x]->push();
+          pair<int, int> p = make_pair(-1, -1);
+          if (nodes[x]->left) {
+            p.first = nodes[x]->left->index;
+            v.push_back(make_pair(p.first, depth + 1));
+          }
+          if (nodes[x]->right) {
+            p.second = nodes[x]->right->index;
+            v.push_back(make_pair(p.second, depth + 1));
+          }
+          int y = -1;
+          if (nodes[x]->parent) y = nodes[x]->parent->index;
+          cout << str(depth * 2, ' ') << x << ": " << y << p << "s:" << nodes[x]->size() << "r:" << nodes[x]->rev << endl;
+        }
+      }
+    }
+    return ;
+  }
+
 private:
-  // splay操作を繰り返し頂点xをsplay木の根にまで移動させる。
+
+  // 最後に右の子を書き換えられた(preferred-edgeが変化した)頂点を返す。
   node_t* expose(node_t* x) {
     node_t* y = nullptr;
     for (node_t* p = x; p != nullptr; p = p->parent) {
       p->splay();
+      // 本来パスを扱っていることを考えると末尾への追加になる。木の回転はinorderを維持するのでpの後ろに追加したければ
+      // pをsplayしてpの右の子とすればいい。
       p->right = y;
+      p->update(); // 子を書き換えたので更新
       y = p;
     }
-    x->splay();
-    return x;
+    x->splay(); // どこかの右の子になっただけなのでsplay操作で根まで移動させる。
+    return y;
   }
-  // 頂点cとその親を結ぶ辺を取り除く。
+
   void cut(node_t* c) {
     expose(c);
     node_t* p = c->left;
+    // inorderでパス（列）を扱っていることを思い出すとcの直前の要素はexporseして左にあるはず。
     c->left = nullptr;
+    c->update(); // 子を書き換えたので更新
     p->parent = nullptr;
     return ;
   }
-  // 頂点cの親を頂点pに設定する。
+
   void link(node_t* c, node_t* p) {
+    // evert(c)でない理由はなに？
     expose(c);
     expose(p);
     c->parent = p;
+    // パスのこの位置から後ろに付け替えるので右
     p->right = c;
+    p->update(); // 子を書き換えたので更新
     return ;
   }
 };
