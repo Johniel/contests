@@ -40,49 +40,43 @@ constexpr lli mod = 998244353;
 
 template<typename T>
 struct SegTree {
-  const int n;
-  const int origin_size;
-  vector<T> v;
+  // https://codeforces.com/blog/entry/18051
   using F = function<T(T, T)>;
-  const F fn;
+  const F op;
   const T e;
-  SegTree(size_t n_, T e_, F fn_) : e(e_), origin_size(n_), fn(fn_), n(bit_ceil(n_)) {
-    assert(fn(e, e) == e);
-    v.resize(2 * n - 1, e);
+  const int n;
+  vector<T> v;
+  SegTree(size_t n_, T e_, F op_) : e(e_), n(n_), op(op_) {
+    assert(op(e, e) == e);
+    v.resize(2 * n, e);
   }
-  SegTree(const vector<T>& v, T e_, F fn_) : SegTree(v.size(), e_, fn_) {
+  SegTree(const vector<T>& v, T e_, F op_) : SegTree(v.size(), e_, op_) {
     for (int i = 0; i < v.size(); ++i) set(i, v[i]);
   }
   void set(size_t k, T a) {
-    k += n - 1;
-    v[k] = a;
-    while (k > 0) {
-      k = (k - 1) / 2;
-      v[k] = fn(v[k * 2 + 1], v[k * 2 + 2]);
-    }
+    assert(k < n);
+    for (v[k += n] = a; k > 1; k >>= 1) v[k >> 1] = op(v[k], v[k ^ 1]);
     return ;
   }
-  inline T get(size_t idx) const { return v.at(idx + n - 1); }
-  inline T operator () (void) const { return query(0, origin_size, 0, 0, n); }
-  inline T operator () (size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
-  inline T all_prod(void) const { return query(0, origin_size, 0, 0, n); }
-  inline T prod(size_t begin, size_t end) const { return query(begin, end, 0, 0, n); }
-  inline T query(size_t begin, size_t end) const {
-    assert(begin <= end);
-    assert(end <= origin_size);
-    return query(begin, end, 0, 0, n);
+  inline T get(size_t k) const { return v.at(k + n); }
+  inline T operator () (void) const { return v[1]; }
+  inline T operator () (size_t begin, size_t end) { return query(begin, end); }
+  inline T all_prod(void) const { return v[1]; }
+  inline T query(void) const { return v[1]; }
+  inline T prod(size_t begin, size_t end) const { return query(begin, end); }
+  T query(size_t l, size_t r) {
+    assert(0 <= l && l <= r && r <= n);
+    T res = e;
+    for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+      if (l & 1) res = op(v[l++], res);
+      if (r & 1) res = op(res, v[--r]);
+    }
+    return res;
   }
-  T query(size_t a, size_t b, size_t k, size_t l, size_t r) const {
-    if (r <= a || b <= l) return e;
-    if (a <= l && r <= b) return v.at(k);
-    T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
-    T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
-    return fn(vl, vr);
-  }
-  size_t size(void) const { return origin_size; }
+  size_t size(void) const { return n; }
 };
-template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.origin_size; ++i) { T t; is >> t; seg.set(i, t); } return is; }
-template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { vector<T> v; for (int i = 0; i < seg.n; ++i) v.push_back(seg[i]); os << v; return os; }
+template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.size(); ++i) { T t; is >> t; seg.set(i, t); } return is; }
+template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { os << seg.v; return os; }
 
 int main(int argc, char *argv[])
 {
@@ -103,10 +97,7 @@ int main(int argc, char *argv[])
         rename[u[i]] = i + 1;
       }
       each (i, v) i = rename[i];
-      // cout << v << endl;
     }
-    // v.insert(v.begin(), 0); v.push_back(N - 1);
-    // cout << v << endl;
 
     vec<int> pref(n, N);
     vec<int> suff(n, N);
@@ -122,7 +113,6 @@ int main(int argc, char *argv[])
           seg.set(v[i], make_pair(1, i));
           continue;
         }
-        // cout << p << "<=" << i << ' ' << v[i] << endl;
         pref[i] = len;
         seg.set(v[i], make_pair(len+1, i));
       }
@@ -145,13 +135,6 @@ int main(int argc, char *argv[])
       }
     }
 
-    // cout << mx << endl;
-    // cout << pref << endl;
-    // cout << suff << endl;
-    // for (int i = 0; i < pref.size(); ++i) {
-    //   cout << pref[i] << "+" << suff[i] << "=" << pref[i] + suff[i] << endl;
-    // }
-
     vec<int> u;
 
     for (int i = 0; i < v.size(); ++i) {
@@ -160,7 +143,6 @@ int main(int argc, char *argv[])
 
     cout << u.size() << endl;
     each (i, u) cout << i+1 << ' '; cout << endl;
-    // break;
   }
   return 0;
 }
