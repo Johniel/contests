@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
         pref[i] = len;
         seg.set(v[i], make_pair(len+1, i));
       }
-      mx = seg(1, seg.size() - 1).first;
+      mx = seg().first;
     }
 
     {
