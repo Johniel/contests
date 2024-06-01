@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     sort(a.begin(), a.end());
     a.erase(unique(a.begin(), a.end()), a.end());
 
-    const int A = 2 * 1e6 + 3;
+    const int A = 1e6 + 3;
 
     BIT<lli> freq(A);
 
