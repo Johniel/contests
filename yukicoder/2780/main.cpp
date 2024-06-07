@@ -93,6 +93,35 @@ namespace {
   }
 };
 
+using Graph = vector<vector<int>>;
+bool visit(const Graph &g, int curr, vector<int> &order, vector<int> &color)
+{
+  constexpr int CLOSED = 1;
+  constexpr int VISITED = 2;
+  color[curr] = CLOSED;
+  each (next, g[curr]) {
+    if (color[next] == VISITED) continue;
+    if (color[next] == CLOSED) return false;
+    if (!visit(g, next, order, color)) return false;
+  }
+    order.push_back(curr);
+  color[curr] = VISITED;
+  return true;
+}
+// verified Codeforces Round #847 C
+bool toporogical_sort(const Graph &g, vector<int> &order)
+{
+  const int size = g.size();
+  vector<int> color(size, 0);
+  for (int i = 0; i < size; ++i) {
+    if (!color[i] && !visit(g, i, order, color)) {
+      return false;
+    }
+  }
+  reverse(order.begin(), order.end());
+  return true;
+}
+
 int main(int argc, char *argv[])
 {
   int n;
@@ -123,30 +152,19 @@ int main(int argc, char *argv[])
     }
     sort(u.begin(), u.end());
     u.erase(unique(u.begin(), u.end()), u.end());
-    fill(g, g + n, vec<int>());
-    vec<int> rev[n];
+
+    Graph tg(v.size());
     each (i, u) {
-      g[i.first].push_back(i.second);
-      rev[i.second].push_back(i.first);
+      tg[i.first].push_back(i.second);
     }
-    n = v.size();
-    vec<int> leaf;
-    for (int i = 0; i < n; ++i) {
-      if (g[i].empty()) leaf.push_back(i);
+    vec<int> ord;
+    bool f = toporogical_sort(tg, ord);
+
+    f = f && (ord[0] == m[0]);
+    for (int i = 0; i + 1 < ord.size(); ++i) {
+      f = f && binary_search(u.begin(), u.end(), make_pair(ord[i], ord[i + 1]));
     }
-    bool f = true;
-    f = f && (leaf.size() <= 1);
-    if (leaf.size()) {
-      set<int> vis;
-      int x = leaf.front();
-      while (rev[x].size()) {
-        vis.insert(x);
-        x = rev[x].front();
-      }
-      vis.insert(x);
-      f = f && (vis.size() == v.size() && m[0] == x);
-    }
-    cout << (f || (n == 1) ? "Yes" : "No") << endl;
+    cout << (f ? "Yes" : "No") << endl;
   }
   return 0;
 }
