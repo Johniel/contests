@@ -70,85 +70,17 @@ namespace math {
   }
 };
 
-// from: https://qiita.com/drken/items/3b4fdf0a78e7a138cd9a
-template<int MOD> struct Fp {
-  long long val;
-  constexpr Fp(long long v = 0) noexcept : val(v % MOD) {
-    if (val < 0) val += MOD;
-  }
-  constexpr int getmod() { return MOD; }
-  constexpr Fp operator - () const noexcept {
-    return val ? MOD - val : 0;
-  }
-  constexpr Fp operator + (const Fp& r) const noexcept { return Fp(*this) += r; }
-  constexpr Fp operator - (const Fp& r) const noexcept { return Fp(*this) -= r; }
-  constexpr Fp operator * (const Fp& r) const noexcept { return Fp(*this) *= r; }
-  constexpr Fp operator / (const Fp& r) const noexcept { return Fp(*this) /= r; }
-  constexpr Fp& operator += (const Fp& r) noexcept {
-    val += r.val;
-    if (val >= MOD) val -= MOD;
-    return *this;
-  }
-  constexpr Fp& operator -= (const Fp& r) noexcept {
-    val -= r.val;
-    if (val < 0) val += MOD;
-    return *this;
-  }
-  constexpr Fp& operator *= (const Fp& r) noexcept {
-    val = val * r.val % MOD;
-    return *this;
-  }
-  constexpr Fp& operator /= (const Fp& r) noexcept {
-    long long a = r.val, b = MOD, u = 1, v = 0;
-    while (b) {
-      long long t = a / b;
-      a -= t * b; swap(a, b);
-      u -= t * v; swap(u, v);
-    }
-    val = val * u % MOD;
-    if (val < 0) val += MOD;
-    return *this;
-  }
-  constexpr bool operator == (const Fp& r) const noexcept {
-    return this->val == r.val;
-  }
-  constexpr bool operator != (const Fp& r) const noexcept {
-    return this->val != r.val;
-  }
-  friend constexpr ostream& operator << (ostream &os, const Fp<MOD>& x) noexcept {
-    return os << x.val;
-  }
-  friend constexpr Fp<MOD> modpow(const Fp<MOD> &a, long long n) noexcept {
-    if (n == 0) return 1;
-    auto t = modpow(a, n / 2);
-    t = t * t;
-    if (n & 1) t = t * a;
-    return t;
-  }
-};
-template<int MOD> istream& operator >> (istream& is, Fp<MOD>& m) { is >> m.val; m.val %= MOD; return is; }
-template<int MOD> ostream& operator << (ostream& os, const Fp<MOD>& m) { os << m.val; return os; }
-// constexpr lli mod = 1e9 + 7;
-using mint = Fp<mod>;
-
-
 int main(int argc, char *argv[])
 {
   // https://rikeilabo.com/formula-list-of-geometric-progression
   lli n;
   while (cin >> n) {
     const str s = to_string(n);
-    mint _10(10);
-    mint r = modpow(_10, s.size());
-    mint rn = modpow(r, n);
-    mint rn1 = rn - mint(1);
-    cout << rn1 / (r - mint(1)) * mint(n) << endl;
-
-    // const lli r = math::mod_pow(10, s.size(), mod);
-    // const lli rn = math::mod_pow(r, n, mod);
-    // const lli rn1 = (rn - 1 + mod) % mod;
-    // const lli div = math::mod_inverse((r - 1 + mod) % mod, mod);
-    // cout << (((rn1 * div) % mod) * n % mod) % mod << endl;
+    const lli r = math::mod_pow(10, s.size(), mod);
+    const lli rn = math::mod_pow(r, n, mod);
+    const lli rn1 = (rn - 1 + mod) % mod;
+    const lli div = math::mod_inverse((r - 1 + mod) % mod, mod);
+    cout << (((rn1 * div) % mod) * (n % mod) % mod) % mod << endl;
   }
 
   return 0;
