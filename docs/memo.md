@@ -67,3 +67,4 @@
 + 固定長ならvectorをarrayに置き換えたら割と早くなる。[shrink_to_fit](https://cpprefjp.github.io/reference/vector/vector/shrink_to_fit.html)でも少しだけ効果がある。ABC345E
 + [2-SATで密な節を解消する方法](https://drken1215.hatenablog.com/entry/2023/08/04/021846)
 + LCPは一致するprefixの個数と見ることもできる。ABC353E
++ [燃やす埋める問題　辺の張り方チートシート](https://qiita.com/ningenMe/items/69ed7ce43c9cd0a2de38)
