@@ -157,7 +157,7 @@ namespace auxiliary_tree {
   }
 
   // 圧縮後の木の{根,辺}
-  pair<int, vector<pair<int, int>>> edges(vector<int> x) {
+  pair<int, vector<pair<int, int>>> query(vector<int> x) {
     vector<int> vs = vertexes(x);
     vector<int> stk;
     vector<pair<int, int>> es;
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
 
     lli z = 0;
     each (k, m) {
-      auto [root, es] = auxiliary_tree::edges(k.second);
+      auto [root, es] = auxiliary_tree::query(k.second);
       map<int, vec<int>> g;
       each (e, es) g[e.first].push_back(e.second);
       function<int(int)> rec = [&] (int curr) {
