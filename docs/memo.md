@@ -68,3 +68,4 @@
 + [2-SATで密な節を解消する方法](https://drken1215.hatenablog.com/entry/2023/08/04/021846)
 + LCPは一致するprefixの個数と見ることもできる。ABC353E
 + [燃やす埋める問題　辺の張り方チートシート](https://qiita.com/ningenMe/items/69ed7ce43c9cd0a2de38)
++ マンハッタン距離を見て盲目的に45度回転するな落ち着け。XY独立。ABC366E
