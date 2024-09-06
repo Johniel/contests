@@ -69,3 +69,4 @@
 + LCPは一致するprefixの個数と見ることもできる。ABC353E
 + [燃やす埋める問題　辺の張り方チートシート](https://qiita.com/ningenMe/items/69ed7ce43c9cd0a2de38)
 + マンハッタン距離を見て盲目的に45度回転するな落ち着け。XY独立。ABC366E
++ 排他的論理和XORを見たら行列の基数を疑う。ABC366G
