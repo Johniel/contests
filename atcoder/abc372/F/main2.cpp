@@ -45,27 +45,55 @@ int main(int argc, char *argv[])
     vec<pair<int, int>> v(m);
     cin >> v;
     each (i, v) --i.first, --i.second;
+    sort(v.begin(), v.end());
+    vec<int> u;
+    u.push_back(0);
+    each (i, v) u.push_back(i.first), u.push_back(i.second);
+    sort(u.begin(), u.end());
+    u.erase(unique(u.begin(), u.end()), u.end());
 
-    const int N = 2 * 1e5 + 3;
-    const int K = 2 * 1e5 + 3;
-    static lli dp[N + K];
-    fill(dp, dp + N + K, 0);
-    int offset = k;
-    dp[offset] = 1;
-    for (int _ = 0; _ < k; ++_) {
-      vec<pair<int, lli>> add;
-      each (e, v) {
-        add.push_back(make_pair(e.second, dp[e.first + offset]));
-      }
-      --offset;
-      (dp[offset] += dp[offset + n]) %= mod;
-      each (i, add) {
-        (dp[i.first + offset] += i.second) %= mod;
+    map<int, vec<int>> es;
+    const int M = 50 + 2;
+    const int A = 2 * M;
+    static bool vis[A][A];
+    for (int i = 0; i < u.size(); ++i) {
+      for (int j = 0; j < u.size(); ++j) {
+        int x = u[i];
+        int y = u[j];
+        if (binary_search(v.begin(), v.end(), make_pair(x, y))) es[i].push_back(j);
       }
     }
+
+    const int K = 2 * 1e5 + 3;
+    static lli dp[K][A][2]; // [移動回数][今どこ][最後に追加の辺を使った]:=パターン数
+    fill(&dp[0][0][0], &dp[K - 1][A - 1][2 - 1] + 1, 0);
+    dp[0][0][1] = 1;
+    for (int i = 0; i < k; ++i) {
+      for (int src = 0; src < u.size(); ++src) {
+        each (dst, es[src]) {
+          (dp[i + 1][dst][1] += dp[i][src][0]) %= mod;
+          (dp[i + 1][dst][1] += dp[i][src][1]) %= mod;
+        }
+        if (const int dst = (src + 1) % u.size(); true) {
+          int x = u[src];
+          int y = u[dst];
+          int j;
+          if (x == y) j = n;
+          else if (x < y) j = y - x;
+          else j = (n - x) + y;
+          if (i + j <= k) {
+            (dp[i + j][dst][0] += dp[i][src][1]) %= mod;
+            (dp[i + j][dst][0] += dp[i][src][0]) %= mod;
+          }
+        }
+      }
+    }
+
     lli z = 0;
-    for (int i = 0; i < n; ++i) {
-      (z += dp[i]) %= mod;
+    for (int len = 0; len <= k; ++len) {
+      for (int i = 0; i < u.size(); ++i) {
+        (z += dp[len][i][1]) %= mod;
+      }
     }
     cout << z << endl;
   }
