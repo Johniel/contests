@@ -39,7 +39,25 @@ template<typename T> using vec = vector<T>;
 constexpr lli mod = 998244353;
 
 const int N = 3000 + 3;
-int w[2][N][N];
+
+// 0〜n-1までの番号の振られて円状に並んだマスを-1,+1の方向それぞれに移動できる。
+// aからbまで移動するために-1方向+1方向に何度移動すれば到達するかを返す。
+// {-1方向の移動回数,+1方向の移動回数}
+// https://atcoder.jp/contests/abc376/tasks/abc376_f
+template<std::integral T>
+pair<T, T> ring(T a, T b, T n) {
+  if (a == b) return make_pair(T(0), T(0));
+
+  if (a < b) {
+    T x = b - a;
+    T y = n - x;
+    return make_pair(y, x);
+  } else {
+    T y = a - b;
+    T x = n - y;
+    return make_pair(y, x);
+  }
+}
 
 int main(int argc, char *argv[])
 {
@@ -47,20 +65,6 @@ int main(int argc, char *argv[])
 
   int n, q;
   while (cin >> n >> q) {
-    fill(&w[0][0][0], &w[2 - 1][N - 1][N - 1] + 1, inf);
-    const vec<int> D({-1, +1});
-    for (int i = 0; i < n; ++i) {
-      each (d, D) {
-        for (int k = 0; k < 2; ++k) {
-          int curr = i;
-          for (int j = 0; j <= n; ++j) {
-            setmin(w[k][i][curr], j);
-            curr = (curr + D[k] + n) % n;
-          }
-        }
-      }
-    }
-
     vec<pair<char, int>> v(q);
     cin >> v;
     each (i, v) --i.second;
@@ -84,22 +88,26 @@ int main(int argc, char *argv[])
         const int T = v[i].second;
 
         if (v[i].first == 'R') {
-          if (const int k = 0; true) { // +1
+          if (const int D = +1; true) { // +1
             auto [L, R] = F();
-            int cost = dp[i][j] + w[k][R][T];
-            if (w[k][L][T] < w[k][R][T]) {
-              const int nL = (T + D[k] + n) % n;
-              cost += w[k][L][nL];
+            auto [_l, wL] = ring(L, T, n);
+            auto [_r, wR] = ring(R, T, n);
+            int cost = dp[i][j] + wR;
+            if (wL < wR) {
+              const int nL = (T + D + n) % n;
+              cost += wL + 1;
               L = nL;
             }
             setmin(dp[i + 1][L], cost);
           }
-          if (const int k = 1; true) { // -1
+          if (const int D = -1; true) { // -1
             auto [L, R] = F();
-            int cost = dp[i][j] + w[k][R][T];
-            if (w[k][L][T] < w[k][R][T]) {
-              const int nL = (T + D[k] + n) % n;
-              cost += w[k][L][nL];
+            auto [wL, _l] = ring(L, T, n);
+            auto [wR, _r] = ring(R, T, n);
+            int cost = dp[i][j] + wR;
+            if (wL < wR) {
+              const int nL = (T + D + n) % n;
+              cost += wL + 1;
               L = nL;
             }
             setmin(dp[i + 1][L], cost);
@@ -107,22 +115,26 @@ int main(int argc, char *argv[])
         }
 
         if (v[i].first == 'L') {
-          if (const int k = 0; true) { // +1
+          if (const int D = +1; true) { // +1
             auto [L, R] = F();
-            int cost = dp[i][j] + w[k][L][T];
-            if (w[k][R][T] < w[k][L][T]) {
-              const int nR = (T + D[k] + n) % n;
-              cost += w[k][R][nR];
+            auto [_l, wL] = ring(L, T, n);
+            auto [_r, wR] = ring(R, T, n);
+            int cost = dp[i][j] + wL;
+            if (wR < wL) {
+              const int nR = (T + D + n) % n;
+              cost += wR + 1;
               R = nR;
             }
             setmin(dp[i + 1][R], cost);
           }
-          if (const int k = 1; true) { // -1
+          if (const int D = -1; true) { // -1
             auto [L, R] = F();
-            int cost = dp[i][j] + w[k][L][T];
-            if (w[k][R][T] < w[k][L][T]) {
-              const int nR = (T + D[k] + n) % n;
-              cost += w[k][R][nR];
+            auto [wL, _l] = ring(L, T, n);
+            auto [wR, _r] = ring(R, T, n);
+            int cost = dp[i][j] + wL;
+            if (wR < wL) {
+              const int nR = (T + D + n) % n;
+              cost += wR + 1;
               R = nR;
             }
             setmin(dp[i + 1][R], cost);
