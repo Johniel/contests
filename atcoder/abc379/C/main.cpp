@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/abc378/E/main.cpp
+// atcoder/abc379/C/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -35,65 +35,64 @@ using ull = unsigned long long;
 using str = string;
 template<typename T> using vec = vector<T>;
 
-template<typename T>
-struct SegTree {
-  // https://codeforces.com/blog/entry/18051
-  using F = function<T(T, T)>;
-  const F op;
-  const T e;
-  const int n;
-  vector<T> v;
-  SegTree(size_t n_, T e_, F op_) : e(e_), n(n_), op(op_), v(2 * n, e) { assert(op(e, e) == e); }
-  SegTree(const vector<T>& v, T e_, F op_) : SegTree(v.size(), e_, op_) {
-    for (int i = 0; i < v.size(); ++i) set(i, v[i]);
-  }
-  void set(size_t k, T a) {
-    assert(k < n);
-    for (v[k += n] = a; k > 1; k >>= 1) v[k >> 1] = op(v[k], v[k ^ 1]);
-    return ;
-  }
-  inline T get(size_t k) const { return v.at(k + n); }
-  inline T operator () (void) const { return v[1]; }
-  inline T operator () (size_t begin, size_t end) { return query(begin, end); }
-  inline T all_prod(void) const { return v[1]; }
-  inline T query(void) const { return v[1]; }
-  inline T prod(size_t begin, size_t end) const { return query(begin, end); }
-  T query(size_t l, size_t r) {
-    assert(0 <= l && l <= r && r <= n);
-    T res = e;
-    for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
-      if (l & 1) res = op(v[l++], res);
-      if (r & 1) res = op(res, v[--r]);
-    }
-    return res;
-  }
-  size_t size(void) const { return n; }
-};
-template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.size(); ++i) { T t; is >> t; seg.set(i, t); } return is; }
-template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { os << seg.v; return os; }
+// constexpr lli mod = 1e9 + 7;
+constexpr lli mod = 998244353;
 
 int main(int argc, char *argv[])
 {
-  int n;
-  lli mod;
-  while (cin >> n >> mod) {
-    vec<lli> a(n);
-    cin >> a;
-    vec<lli> b({0});
-    for (int i = 0; i < a.size(); ++i) {
-      b.push_back((b.back() + a[i]) % mod);
+  int n, m;
+  while (cin >> n >> m) {
+    vec<lli> x(m), a(m);
+    cin >> x >> a;
+    each (i, x) --i;
+
+    vec<pair<lli, lli>> v;
+    for (int i = 0; i < x.size(); ++i) {
+      v.push_back(make_pair(x[i], a[i]));
     }
-    const int N = 2 * 1e5 + 3;
-    SegTree<lli> freq(N, 0, [] (auto x, auto y) { return x + y; });
-    SegTree<lli> seg(b, 0, [] (auto x, auto y) { return x + y; });
+    sort(v.begin(), v.end());
+    for (int i = 0; i < v.size(); ++i) {
+      x[i] = v[i].first;
+      a[i] = v[i].second;
+    }
+
+    if (accumulate(a.begin(), a.end(), 0LL) != n) {
+      cout << -1 << endl;
+      continue;
+    }
+    if (x[0] != 0) {
+      cout << -1 << endl;
+      continue;
+    }
+    if (x.back() != n - 1) {
+      x.push_back(n - 1);
+      a.push_back(0);
+    }
+
     lli z = 0;
-    for (int i = 0; i < a.size(); ++i) {
-      lli y = b[i + 1] * (i + 1);
-      lli x = seg.query(0, i + 1);
-      z += (y - x) + (mod * freq(b[i + 1] + 1, N));
-      freq.set(b[i + 1], freq.get(b[i + 1]) + 1);
+
+    for (int i = 1; i < a.size(); ++i) {
+      // cout << x << endl;
+      // cout << a << endl;
+      lli diff = x[i] - x[i - 1];
+      if (a[i - 1] < diff) {
+        a.back() = 0;
+        break;
+      }
+      // --diff;
+      lli cost = (diff - 1) * (diff - 0) / 2;
+      lli y = a[i - 1] - diff;
+      a[i] += y;
+      // cout << a[i - 1] << '-' << diff << endl;
+      z += cost + diff * y;
+      // cout << cost << "+" << diff << "*" << y << endl;
     }
-    cout << z << endl;
+    // cout << a << endl;
+    if (a.back() == 1) {
+      cout << z << endl;
+    } else {
+      cout << -1 << endl;
+    }
   }
   return 0;
 }

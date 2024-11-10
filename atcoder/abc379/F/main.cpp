@@ -1,5 +1,5 @@
 // github.com/Johniel/contests
-// atcoder/abc378/E/main.cpp
+// atcoder/abc379/F/main.cpp
 
 #include <bits/stdc++.h>
 
@@ -35,65 +35,85 @@ using ull = unsigned long long;
 using str = string;
 template<typename T> using vec = vector<T>;
 
-template<typename T>
-struct SegTree {
-  // https://codeforces.com/blog/entry/18051
-  using F = function<T(T, T)>;
-  const F op;
-  const T e;
-  const int n;
+// constexpr lli mod = 1e9 + 7;
+constexpr lli mod = 998244353;
+
+template<typename T = long long int>
+struct BIT {
   vector<T> v;
-  SegTree(size_t n_, T e_, F op_) : e(e_), n(n_), op(op_), v(2 * n, e) { assert(op(e, e) == e); }
-  SegTree(const vector<T>& v, T e_, F op_) : SegTree(v.size(), e_, op_) {
-    for (int i = 0; i < v.size(); ++i) set(i, v[i]);
+  const int n;
+
+  BIT(int n_ = 0) : n(n_), v(n_ + 1, 0) {}
+
+  T operator () (int i) const {
+    T s = 0;
+    while (i > 0) {
+      s += v.at(i);
+      i -= i & -i;
+    }
+    return s;
   }
-  void set(size_t k, T a) {
-    assert(k < n);
-    for (v[k += n] = a; k > 1; k >>= 1) v[k >> 1] = op(v[k], v[k ^ 1]);
+
+  T query(int begin, int end) const {
+    assert(begin <= end);
+    return (*this)(end) - (*this)(begin);
+  }
+
+  T operator () (int begin, int end) const {
+    return query(begin, end);
+  }
+
+  void add(int i, T x) {
+    ++i;
+    while (i <= n) {
+      v.at(i) += x;
+      i += i & -i;
+    }
     return ;
   }
-  inline T get(size_t k) const { return v.at(k + n); }
-  inline T operator () (void) const { return v[1]; }
-  inline T operator () (size_t begin, size_t end) { return query(begin, end); }
-  inline T all_prod(void) const { return v[1]; }
-  inline T query(void) const { return v[1]; }
-  inline T prod(size_t begin, size_t end) const { return query(begin, end); }
-  T query(size_t l, size_t r) {
-    assert(0 <= l && l <= r && r <= n);
-    T res = e;
-    for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
-      if (l & 1) res = op(v[l++], res);
-      if (r & 1) res = op(res, v[--r]);
+
+  size_t lower_bound(const T query) const {
+    int small = 0;
+    int large = v.size();
+    while (small + 1 < large) {
+      auto mid = (small + large) / 2;
+      if ((*this)(mid) <= query) small = mid;
+      else large = mid;
     }
-    return res;
+    if (query <= (*this)(small)) return small;
+    if (query <= (*this)(large)) return large;
+    return size();
   }
+
   size_t size(void) const { return n; }
 };
-template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.size(); ++i) { T t; is >> t; seg.set(i, t); } return is; }
-template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { os << seg.v; return os; }
 
 int main(int argc, char *argv[])
 {
-  int n;
-  lli mod;
-  while (cin >> n >> mod) {
-    vec<lli> a(n);
-    cin >> a;
-    vec<lli> b({0});
-    for (int i = 0; i < a.size(); ++i) {
-      b.push_back((b.back() + a[i]) % mod);
+  int n, q;
+  while (cin >> n >> q) {
+    vec<lli> v(n);
+    cin >> v;
+    vec<pair<int, int>> w(q);
+    cin >> w;
+    each (i, w) --i.first, --i.second;
+    map<int, vec<int>> g;
+    each (i, w) g[i.first].push_back(i.second);
+    BIT<int> bit(n + 1);
+    map<pair<int, int>, int> m;
+    vec<int> s;
+    for (int i = v.size() - 1; 0 <= i; --i) {
+      each (j, g[i]) {
+        m[make_pair(i, j)] = bit(j + 1, n + 1);
+      }
+      while (s.size() && v[s.back()] < v[i]) {
+        bit.add(s.back(), -1);
+        s.pop_back();
+      }
+      bit.add(i, +1);
+      s.push_back(i);
     }
-    const int N = 2 * 1e5 + 3;
-    SegTree<lli> freq(N, 0, [] (auto x, auto y) { return x + y; });
-    SegTree<lli> seg(b, 0, [] (auto x, auto y) { return x + y; });
-    lli z = 0;
-    for (int i = 0; i < a.size(); ++i) {
-      lli y = b[i + 1] * (i + 1);
-      lli x = seg.query(0, i + 1);
-      z += (y - x) + (mod * freq(b[i + 1] + 1, N));
-      freq.set(b[i + 1], freq.get(b[i + 1]) + 1);
-    }
-    cout << z << endl;
+    each (k, w) cout << m[k] << endl;
   }
   return 0;
 }
