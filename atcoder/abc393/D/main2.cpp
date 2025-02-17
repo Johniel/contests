@@ -38,25 +38,107 @@ template<typename T> using vec = vector<T>;
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
+template<typename T>
+struct SegTree {
+  // https://codeforces.com/blog/entry/18051
+  using F = function<T(T, T)>;
+  const F op;
+  const T e;
+  const int n;
+  vector<T> v;
+  SegTree(size_t n_, T e_, F op_) : e(e_), n(n_), op(op_), v(2 * n, e) { assert(op(e, e) == e); }
+  SegTree(const vector<T>& v, T e_, F op_) : SegTree(v.size(), e_, op_) {
+    for (int i = 0; i < v.size(); ++i) set(i, v[i]);
+  }
+  void set(size_t k, T a) {
+    assert(k < n);
+    for (v[k += n] = a; k > 1; k >>= 1) v[k >> 1] = op(v[k], v[k ^ 1]);
+    return ;
+  }
+  inline T get(size_t k) const { return v.at(k + n); }
+  inline T operator () (void) const { return v[1]; }
+  inline T operator () (size_t begin, size_t end) { return query(begin, end); }
+  inline T all_prod(void) const { return v[1]; }
+  inline T query(void) const { return v[1]; }
+  inline T prod(size_t begin, size_t end) const { return query(begin, end); }
+  T query(size_t l, size_t r) {
+    assert(0 <= l && l <= r && r <= n);
+    T res = e;
+    for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+      if (l & 1) res = op(v[l++], res);
+      if (r & 1) res = op(res, v[--r]);
+    }
+    return res;
+  }
+  size_t size(void) const { return n; }
+};
+template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (int i = 0; i < seg.size(); ++i) { T t; is >> t; seg.set(i, t); } return is; }
+template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { os << seg.v; return os; }
+
 int main(int argc, char *argv[])
 {
+  const int N = 5 * 1e5 + 3;
+  vec<lli> D(N, 0);
+  for (int i = 1; i < N; ++i) {
+    D[i] = D[i - 1] + i;
+  }
+
   int n;
   str s;
   while (cin >> n >> s) {
-    vec<int> v;
+    SegTree<lli> cnt0(s.size(), 0, [] (lli a, lli b) { return a + b; });
+    SegTree<lli> cnt1(s.size(), 0, [] (lli a, lli b) { return a + b; });
+    SegTree<lli> seg0(s.size(), 0, [] (lli a, lli b) { return a + b; });
+    SegTree<lli> seg1(s.size(), 0, [] (lli a, lli b) { return a + b; });
+    int last = -1;
     for (int i = 0; i < s.size(); ++i) {
-      if (s[i] == '1') v.push_back(i);
+      if (s[i] == '0') {
+        seg0.set(i, i);
+        cnt0.set(i, 1);
+      }
+      if (s[i] == '1') {
+        seg1.set(i, i);
+        cnt1.set(i, 1);
+        last = i;
+      }
     }
-    const int mid = v[v.size() / 2];
+    const lli inf = (1LL << 61);
+    lli mn = inf;
+    bool f = false;
+    set<int> vis;
     lli z = 0;
-    each (i, v) z += abs(i - mid);
-    vec<int> u(s.size());
-    iota(u.begin(), u.end(), 0);
-    sort(u.begin(), u.end(), [&] (int a, int b) { return abs(a - mid) < abs(b - mid); });
-    for (int i = 0; i < v.size(); ++i) {
-      z -= abs(u[i] - mid);
+    for (int i = 0; i < s.size(); ++i) {
+      if (s[i] == '1') {
+        vis.insert(i);
+        f = true;
+      }
+      unless (f) continue;
+      if (s[i] == '0') {
+        assert(vis.size());
+        int j = *vis.begin();
+        swap(s[j], s[i]);
+        z += abs(j - i);
+        vis.erase(j);
+        vis.insert(i);
+        cnt0.set(i, 0);
+        cnt0.set(j, 1);
+        seg0.set(i, 0);
+        seg0.set(j, j);
+        seg1.set(i, i);
+        seg1.set(j, 0);
+      }
+
+      if (f) {
+        const lli cnt = cnt1.query(i + 1, s.size());
+        if (i + cnt == last) break;
+        unless (i + 1 <= last + 1) break;
+        lli w = seg1.query(i + 1, last + 1) - (D[cnt] + cnt * i);
+        assert(0 <= w);
+        setmin(mn, z + w);
+      }
     }
-    cout << z << endl;
+    if (mn == inf) mn = 0;
+    cout << mn << endl;
   }
   return 0;
 }
