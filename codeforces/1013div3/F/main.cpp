@@ -38,45 +38,51 @@ template<typename T> using vec = vector<T>;
 // constexpr lli mod = 1e9 + 7;
 constexpr lli mod = 998244353;
 
+const int WW = 2000 + 3;
+
 template<typename T>
 struct PrefixSum {
   vector<T> sum;
-  PrefixSum() {}
+  PrefixSum() { sum.resize(WW); }
   PrefixSum(vector<T> v) {
     sum.push_back(0);
     for (int i = 0; i < v.size(); ++i) {
       sum.push_back((sum.back() + v[i]) % mod);
     }
+    while (sum.size() < WW) sum.push_back(0);
   }
-  T operator () (size_t begin, size_t end) const {
-    assert(begin <= end);
+  inline void rebuild(const vec<T>& v) {
+    for (int i = 0; i < v.size(); ++i) {
+      sum[i + 1] = (sum[i] + v[i]) % mod;
+    }
+  }
+  inline T operator () (size_t begin, size_t end) const {
     return (sum[end] - sum[begin] + mod) % mod;
   }
-  T operator () (size_t end) const {
+  inline T operator () (size_t end) const {
     return (*this)(0, end);
-  }
-  int lower_bound(T x) const {
-    return std::lower_bound(sum.begin(), sum.end(), x) - sum.begin();
-  }
-  int upper_bound(T x) const {
-    return std::upper_bound(sum.begin(), sum.end(), x) - sum.begin();
   }
   size_t size(void) const { return (int)sum.size() - 1; }
 };
 
 int main(int argc, char *argv[])
 {
-  { int _; cin >> _; }
+  vec<lli> a;
+  vec<lli> b;
+  // { int _; cin >> _; }
+  PrefixSum<lli> sum[2];
+  { int _; scanf("%d\n", &_); }
   int h, w, d;
-  while (cin >> h >> w >> d) {
-    char g[h][w];
+  // while (cin >> h >> w >> d) {
+  const int H = 2000 + 3;
+  const int W = 2000 + 3;
+  while (scanf("%d %d %d\n", &h, &w, &d) == 3) {
+    static char g[H][W];
     for (int i =  h - 1; 0 <= i; --i) {
-      for (int j = 0; j < w; ++j) {
-        cin >> g[i][j];
-      }
+      scanf("%s\n", &g[i][0]);
     }
-    lli dp[h + 1][w + 1][2];
-    for (int i = 0; i <= h; ++i) {
+    static lli dp[H][W][2];
+    for (int i = 0; i <= min(3, h); ++i) {
       for (int j = 0; j <= w; ++j) {
         dp[i][j][0] = dp[i][j][1] = 0;
       }
@@ -85,55 +91,58 @@ int main(int argc, char *argv[])
       if (g[0][j] == 'X') dp[0][j][0] = 1;
     }
 
-    int y, x;
-    x = y = 0;
-    for (int j = 0; j < w; ++j) {
-      if (sqrt(0 + j * j) <= d) y = j;
-      if (sqrt(1 + j * j) <= d) x = j;
+    static int y;
+    static int x;
+    static pair<int, int> prev = make_pair(-1, -1);
+    if (prev != make_pair(w, d)) {
+      for (int j = 0; j < w; ++j) {
+        if (sqrt(0 + j * j) <= d) y = j;
+        else break;
+        if (sqrt(1 + j * j) <= d) x = j;
+      }
+      prev = make_pair(w, d);
     }
     for (int j = 0; j < w; ++j) {
-      for (int k = 0; k < w; ++k) {
-        if (j != k && abs(j - k) <= y && g[0][k] == 'X') dp[0][k][1] += dp[0][j][0];
+      if (g[0][j] != 'X') continue;
+      for (int k = max(0, j - y); k <= min(j + y, w + 1); ++k) {
+        if (j != k && g[0][k] == 'X') dp[0][k][1] += dp[0][j][0];
       }
     }
 
-    PrefixSum<lli> sum[2];
+    a.resize(w);
+    b.resize(w);
     {
-      vec<lli> a, b;
       for (int j = 0; j < w; ++j) {
-        a.push_back(dp[0][j][0]);
-        b.push_back(dp[0][j][1]);
+        a[j] = dp[0][j][0];
+        b[j] = dp[0][j][1];
       }
-      sum[0] = PrefixSum<lli>(a);
-      sum[1] = PrefixSum<lli>(b);
+      sum[0].rebuild(a);
+      sum[1].rebuild(b);
     }
 
     for (int i = 1; i < h; ++i) {
       for (int j = 0; j < w; ++j) {
+        a[j] = 0;
         if (g[i][j] == '#') continue;
         const int begin = max(j - x, 0);
         const int end = min(j + x + 1, w);
-        dp[i][j][0] += sum[0](begin, end);
-        dp[i][j][0] += sum[1](begin, end);
-        dp[i][j][0] %= mod;
+        a[j] = dp[i][j][0] = (sum[0](begin, end) + sum[1](begin, end)) % mod;
       }
-      vec<lli> a;
-      for (int j = 0; j < w; ++j) a.push_back(dp[i][j][0]);
-      sum[0] = PrefixSum<lli>(a);
+
+      sum[0].rebuild(a);
       for (int j = 0; j < w; ++j) {
+        b[j] = 0;
         if (g[i][j] == '#') continue;
         const int begin = max(j - y, 0);
         const int end = min(j + y + 1, w);
-        dp[i][j][1] += (sum[0](begin, end) - dp[i][j][0] + mod) % mod;
-        dp[i][j][1] %= mod;
+        b[j] = dp[i][j][1] = (sum[0](begin, end) - dp[i][j][0] + mod) % mod;
       }
-      vec<lli> b;
-      for (int j = 0; j < w; ++j) b.push_back(dp[i][j][1]);
-      sum[1] = PrefixSum<lli>(b);
+      sum[1].rebuild(b);
     }
 
-    lli z = (sum[0](0, w) + sum[1](0, w)) % mod;
-    cout << z << endl;
+    const lli z = (sum[0](0, w) + sum[1](0, w)) % mod;
+    // cout << z << "\n";
+    printf("%lld\n", z);
   }
   return 0;
 }
