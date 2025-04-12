@@ -38,13 +38,11 @@ template<typename T> using vec = vector<T>;
 // 木の各頂点から最も遠い点までの距離を求める。
 struct TreeEccentricity {
   vector<vector<int>> g;
-  vec<int> dp;
-  vec<int> res;
+  vector<int> eccentricity;
+
   TreeEccentricity() : TreeEccentricity(0) {}
   TreeEccentricity(const int n) {
     g.resize(n, vector<int>());
-    dp.resize(n, 0);
-    res.resize(n, 0);
   }
 
   void add_edge(int a, int b) {
@@ -52,47 +50,28 @@ struct TreeEccentricity {
     g[b].push_back(a);
   }
 
-  int rec1(int curr, int prev) {
-    dp[curr] = 0;
-    for (int next : g[curr]) {
-      if (next == prev) continue;
-      dp[curr] = max(dp[curr], rec1(next, curr) + 1);
+  void rec(int curr, int prev, vector<int>& dist) {
+    if (curr != prev) dist[curr] = dist[prev] + 1;
+    for (const auto next: g[curr]) {
+      if (next != prev) rec(next, curr, dist);
     }
-    return dp[curr];
   }
 
-  void rec2(int curr, int prev, int from_parent) {
-    vector<int> prefix, suffix;
-    for (int next : g[curr]) {
-      if (next == prev) continue;
-      prefix.push_back(dp[next] + 1);
-      suffix.push_back(dp[next] + 1);
+  pair<int, pair<int, int>> build(void) {
+    vector<int> v_(g.size(), 0);
+    vector<int> va(g.size(), 0);
+    vector<int> vb(g.size(), 0);
+    rec(0, 0, v_);
+    int a = max_element(v_.begin(), v_.end()) - v_.begin();
+    rec(a, a, va);
+    int b = max_element(va.begin(), va.end()) - va.begin();
+    rec(b, b, vb);
+    for (int i = 0; i < g.size(); ++i) {
+      eccentricity.push_back(max(va[i], vb[i]));
     }
-
-    const int sz = prefix.size();
-    for (int i = 1; i < sz; ++i) prefix[i] = max(prefix[i], prefix[i - 1]);
-    for (int i = sz - 2; i >= 0; --i) suffix[i] = max(suffix[i], suffix[i + 1]);
-
-    int child_index = 0;
-    for (int next : g[curr]) {
-      if (next == prev) continue;
-
-      int use = from_parent;
-      if (child_index > 0) use = max(use, prefix[child_index - 1]);
-      if (child_index + 1 < sz) use = max(use, suffix[child_index + 1]);
-
-      rec2(next, curr, use + 1);
-      ++child_index;
-    }
-
-    res[curr] = max(dp[curr], from_parent);
-    return ;
-  }
-
-  void build(void) {
-    rec1(0, -1);
-    rec2(0, -1, 0);
-    return ;
+    const int diameter = *max_element(eccentricity.begin(), eccentricity.end());
+    assert(diameter == eccentricity[a]);
+    return make_pair(diameter, make_pair(a, b));
   }
 };
 
@@ -109,15 +88,7 @@ struct PrefixSum {
     assert(begin <= end);
     return sum[end] - sum[begin];
   }
-  T operator () (size_t end) const {
-    return (*this)(0, end);
-  }
-  int lower_bound(T x) const {
-    return std::lower_bound(sum.begin(), sum.end(), x) - sum.begin();
-  }
-  int upper_bound(T x) const {
-    return std::upper_bound(sum.begin(), sum.end(), x) - sum.begin();
-  }
+  T operator () (size_t end) const { return (*this)(0, end); }
   size_t size(void) const { return (int)sum.size() - 1; }
 };
 
@@ -153,12 +124,12 @@ int main() {
 
     lli z = 0;
 
-    int mx1 = *max_element(A.res.begin(), A.res.end());
-    int mx2 = *max_element(B.res.begin(), B.res.end());
+    const int mx1 = *max_element(A.eccentricity.begin(), A.eccentricity.end());
+    const int mx2 = *max_element(B.eccentricity.begin(), B.eccentricity.end());
 
     vec<lli> a, b;
-    each (i, A.res) a.push_back(i);
-    each (i, B.res) b.push_back(i);
+    each (i, A.eccentricity) a.push_back(i);
+    each (i, B.eccentricity) b.push_back(i);
     sort(a.begin(), a.end());
     sort(b.begin(), b.end());
 
@@ -168,15 +139,14 @@ int main() {
     lli p = 0;
     for (int i = 0; i < n1; ++i) {
       const lli mx = max(mx1, mx2);
-      auto itr = lower_bound(b.begin(), b.end(), mx - (A.res[i] + 1));
-      lli w = (b.end() - itr) * (lli)(A.res[i] + 1);
+      auto itr = lower_bound(b.begin(), b.end(), mx - (A.eccentricity[i] + 1));
+      lli w = (b.end() - itr) * (lli)(A.eccentricity[i] + 1);
       p += (b.end() - itr);
       z += w;
       z += sum2(itr - b.begin(), sum2.size());
     }
     z += ((n1 * n2) - p) * max<lli>(mx1, mx2);
     cout << z << endl;
-
   }
 
   return 0;
