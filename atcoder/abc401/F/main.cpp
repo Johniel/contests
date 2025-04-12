@@ -35,31 +35,36 @@ using ull = unsigned long long;
 using str = string;
 template<typename T> using vec = vector<T>;
 
-// constexpr lli mod = 1e9 + 7;
-constexpr lli mod = 998244353;
+// 木の各頂点から最も遠い点までの距離を求める。
+struct TreeEccentricity {
+  vector<vector<int>> g;
+  vec<int> dp;
+  vec<int> res;
+  TreeEccentricity() : TreeEccentricity(0) {}
+  TreeEccentricity(const int n) {
+    g.resize(n, vector<int>());
+    dp.resize(n, 0);
+    res.resize(n, 0);
+  }
 
-const int MAXN = 2 * 1e5 + 5;
-namespace A {
-  // const int MAXN = 2e5 + 5;
-  vector<int> G[MAXN];
-  int dp[MAXN];       // 子から受け取った部分木最大長
-  int res[MAXN];
+  void add_edge(int a, int b) {
+    g[a].push_back(b);
+    g[b].push_back(a);
+  }
 
-// 1回目のDFS：部分木の最大深さを求める
   void dfs1(int v, int p) {
     dp[v] = 0;
-    for (int u : G[v]) {
+    for (int u : g[v]) {
       if (u == p) continue;
       dfs1(u, v);
       dp[v] = max(dp[v], dp[u] + 1);
     }
+    return ;
   }
 
-// 2回目のDFS：rerooting によって res を更新していく
   void dfs2(int v, int p, int from_parent) {
-    // 各子に渡す値を準備する
     vector<int> prefix, suffix;
-    for (int u : G[v]) {
+    for (int u : g[v]) {
       if (u == p) continue;
       prefix.push_back(dp[u] + 1);
       suffix.push_back(dp[u] + 1);
@@ -70,64 +75,25 @@ namespace A {
     for (int i = sz - 2; i >= 0; --i) suffix[i] = max(suffix[i], suffix[i + 1]);
 
     int child_index = 0;
-    for (int u : G[v]) {
+    for (int u : g[v]) {
       if (u == p) continue;
 
-      // 最大値を親から持ってきた `from_parent` または兄弟部分木から選ぶ
       int use = from_parent;
       if (child_index > 0) use = max(use, prefix[child_index - 1]);
       if (child_index + 1 < sz) use = max(use, suffix[child_index + 1]);
 
       dfs2(u, v, use + 1);
-      child_index++;
+      ++child_index;
     }
 
     res[v] = max(dp[v], from_parent);
-  }
-};
-namespace B {
-  vector<int> G[MAXN];
-  int dp[MAXN];       // 子から受け取った部分木最大長
-  int res[MAXN];      // 各頂点を根にしたときの最大距離
-
-// 1回目のDFS：部分木の最大深さを求める
-  void dfs1(int v, int p) {
-    dp[v] = 0;
-    for (int u : G[v]) {
-      if (u == p) continue;
-      dfs1(u, v);
-      dp[v] = max(dp[v], dp[u] + 1);
-    }
+    return ;
   }
 
-// 2回目のDFS：rerooting によって res を更新していく
-  void dfs2(int v, int p, int from_parent) {
-    // 各子に渡す値を準備する
-    vector<int> prefix, suffix;
-    for (int u : G[v]) {
-      if (u == p) continue;
-      prefix.push_back(dp[u] + 1);
-      suffix.push_back(dp[u] + 1);
-    }
-
-    int sz = prefix.size();
-    for (int i = 1; i < sz; ++i) prefix[i] = max(prefix[i], prefix[i - 1]);
-    for (int i = sz - 2; i >= 0; --i) suffix[i] = max(suffix[i], suffix[i + 1]);
-
-    int child_index = 0;
-    for (int u : G[v]) {
-      if (u == p) continue;
-
-      // 最大値を親から持ってきた `from_parent` または兄弟部分木から選ぶ
-      int use = from_parent;
-      if (child_index > 0) use = max(use, prefix[child_index - 1]);
-      if (child_index + 1 < sz) use = max(use, suffix[child_index + 1]);
-
-      dfs2(u, v, use + 1);
-      child_index++;
-    }
-
-    res[v] = max(dp[v], from_parent);
+  void build(void) {
+    dfs1(0, -1);
+    dfs2(0, -1, 0);
+    return ;
   }
 };
 
@@ -160,41 +126,40 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
-  int n1;
+  lli n1;
   while (cin >> n1) {
-    fill(A::G, A::G + MAXN, vec<int>());
-    fill(B::G, B::G + MAXN, vec<int>());
+    TreeEccentricity A(n1);
+
     for (int i = 0; i < n1 - 1; ++i) {
       int u, v;
       cin >> u >> v;
-      --u; --v;
-      A::G[u].push_back(v);
-      A::G[v].push_back(u);
+      --u;
+      --v;
+      A.add_edge(u, v);
     }
-    A::dfs1(0, -1);         // 木DP
-    A::dfs2(0, -1, 0);      // rerooting
-    int n2;
+
+    lli n2;
     cin >> n2;
+    TreeEccentricity B(n2);
     for (int i = 0; i < n2 - 1; ++i) {
       int u, v;
       cin >> u >> v;
-      --u; --v;
-      B::G[u].push_back(v);
-      B::G[v].push_back(u);
+      --u;
+      --v;
+      B.add_edge(u, v);
     }
-    B::dfs1(0, -1);         // 木DP
-    B::dfs2(0, -1, 0);      // rerooting
+
+    A.build();
+    B.build();
 
     lli z = 0;
 
-    int mx1 = 0;
-    int mx2 = 0;
-    for (int i = 0; i < n1; ++i) setmax(mx1, A::res[i]);
-    for (int i = 0; i < n2; ++i) setmax(mx2, B::res[i]);
+    int mx1 = *max_element(A.res.begin(), A.res.end());
+    int mx2 = *max_element(B.res.begin(), B.res.end());
 
     vec<lli> a, b;
-    for (int i = 0; i < n1; ++i) a.push_back(A::res[i]);
-    for (int i = 0; i < n2; ++i) b.push_back(B::res[i]);
+    each (i, A.res) a.push_back(i);
+    each (i, B.res) b.push_back(i);
     sort(a.begin(), a.end());
     sort(b.begin(), b.end());
 
@@ -204,13 +169,13 @@ int main() {
     lli p = 0;
     for (int i = 0; i < n1; ++i) {
       const lli mx = max(mx1, mx2);
-      auto itr = lower_bound(b.begin(), b.end(), mx - (A::res[i] + 1));
-      lli w = (b.end() - itr) * (lli)(A::res[i] + 1);
+      auto itr = lower_bound(b.begin(), b.end(), mx - (A.res[i] + 1));
+      lli w = (b.end() - itr) * (lli)(A.res[i] + 1);
       p += (b.end() - itr);
       z += w;
       z += sum2(itr - b.begin(), sum2.size());
     }
-    z += (lli)((n1 * (lli)n2) - p) * max<lli>(mx1, mx2);
+    z += ((n1 * n2) - p) * max<lli>(mx1, mx2);
     cout << z << endl;
 
   }
