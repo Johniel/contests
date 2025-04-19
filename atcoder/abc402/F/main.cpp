@@ -50,15 +50,12 @@ int main(int argc, char *argv[])
       }
     }
     // 2^20=1048576
-    //
     const int N = 20 + 1;
-    // const int D =
     set<lli> dp1[N][N];
     dp1[0][0].insert(0);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
         if (j == n - i - 1) break;
-        // cout << "1: " << make_pair(i, j) << endl;
         each (k, dp1[i][j]) {
           if (i + 1 < n) dp1[i + 1][j].insert((k * 10 + g[i][j]) % mod);
           if (j + 1 < n) dp1[i][j + 1].insert((k * 10 + g[i][j]) % mod);
@@ -77,31 +74,11 @@ int main(int argc, char *argv[])
       for (int j = n - 1; 0 <= j; --j) {
         unless (n <= i + j) continue;
         const int w = p10[(2 * n - 1) - (i + j)];
-        // cout << make_pair(i, j) << w << endl;
-        // cout << "2: " << make_pair(i, j) << endl;
         each (k, dp2[i][j]) {
           if (0 <= i - 1) dp2[i - 1][j].insert((k + (g[i - 1][j] * w) % mod) % mod);
           if (0 <= j - 1) dp2[i][j - 1].insert((k + (g[i][j - 1] * w) % mod) % mod);
         }
       }
-    }
-
-    if (0) {
-      cout << "dp1" << endl;
-      for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-          cout << dp1[i][j] << ",";
-        }
-        cout << endl;
-      }
-      cout << "dp2" << endl;
-      for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-          cout << dp2[i][j] << ",";
-        }
-        cout << endl;
-      }
-      cout << p10[n] << endl;
     }
 
     lli z = 0;
@@ -116,11 +93,9 @@ int main(int argc, char *argv[])
         }
         setmax(z, (x + (*dp2[i][j].begin())) % mod);
         setmax(z, (x + (*dp2[i][j].rbegin())) % mod);
-        // each (b, dp2[i][n - i - 1]) setmax(z, ((a * p10[n]) + b) % mod);
       }
     }
     cout << z << endl;
-    // break;
   }
   return 0;
 }
