@@ -36,44 +36,46 @@ using str = string;
 template<typename T> using vec = vector<T>;
 
 template<typename T>
-struct SegTree {
-  // https://codeforces.com/blog/entry/18051
+struct DynamicSegTree {
   using F = function<T(T, T)>;
   const F op;
   const T e;
-  const int n;
-  const int bitceiln;
-  vector<T> v;
-  SegTree(size_t n_, T e_, F op_) : e(e_), n(n_), op(op_), bitceiln(__bit_ceil(n)) {
-    assert(op(e, e) == e);
-    v.resize(2 * bitceiln, e);
-  }
-  SegTree(const vector<T>& v, T e_, F op_) : SegTree(v.size(), e_, op_) {
-    for (size_t i = 0; i < v.size(); ++i) set(i, v[i]);
-  }
-  void set(size_t k, T a) {
-    assert(k < n);
-    for (v[k += bitceiln] = a; k >>= 1; v[k] = op(v[k * 2], v[k * 2 + 1])) ;
-  }
-  inline T get(size_t k) const { assert(k < n); return v[k + bitceiln]; }
-  inline T operator () (void) const { return v.at(1); }
-  inline T operator () (size_t begin, size_t end) { return query(begin, end); }
-  inline T all_prod(void) const { return v.at(1); }
-  inline T query(void) const { return v.at(1); }
-  inline T prod(size_t begin, size_t end) const { return query(begin, end); }
-  T query(size_t l, size_t r) {
-    assert(0 <= l && l <= r && r <= n);
+  unordered_map<long long int, T> seg;
+  DynamicSegTree(F o, T ie) : op(o), e(ie) {}
+  T query(void) { return seg.count(1) ? seg[1LL] : e; }
+  T query(size_t begin, size_t end) {
     T res = e;
-    for (l += bitceiln, r += bitceiln; l < r; l >>= 1, r >>= 1) {
-      if (l & 1) res = op(v[l++], res);
-      if (r & 1) res = op(res, v[--r]);
+    auto l = begin + (1LL << 33);
+    auto r = end + (1LL << 33);
+    for (; l < r; l /= 2, r /= 2) {
+      if (l & 1) {
+        if (seg.count(l)) res = op(seg[l], res);
+        ++l;
+      }
+      if (r & 1) {
+        --r;
+        if (seg.count(r)) res = op(res, seg[r]);
+      }
     }
     return res;
   }
-  size_t size(void) const { return n; }
+  T get(size_t idx) {
+    const auto i = idx + (1LL << 33);
+    return seg.count(i) ? seg[i] : e;
+  }
+  void set(size_t idx, T v) {
+    auto i = idx + (1LL << 33);
+    seg[i] = v;
+    while (i /= 2) {
+      const auto l = i * 2;
+      const auto r = i * 2 + 1;
+      T t = e;
+      if (seg.count(l)) t = op(seg[l], t);
+      if (seg.count(r)) t = op(t, seg[r]);
+      seg[i] = t;
+    }
+  }
 };
-template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (size_t i = 0; i < seg.size(); ++i) { T t; is >> t; seg.set(i, t); } return is; }
-template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { os << seg.v; return os; }
 
 int main(int argc, char *argv[])
 {
@@ -82,12 +84,12 @@ int main(int argc, char *argv[])
     vec<int> a(n);
     cin >> a;
     const int inf = 1 << 29;
-    SegTree<pair<int, int>> seg(a.size(), make_pair(-inf, -inf), [] (auto x, auto y) {
+    DynamicSegTree<pair<int, int>> seg([] (auto x, auto y) {
       if (x.first == y.first) {
         return x.second > y.second ? x : y;
       }
       return max(x, y);
-    });
+    },make_pair(-inf, -inf));
     for (int i = 0; i < a.size(); ++i) {
       seg.set(i, make_pair(a[i], i));
     }
