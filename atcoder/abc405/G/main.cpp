@@ -109,18 +109,16 @@ namespace math {
     return (m + x % m) % m;
   }
 
-  constexpr lli mod_inverse_c(lli a, lli mod)
+  constexpr lli constexpr_mod_inverse(lli a, lli mod)
   {
-    lli result = 1;
-    lli power = mod - 2;
-    while (power > 0) {
-      if (power & 1) {
-        result = (result * a) % mod;
-      }
-      a = (a * a) % mod;
-      power >>= 1;
+    lli inv = 1;
+    lli p = mod - 2;
+    while (p > 0) {
+      if (p & 1) (inv *= a) %= mod;
+      (a *= a) %= mod;
+      p >>= 1;
     }
-    return result;
+    return inv;
   }
 };
 
@@ -134,16 +132,16 @@ struct SqrtDecomposition {
   vector<T> v;
   const T e;
   const int b;
-  SqrtDecomposition(vector<T> values, OP op_, T e_) : e(e_), op(op_), v(values), b(max<int>(1, sqrt(N))) {
-    // assert(v.size());
-    bucket.resize(N, e);
+  SqrtDecomposition(vector<T> values, OP op_, T e_) : e(e_), op(op_), v(values), b(max<int>(1, sqrt(v.size()))) {
+    assert(v.size());
+    bucket.resize((v.size() + b - 1) / b, e);
     for (size_t i = 0; i < v.size(); ++i) {
       op(bucket[i / b], v[i]);
     }
   }
   T query(size_t begin, size_t end) {
-    // assert(begin <= end);
-    // assert(end <= v.size());
+    assert(begin <= end);
+    assert(end <= v.size());
     T res = e;
     size_t i = begin;
     for (; i < end && i % b; ++i) {
@@ -182,7 +180,7 @@ void push(const int& i) {
 
   (xxx.bucket[a[i] / xxx.b].first *= mul) %= mod;
   xxx.v[a[i]].first = x;
-};
+}
 
 void pop(const int& i) {
   lli mul = fact_inverse[xxx.v[a[i]].second];
@@ -195,19 +193,17 @@ void pop(const int& i) {
 
   (xxx.bucket[a[i] / xxx.b].first *= mul) %= mod;
   xxx.v[a[i]].first = x;
-};
+}
 
 static int x[N];
 static int c[N];
-void rep(const int& i) {
-  // int k = bit.query(0, x[i]);
-  // lli z = fact[k];
-  // lli d = sd.query(0, x[i]);
+void rep(const int& i)
+{
   const auto p = xxx.query(0, x[i]);
   int k = p.second;
   lli z = fact[k];
   lli d = p.first;
-  (z *= math::mod_inverse_c(d, mod)) %= mod;
+  (z *= math::constexpr_mod_inverse(d, mod)) %= mod;
   c[i] = z;
 }
 
@@ -218,7 +214,7 @@ int main(int argc, char *argv[])
     fact[i] = (fact[i - 1] * i) % mod;
   }
   for (int i = 0; i < N; ++i) {
-    fact_inverse[i] = math::mod_inverse_c(fact[i], mod);
+    fact_inverse[i] = math::constexpr_mod_inverse(fact[i], mod);
   }
 
   int n, q;
