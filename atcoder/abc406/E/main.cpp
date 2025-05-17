@@ -5,6 +5,7 @@
 
 #define each(i, c) for (auto& i : c)
 #define unless(cond) if (!(cond))
+#define __builtin_popcount(x) __builtin_popcountll(x)
 
 using namespace std;
 
@@ -91,7 +92,7 @@ int main(int argc, char *argv[])
   int k;
   while (cin >> n >> k) {
     lli z = 0;
-    // if (__builtin_popcount(n) == k) z += n % mod;
+    if (__builtin_popcount(n) == k) z += n % mod;
     lli pref = 0;
     for (int i = 61; 0 <= i && 0 <= k; --i) {
       unless (n & (1LL << i)) continue;
@@ -104,21 +105,7 @@ int main(int argc, char *argv[])
       --k;
       (pref += ((1LL << i) % mod)) %= mod;
     }
-    if (k == 0) (z += pref) %= mod;
     cout << z << endl;
   }
   return 0;
 }
-//31
-// 1100,12
-// 1010,10
-// 1001,09
-//14
-// 0101,05
-// 0110,06
-// 0011,03
-
-
-
-// 1011,11
-// 0111,07
