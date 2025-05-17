@@ -40,53 +40,35 @@ template<typename T> using vec = vector<T>;
 constexpr lli mod = 998244353;
 
 namespace math {
-  const int N = 1e5 + 3;
-  lli fact[N], finv[N], inv[N];
-
+  const int N = 100;
+  long long int nck[N][N];
+  long long int sum[N][N];
   void init(void)
   {
-    fact[0] = fact[1] = 1;
-    finv[0] = finv[1] = 1;
-    inv[1] = 1;
-    for (int i = 2; i < N; i++){
-      fact[i] = fact[i - 1] * i % mod;
-      inv[i] = mod - inv[mod % i] * (mod / i) % mod;
-      finv[i] = finv[i - 1] * inv[i] % mod;
+    vector<long long int> p2(N + 1);
+    p2[0] = 1;
+    for (size_t i = 1; i < p2.size(); ++i) {
+      p2[i] = p2[i - 1] * 2 % mod;
+    }
+    fill(&nck[0][0], &nck[N - 1][N - 1] + 1, 0);
+    fill(&sum[0][0], &sum[N - 1][N - 1] + 1, 0);
+    nck[0][0] = 1;
+    for (int i = 0; i + 1 < N; ++i) {
+      for (int j = 0; j < i + 1; ++j) {
+        (nck[i + 1][j + 0] += nck[i][j]) %= mod;
+        (nck[i + 1][j + 1] += nck[i][j]) %= mod;
+        (sum[i + 1][j + 0] += sum[i][j]) %= mod;
+        (sum[i + 1][j + 1] += sum[i][j]) %= mod;
+        (sum[i + 1][j + 1] += p2[i] * nck[i][j] % mod) %= mod;
+      }
     }
     return ;
   }
-
-  lli mod_comb(int n, int k)  // 必要に応じてlucasの定理を使うこと
-  {
-    assert(n < N && k < N);
-    if (n < k) return 0;
-    if (n < 0 || k < 0) return 0;
-    return fact[n] * (finv[k] * finv[n - k] % mod) % mod;
-  }
 };
-
-const int N = 62;
-lli memo[N][N];
-lli rec(int n, int k)
-{
-  if (n < k) return 0;
-  if (k == 0) return 0;
-  if (n == 1) return !!k;
-  if (n == 0) return 0;
-  lli& ret = memo[n][k];
-  if (ret != -1) return ret;
-  lli sum = 0;
-  const lli w = (((1LL << (n - 1)) % mod) * math::mod_comb(n - 1, k - 1)) % mod;
-  sum += w;
-  (sum += rec(n - 1, k - 1)) %= mod;
-  (sum += rec(n - 1, k)) %= mod;
-  return ret = sum;
-}
 
 int main(int argc, char *argv[])
 {
   math::init();
-  fill(&memo[0][0], &memo[N - 1][N - 1] + 1, -1);
   { int _; cin >> _; }
   lli n;
   int k;
@@ -98,9 +80,9 @@ int main(int argc, char *argv[])
       unless (n & (1LL << i)) continue;
       const int rem = i;
       if (rem >= k) {
-        lli x = pref * math::mod_comb(rem, k) % mod;
+        lli x = pref * math::nck[rem][k] % mod;
         (z += x) %= mod;
-        (z += rec(rem, k)) %= mod;
+        (z += math::sum[rem][k]) %= mod;
       }
       --k;
       (pref += ((1LL << i) % mod)) %= mod;
