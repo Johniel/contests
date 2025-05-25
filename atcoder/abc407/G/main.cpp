@@ -39,7 +39,6 @@ template<typename T> using vec = vector<T>;
 namespace min_cost_flow {
   using Cap = long long int;
   using Cost = long long int;
-  const Cost inf = (1LL << 50);
 
   struct E {
     int src, dst;
@@ -49,16 +48,7 @@ namespace min_cost_flow {
     E(int s, int d, Cap cap_, Cost cost_, int r) : src(s), dst(d), cap(cap_), cost(cost_), rev(r), flow(0) {}
     Cap residue(void) const { return cap - flow; }
   };
-  typedef vector<E> Es;
-  typedef vector<Es> G;
-
-  // max node conut
-  const int N = 2000 + 30;
-  const COST offset = 0;
-
-  pair<int, int> path[N]; // path[dst]:=(src,index of e)
-  Cost dist[N];
-  Cost potential[N];
+  using G = vector<vector<E>>;
 
   void add_edge(G& g, const int src, const int dst, const Cap cap, const Cost cost)
   {
@@ -71,26 +61,35 @@ namespace min_cost_flow {
     return ;
   }
 
+  const int N = 2000 + 30;
+  // 負のコストを消すためにoffsetを使う可能性を忘ない
+  const Cost offset = 2000000000000;
+
+  pair<int, int> path[N]; // path[dst]:={src,index of e}
+  Cost dist[N];
+  Cost potential[N];
+
   bool sssp(const G &g, const int src, const int snk)
   {
+    const Cost inf = (1LL << 60);
     const int size = g.size();
     fill(dist, dist + size, inf);
     dist[src] = 0;
-    path[src] = {src, -1};
+    path[src] = make_pair(src, -1);
     using S = pair<Cost, int>;
     priority_queue<S, vector<S>, greater<S>> q;
-    for (q.push({0, src}); q.size();) {
-      const S next = q.top();
+    for (q.push({0, src}); q.size(); ) {
+      const auto [cost, curr] = q.top();
       q.pop();
-      if (dist[next.second] != next.first) continue;
-      if (next.second == snk) break;
-      for (int i = 0; i < g[next.second].size(); ++i) {
-        const E& e = g[next.second][i];
+      if (dist[curr] != cost) continue;
+      if (curr == snk) break;
+      for (size_t i = 0; i < g[curr].size(); ++i) {
+        const E& e = g[curr][i];
         if (e.residue() <= 0) continue;
         const Cost rcost = e.cost + (potential[e.src] - potential[e.dst]);
         if (dist[e.dst] > rcost + dist[e.src]) {
           dist[e.dst] = rcost + dist[e.src];
-          q.push({dist[e.dst], e.dst});
+          q.push(make_pair(dist[e.dst], e.dst));
           path[e.dst] = make_pair(e.src, i);
         }
       }
@@ -98,38 +97,36 @@ namespace min_cost_flow {
     return dist[snk] != inf;
   }
 
-  vector<pair<Cost, Cap>> run(G g, const int src, const int snk, Cap req = (1LL << 60))
+  vector<pair<Cost, Cap>> run(G& g, const int src, const int snk, Cap req)
   {
     assert(src < g.size());
     assert(snk < g.size());
-    vector<pair<Cost, Cap>> v;
-    v.push_back(make_pair(0, 0));
-
+    vector<pair<Cost, Cap>> slope;
     const int size = g.size();
     fill(potential, potential + size, 0);
-    pair<Cost, Cap> result = {0, 0};
+    Cost cost = 0;
+    Cap flow = 0;
+    slope.push_back(make_pair(cost, flow));
     while (0 < req && sssp(g, src, snk)) {
       for (int i = 0; i < size; ++i) {
         potential[i] += dist[i];
       }
       Cap mn = req;
       for (int i = snk; i != path[i].first; i = path[i].first) {
-        const int v = path[i].first;
-        const int e = path[i].second;
+        auto [v, e] = path[i];
         mn = min(mn, g[v][e].residue());
       }
       for (int i = snk; i != path[i].first; i = path[i].first) {
-        const int v = path[i].first;
-        const int e = path[i].second;
-        result.first += mn * g[v][e].cost;
+        auto [v, e] = path[i];
+        cost += mn * g[v][e].cost;
         g[v][e].flow += mn;
         g[g[v][e].dst][g[v][e].rev].flow -= mn;
       }
       req -= mn;
-      result.second += mn;
-      v.push_back(result);
+      flow += mn;
+      slope.push_back(make_pair(cost, flow));
     }
-    return v;
+    return slope;
   }
 };
 namespace mcf = min_cost_flow;
@@ -155,7 +152,7 @@ int main(int argc, char *argv[])
         color[i][j] = (i + j) % 2;
       }
     }
-    const lli offset = 2000000000000;
+
     const int N = h * w + 2;
     const int src = N - 1;
     const int snk = N - 2;
@@ -173,7 +170,7 @@ int main(int argc, char *argv[])
             const int nj = j + dj[d];
             unless (0 <= ni && ni < h) continue;
             unless (0 <= nj && nj < w) continue;
-            min_cost_flow::add_edge(g, name[i][j], name[ni][nj], 1, a[i][j] + a[ni][nj] + offset);
+            min_cost_flow::add_edge(g, name[i][j], name[ni][nj], 1, a[i][j] + a[ni][nj] + min_cost_flow::offset);
           }
         }
       }
@@ -184,10 +181,10 @@ int main(int argc, char *argv[])
         z += a[i][j];
       }
     }
-    auto v = min_cost_flow::run(g, src, snk);
+    auto v = min_cost_flow::run(g, src, snk, 1LL << 60);
     lli mx = -(1LL << 62);
     for (int i = 0; i < v.size(); ++i) {
-      lli x = z - (v[i].first - v[i].second * offset);
+      lli x = z - (v[i].first - v[i].second * min_cost_flow::offset);
       setmax<lli>(mx, x);
     }
     cout << mx << endl;
