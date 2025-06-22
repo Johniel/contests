@@ -83,13 +83,16 @@ namespace math {
   }
 };
 
+template<std::integral T>
+inline int find_first_set(T b) {
+  // assert(b);
+  return __builtin_ffsll(b) - 1; // change to 0-origin
+}
 
 int main(int argc, char *argv[])
 {
   const int N = 20 + 1;
   const int B = 1 << N;
-  static int idx[B];
-  for (int i = 0; i < N; ++i) idx[1 << i] = i;
 
   vec<lli> inv;
   for (int i = 0; i < N; ++i) {
@@ -120,12 +123,12 @@ int main(int argc, char *argv[])
         int vis = bit;
         while (vis) {
           int a = vis - (vis & (vis - 1));
-          int i = idx[a];
+          int i = find_first_set(a);
           if (dp[bit][i]) {
             int rem = (((1 << n) - 1) ^ bit);
             while (rem) {
               int b = rem ^ (rem & (rem - 1));
-              int j = idx[b];
+              int j = find_first_set(b);
               (dp[bit | (1 << j)][j] += dp[bit][i] * g[i][j] % mod) %= mod;
               rem -= b;
             }
