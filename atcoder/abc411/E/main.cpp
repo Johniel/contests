@@ -97,42 +97,39 @@ int main(int argc, char *argv[])
     }
     sort(v.begin(), v.end());
 
-    map<lli, int> m;
-    each (i, v) ++m[i.first];
-
     vec<lli> freq(n, 0);
-    lli prev = 0;
+
     lli z = 0;
-    lli p = 1;
-    int w = 0;
+    lli prev = 0;
+    lli pattern = 1;
 
     int y = n;
-    set<int> vis;
 
     int k = 0;
     while (k < v.size()) {
-      const auto [val, idx] = v[k];
-
-      const lli divn6 = math::mod_pow(math::mod_inverse(6, mod), n);
-      const lli diff = (val - prev);
-      lli w = (y ? 0 : (p * divn6) % mod);
-      lli u = ((diff % mod) * ((1 - w + mod) % mod)) % mod;
-      (z += u) %= mod;
+      const auto [val, _] = v[k];
 
       while (k < v.size() && v[k].first == val) {
-        const int x = freq[v[k].second];
-        if (x) {
-          (p *= math::mod_inverse(x, mod)) %= mod;
-        } else {
-          --y;
+        const int j = v[k].second;
+        unless (freq[j]) --y;
+        if (freq[j]) {
+          (pattern *= math::mod_inverse(freq[j], mod)) %= mod;
         }
-        ++freq[v[k].second];
-        (p *= freq[v[k].second]) %= mod;
+        (pattern *= ++freq[j]) %= mod;
         ++k;
       }
-      prev = val;
+      assert(0 <= y);
+
+      unless (y) {
+        const lli div6n = math::mod_pow(math::mod_inverse(6, mod), n);
+        lli w = (pattern - prev + mod) % mod;
+        lli p = w * div6n % mod;
+        (z += val * p % mod) %= mod;
+        prev = pattern;
+      }
     }
     cout << z << endl;
+    assert(y == 0);
   }
   return 0;
 }
