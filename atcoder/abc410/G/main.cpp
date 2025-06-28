@@ -87,16 +87,16 @@ int main(int argc, char *argv[])
     each (k, v) if (k.first < k.second) swap(k.first, k.second);
     sort(v.begin(), v.end());
     const int N = 2 * (2 * 1e5) + 3;
-    SegTree<lli> seg(N, 0, [] (lli a, lli b) { return max(a, b); });
-    SegTree<lli> lis(N, 0, [] (lli a, lli b) { return max(a, b); });
-    lli z = 0;
-    each (k, v) {
-      auto [end, begin] = k;
-      lli A = seg.query(0, begin);
-      lli B = lis.query(begin, end) + 1;
-      setmax(z, A + B);
-      lis.set(begin, B);
-      seg.set(end, B);
+    SegTree<int> seg(N, 0, [] (lli a, lli b) { return max(a, b); });
+    vec<int> u(N, 0);
+    for (int i = 0; i < v.size(); ++i) {
+      auto [end, begin] = v[i];
+      lli x = seg.query(begin, end) + 1;
+      seg.set(begin, u[i] = x);
+    }
+    int z = 0;
+    for (int i = 0; i < v.size(); ++i) {
+      setmax(z, u[i] + seg.query(v[i].first, seg.size()));
     }
     cout << z << endl;
   }
