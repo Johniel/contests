@@ -38,73 +38,48 @@ template<typename T> using vec = vector<T>;
 
 constexpr lli mod = 998244353; // 1e9 + 7;
 
-// https://qiita.com/rsk0315_h4x/items/ff3b542a4468679fb409
-std::vector<bool> sieve(lli L, lli R) {
-  lli n = sqrt(R)+1;  // 念のため多めに
-  std::vector<bool> aux(n, true);  // 小さい篩
-  std::vector<bool> res(R-L, true);  // 大きい篩
-  for (lli i = 2; i*i < n; ++i) {
-    if (!aux[i]) continue;
-    for (lli j = i*i; j < R; j += i)
-      aux[j] = false;
-    for (lli j = std::max(i, (L+i-1)/i)*i; j < R; j += i)
-      res[j] = false;
-  }
-  return res;
-}
-
-// https://qiita.com/pell3221/items/0d1040ac74b052ec7e44
-// vector<lli> segment_sieve(lli a, lli b) {
-
-
-// https://atcoder.jp/contests/abc412/editorial/13387
-vector<int> prime_enumerate(int N) {
-  vector<bool> is_prime(N + 1, true);
-  vector<int> primes;
-  if (N < 2) return primes;
-  is_prime[0] = is_prime[1] = false;
-  for (int i = 2; i * i <= N; ++i) {
-    if (is_prime[i]) {
-      for (int j = i * i; j <= N; j += i) is_prime[j] = false;
-    }
-  }
-  for (int i = 2; i <= N; ++i) {
-    if (is_prime[i]) primes.push_back(i);
-  }
-  return primes;
-}
-
 int main(int argc, char *argv[])
 {
-  const int N = 1e7 + 5;
+  long long int L, R;
+  cin >> L >> R;
+  ++R;
+
+
+  const long long int N = 1e7 + 5;
   static bool prime[N];
   fill(prime, prime + N, true);
   prime[0] = prime[1] = false;
-  for (lli i = 2; i * i < N; ++i) {
-    for (lli j = 2; i * j < N; ++j) {
+  for (long long int i = 2; i * i < N; ++i) {
+    for (long long int j = 2; i * j < N; ++j) {
       prime[i * j] = false;
     }
   }
-  vector<lli> ps;
+  vector<long long int> ps;
   for (int i = 0; i < N; ++i) {
     if (prime[i]) ps.push_back(i);
   }
 
-  lli L, R;
-  while (cin >> L >> R) {
-    vec<int> v(R - L, 0);
-    lli z = 1;
-    each (p, ps) {
-      for (lli x = (L / p + 1) * p; x <= R; x += p) {
-        if (v[x - (L + 1)]) continue;
-        v[x - (L + 1)] = 1;
-        lli y = x;
-        while (y % p == 0) y /= p;
-        if (y == 1) ++z;
-      }
+  assert(R < N * N);
+  assert(L < R);
+  vector<int> is_composite(R - L, 0); // 合成数
+  vector<int> is_prime_power(R - L, 0); // 素数の累乗、素数冪
+  for (auto& p: ps) {
+    long long int x = (L / p) * p;
+    if (x < L) x = ((L / p) + 1) * p;
+    for (; x < R; x += p) {
+      if (is_composite[x - L]) continue;
+      is_composite[x - L] = 1;
+      long long int y = x;
+      while (y % p == 0) y /= p;
+      is_prime_power[x - L] += (y == 1);
     }
-    each (i, v) z += (i == 0);
-    cout << z << endl;
   }
+
+  lli z = 1;
+  for (lli i = L + 1; i < R; ++i) {
+    z += (is_prime_power[i - L] || !is_composite[i - L]);
+  }
+  cout << z << endl;
+
   return 0;
 }
