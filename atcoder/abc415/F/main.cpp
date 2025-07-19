@@ -66,84 +66,24 @@ struct SegTree {
   T prod(size_t begin, size_t end) const { return query(begin, end); }
   T query(size_t l, size_t r) {
     assert(0 <= l && l <= r && r <= n);
-    T res = e;
+    T L = e, R = e;
     for (l += bitceiln, r += bitceiln; l < r; l >>= 1, r >>= 1) {
-      // if (l & 1) res = op(v[l++], res);
-      // if (r & 1) res = op(res, v[--r]);
-      if (l & 1) res = op(res, v[l++]);
-      if (r & 1) res = op(v[--r], res);
+      if (l & 1) L = op(L, v[l++]);
+      if (r & 1) R = op(v[--r], R);
     }
-    return res;
+    return op(L, R);
   }
   size_t size(void) const { return n; }
 };
 template<typename T> istream& operator >> (istream& is, SegTree<T>& seg) { for (size_t i = 0; i < seg.size(); ++i) { T t; is >> t; seg.set(i, t); } return is; }
 template<typename T> ostream& operator << (ostream& os, SegTree<T>& seg) { os << seg.v; return os; }
 
-// struct S {
-//   char c;
-//   int len;
-// };
-
-#include <atcoder/segtree>
-
 struct S {
   pair<char, int> left;
   pair<char, int> right;
-  // pair<char, int> best;
   int best;
   int len;
 };
-
-S e() {
-  S E;
-  E.left = make_pair(0, 0);
-  E.right = make_pair(0, 0);
-  E.best = 0;
-  E.len = 0;
-  return E;
-}
-
-S op(S a, S b) {
-  // if (a.best == E.best) return b;
-  // if (b.best == E.best) return a;
-  if (a.len == 0) return b;
-  if (b.len == 0) return a;
-
-  S c;
-  c.len = a.len + b.len;
-  c.left = a.left;
-  c.right = b.right;
-
-  if (a.len == a.left.second && a.left.first == b.left.first) {
-    c.left.second += b.left.second;
-  }
-  if (b.len == b.right.second && b.right.first == a.right.first) {
-    c.right.second += a.right.second;
-  }
-
-  int mx = max(a.best, b.best);
-  if (a.right.first == b.left.first) {
-    setmax(mx, a.right.second + b.left.second);
-  }
-  setmax(mx, c.right.second);
-  setmax(mx, c.left.second);
-  c.best = mx;
-  // if (a.best.second < b.best.second) {
-  //   c.best = b.best;
-  // } else {
-  //   c.best = a.best;
-  // }
-  // if (a.right.first == b.left.first && a.right.second + b.left.second > c.best.second) {
-  //   c.best.first = a.right.first;
-  //   c.best.second = a.right.second + b.left.second;
-  // }
-  // cout << make_pair(a.left, a.right) << make_pair(a.best, a.len) << "+"
-  //      << make_pair(b.left, b.right) << make_pair(b.best, b.len) << "="
-  //      << make_pair(c.left, c.right) << make_pair(c.best, c.len) << endl;
-  return c;
-}
-
 
 int main(int argc, char *argv[])
 {
@@ -151,23 +91,42 @@ int main(int argc, char *argv[])
   str s;
   while (cin >> n >> q >> s) {
 
-
     S E;
     E.left = make_pair(0, 0);
     E.right = make_pair(0, 0);
-    // E.best = make_pair(0, 0);
     E.best = 0;
     E.len = 0;
 
-    vec<S> init(n, e());
-    atcoder::segtree<S, op, e> seg(init);
+    SegTree<S> seg(s.size(), E, [&] (const auto& a, const auto& b) {
+      if (a.len == 0) return b;
+      if (b.len == 0) return a;
 
-    // SegTree<S> seg(s.size(), E,
+      S c;
+      c.len = a.len + b.len;
+      c.left = a.left;
+      c.right = b.right;
+
+      if (a.len == a.left.second && a.left.first == b.left.first) {
+        c.left.second += b.left.second;
+      }
+      if (b.len == b.right.second && b.right.first == a.right.first) {
+        c.right.second += a.right.second;
+      }
+
+      int mx = max(a.best, b.best);
+      if (a.right.first == b.left.first) {
+        setmax(mx, a.right.second + b.left.second);
+      }
+      setmax(mx, c.right.second);
+      setmax(mx, c.left.second);
+      c.best = mx;
+      return c;
+    });
+
     for (int i = 0; i < s.size(); ++i) {
       S c;
       c.right = make_pair(s[i], 1);
       c.left = make_pair(s[i], 1);
-      // c.best = make_pair(s[i], 1);
       c.best = 1;
       c.len = 1;
       seg.set(i, c);
@@ -185,7 +144,6 @@ int main(int argc, char *argv[])
         S c;
         c.right = make_pair(x, 1);
         c.left = make_pair(x, 1);
-        // c.best = make_pair(x, 1);
         c.best = 1;
         c.len = 1;
         seg.set(idx, c);
@@ -195,9 +153,7 @@ int main(int argc, char *argv[])
         int begin, end;
         cin >> begin >> end;
         --begin;
-        // auto c = seg.query(begin, end);
-        auto c = seg.prod(begin, end);
-        // cout << c.left << ' ' << c.right << ' ' << c.best << ' ' << c.len << endl;
+        auto c = seg.query(begin, end);
         cout << c.best << endl;
       }
     }
