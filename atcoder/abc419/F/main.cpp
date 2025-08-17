@@ -1,6 +1,5 @@
 // github.com/Johniel/contests
 // atcoder/abc419/F/main.cpp
-
 #include <bits/stdc++.h>
 
 #define each(i, c) for (auto& i : c)
@@ -38,113 +37,87 @@ template<typename T> using vec = vector<T>;
 
 constexpr lli mod = 998244353; // 1e9 + 7;
 
-
-
-
-#define REP(i, n) for(int i=0; i<(int)n; ++i)
-#define LOOP(i, b, n) for(int i=0; i<(int)n; ++i)
-
-
-using namespace std;
-
-
-static const int MAX_TEXT_LEN = 100000;
-static const int MAX_QUERY = 1000;
-static const int MAX_QUERY_LEN = 1000;
-static const int MAX_CHAR = CHAR_MAX;
-
-
+constexpr int SIGMA = CHAR_MAX;
 struct PMA {
-  PMA* next[MAX_CHAR]; // next[0] => fail
+  array<PMA*, SIGMA> next; // next[0] => fail
   vector<int> accept;
-  PMA() {
-    fill(next, next + MAX_CHAR, (PMA*)NULL);
+  PMA() { next.fill(nullptr); }
+  PMA* transact(const char c) {
+    PMA* node = this;
+    while (node->next[c] == nullptr) node = node->next[0];
+    return node->next[c];
   }
+  static PMA* build(const vector<string>& words);
+  static void match(const string& text, PMA* node, vector<int>& freq);
 };
 
-PMA* buildAM(char word[MAX_QUERY][MAX_QUERY_LEN], const int size)
+PMA* PMA::build(const vector<string>& words)
 {
-  // build tree/tri
-  PMA *root = new PMA();
-  REP(i, size){
-    PMA *node = root;
-    for(int j=0; word[i][j] != '\0'; ++j){
-      char c = word[i][j];
-      if(node->next[c] == NULL) node->next[c] = new PMA();
+  PMA* root = new PMA();
+  for (int i = 0; i < words.size(); ++i) {
+    PMA* node = root;
+    for (const char& c: words[i]) {
+      if (node->next[c] == nullptr) node->next[c] = new PMA();
       node = node->next[c];
     }
     node->accept.push_back(i);
   }
-  // make suffix/failure link with BFS
+
   queue<PMA*> Q;
-  for(int c='A'; c<='z'; ++c){
-    if(root->next[c] != NULL){
-      root->next[c]->next[0] = root;//truism
+  for (int c = 'A'; c <= 'z'; ++c) {
+    if (root->next[c] != nullptr) {
+      root->next[c]->next[0] = root;
       Q.push(root->next[c]);
+    } else {
+      root->next[c] = root; // rootはfailを使わない。
     }
-    else root->next[c] = root;
   }
-  while(!Q.empty()){
-    PMA *node = Q.front(); Q.pop();
-    for(int c='A'; c<='z'; ++c){
-      if(node->next[c] != NULL){
-        Q.push(node->next[c]);
-        PMA *linked = node->next[0];
-        while(linked->next[c] == NULL)
-          linked = linked->next[0];
-        node->next[c]->next[0] = linked->next[c];
+
+  while (!Q.empty()) {
+    const PMA* node = Q.front();
+    Q.pop();
+    for (int c = 'A'; c <= 'z'; ++c) {
+      if (node->next[c] != nullptr) {
+        PMA* child = node->next[c];
+        child->next[0] = node->next[0]->transact(c);
+        child->accept.insert(child->accept.end(),
+                             child->next[0]->accept.begin(),
+                             child->next[0]->accept.end());
+        Q.push(child);
       }
     }
   }
   return root;
 }
 
-void matching(char *text, PMA *node, int *result)
+void PMA::match(const string& text, PMA* node, vector<int>& freq)
 {
-  const int len = strlen(text);
-  REP (i, len) {
-    char c = text[i];
-    while(node->next[c] == NULL) node = node->next[0];
-    node = node->next[c];
-    REP(j, node->accept.size())
-      ++result[node->accept[j]];// count frequency
+  for (const char& c: text) {
+    node = node->transact(c);
+    for (const int& j: node->accept) ++freq.at(j);
   }
   return ;
 }
 
-char text[MAX_TEXT_LEN];
-char query[MAX_QUERY][MAX_QUERY_LEN];
-int exist[MAX_QUERY];
-
-const int L = 100 + 3;
-const int N = 8;
-const int B = (1 << N) + 3;
-map<PMA*, lli> memo[L][B];
-int n;
-int l;
-
 int main(int argc, char *argv[])
 {
-  while (scanf("%d %d\n", &n, &l) == 2) {
-    fill(exist, exist + n, 0);
-    REP(i, n) scanf("%s\n", query[i]);
-    PMA* root = buildAM(query, n);
-    // matching(text, root, exist);
+  int n, l;
+  while (cin >> n >> l) {
+    vec<str> v(n);
+    cin >> v;
+    PMA* root = PMA::build(v);
 
-
+    const int L = 100 + 3;
+    const int N = 8;
+    const int B = (1 << N) + 3;
     map<PMA*, lli> dp[L][B];
     dp[0][0][root] = 1;
     for (int len = 0; len < l; ++len) {
       for (int bit = 0; bit < (1 << n); ++bit) {
         each (k, dp[len][bit]) {
           for (char c = 'a'; c <= 'z'; ++c) {
-            PMA* node = k.first;
+            PMA* node = k.first->transact(c);
             int nb = bit;
-            while(node->next[c] == NULL) {
-              node = node->next[0];
-              each (i, node->accept) nb |= (1 << i);
-            }
-            node = node->next[c];
             each (i, node->accept) nb |= (1 << i);
             (dp[len + 1][nb][node] += k.second) %= mod;
           }
@@ -152,9 +125,7 @@ int main(int argc, char *argv[])
       }
     }
     lli z = 0;
-    each (k, dp[l][(1 << n) - 1]) {
-      (z += k.second) %= mod;
-    }
+    each (k, dp[l][(1 << n) - 1]) (z += k.second) %= mod;
     cout << z << endl;
   }
 
