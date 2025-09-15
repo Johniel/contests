@@ -61,7 +61,7 @@
   + $`fn(i+1,x)=min(fn(i,y)-y)+x`$
   + $`fn(i+1,x)=min(fn(i,y)+y)-x`$
   + この式変形に市民権を与えるために呼称が欲しい。`絶対値の場合分け`と一旦呼ぶ。
-+ $`\sum_{0\le i\le |a|-1}\sum_{i+1\le j\le |a|-1}(a_{j}-a_{i})`$は$`-a_{i}`$の出現回数は$`|a|-i-1`$回で$`+a_{j}`$の出現回数が$`j`$回 ABC351E
++ $`\sum_{0\le i\le |a|-1}\sum_{i+1\le j\le |a|-1}(a_{j}-a_{i})`$は$`-a_{i}`$の出現回数は$`|a|-i-1`$回で$`+a_{j}`$の出現回数が$`j`$回 ABC351F
   + $`\sum_{0\le i\le |a|-1}(i*a_{i})-\sum_{0\le i\le |a|-1}(a_{i}*(|a|-i-1))`$とすれば線形時間。
 + 上位数件だけ記憶しておけば充分な場合がある。いつも忘れる。ABC345E
 + 固定長ならvectorをarrayに置き換えたら割と早くなる。[shrink_to_fit](https://cpprefjp.github.io/reference/vector/vector/shrink_to_fit.html)でも少しだけ効果がある。ABC345E
