@@ -63,6 +63,8 @@
   + この式変形に市民権を与えるために呼称が欲しい。`絶対値の場合分け`と一旦呼ぶ。
 + $`\sum_{0\le i\le |a|-1}\sum_{i+1\le j\le |a|-1}(a_{j}-a_{i})`$は$`-a_{i}`$の出現回数は$`|a|-i-1`$回で$`+a_{j}`$の出現回数が$`j`$回 ABC351F
   + $`\sum_{0\le i\le |a|-1}(i*a_{i})-\sum_{0\le i\le |a|-1}(a_{i}*(|a|-i-1))`$とすれば線形時間。
++ 与えられた区間に含まれる全ての部分列の和 $`\sum_{L_{i}\le l\le R_{i}}\sum_{l\le r\le R_{i}}\sum_{l\le j\le r} A_{j}`$ [ABC423E](https://atcoder.jp/contests/abc423/editorial/13865)
+  + $`\sum_{L_{i}\le j\le R_{i}} (j-R_{i}+i)(R_{i}-j+1)A_{j} = \sum_{L_{i}\le j\le R_{i}}-j^{2}A_{j}-(L_{i}+R_{i})jA_{j}+(-L_{i}+1)(R_{i}+1)A_{j}`$
 + 上位数件だけ記憶しておけば充分な場合がある。いつも忘れる。ABC345E
 + 固定長ならvectorをarrayに置き換えたら割と早くなる。[shrink_to_fit](https://cpprefjp.github.io/reference/vector/vector/shrink_to_fit.html)でも少しだけ効果がある。ABC345E
 + [2-SATで密な節を解消する方法](https://drken1215.hatenablog.com/entry/2023/08/04/021846)
