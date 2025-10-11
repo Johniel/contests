@@ -38,60 +38,14 @@ template<typename T> using vec = vector<T>;
 
 // constexpr lli mod = 998244353; // 1e9 + 7;
 
-unordered_map<lli, lli> a0, a1;
-unordered_map<lli, lli> b0, b1;
-
 lli mod;
-
-vec<lli> a;
-void reca(int idx, lli sum, bool prev)
-{
-  if (idx == a.size()) {
-    if (prev) ++a1[sum];
-    else ++a0[sum];
-    return ;
-  }
-
-  if (prev) {
-    reca(idx + 1, sum, false);
-  } else {
-    reca(idx + 1, (sum + a[idx]) % mod, true);
-    reca(idx + 1, sum, false);
-  }
-
-  return ;
-}
-
-vec<lli> b;
-void recb(int idx, lli sum, bool prev, bool head)
-{
-  if (idx == b.size()) {
-    if (head) ++b1[sum];
-    else ++b0[sum];
-    return ;
-  }
-
-  if (prev) {
-    recb(idx + 1, sum, false, head);
-  } else {
-    if (idx == 0) {
-      recb(idx + 1, (sum + b[idx]) % mod, true, true);
-      recb(idx + 1, sum, false, false);
-    } else {
-      recb(idx + 1, (sum + b[idx]) % mod, true, head);
-      recb(idx + 1, sum, false, head);
-    }
-  }
-
-  return ;
-}
 
 int main(int argc, char *argv[])
 {
   // 9<=log10(2^30)
   int n;
   while (cin >> n >> mod) {
-    a.resize(n);
+    vec<lli> a(n);
     cin >> a;
 
     if (n == 1) {
@@ -99,47 +53,63 @@ int main(int argc, char *argv[])
       continue;
     }
 
-    b.clear();
+    vec<lli> b;
     while (n / 2 < a.size()) {
       b.push_back(a.back());
       a.pop_back();
     }
     reverse(b.begin(), b.end());
 
-    a0.clear();
-    a1.clear();
-    b0.clear();
-    b1.clear();
+    unordered_map<lli, lli> a0, a1;
+    unordered_map<lli, lli> b0, b1;
 
-    // for (int bit = 0; bit < (1 << a.size()); ++bit) {
-    //   bool f = true;
-    //   lli z = 0;
-    //   for (int i = 0; i < a.size(); ++i) {
-    //     int j = i + 1;
-    //     if ((bit & (1 << i)) && (bit & (1 << j))) { f = false; break; }
-    //     if (bit & (1 << i)) (z += a[i]) %= mod;
-    //   }
-    //   if (f) {
-    //     if (bit & (1 << (a.size() - 1))) ++a1[z];
-    //     else ++a0[z];
-    //   }
-    // }
+    for (int bit = 0; bit < (1 << a.size()); ++bit) {
+      int step;
+      bool f = true;
+      lli z = 0;
+      for (int i = 0; i < a.size(); ++i) {
+        int j = i + 1;
+        if ((bit & (1 << i)) && (bit & (1 << j))) {
+          step = 0;
+          step += (1 << j);
+          step -= (bit & ((1 << j) - 1));
+          f = false;
+          break;
+        }
+        if (bit & (1 << i)) (z += a[i]) %= mod;
+      }
+      if (f) {
+        if (bit & (1 << (a.size() - 1))) ++a1[z];
+        else ++a0[z];
+      } else {
+        --bit;
+        bit += step;
+      }
+    }
 
-    // for (int bit = 0; bit < (1 << b.size()); ++bit) {
-    //   bool f = true;
-    //   lli z = 0;
-    //   for (int i = 0; i < b.size(); ++i) {
-    //     int j = i + 1;
-    //     if ((bit & (1 << i)) && (bit & (1 << j))) { f = false; break; }
-    //     if (bit & (1 << i)) (z += b[i]) %= mod;
-    //   }
-    //   if (f) {
-    //     if (bit & (1 << 0)) ++b1[z];
-    //     else ++b0[z];
-    //   }
-    // }
-    reca(0, 0, false);
-    recb(0, 0, false, false);
+    for (int bit = 0; bit < (1 << b.size()); ++bit) {
+      int step;
+      bool f = true;
+      lli z = 0;
+      for (int i = 0; i < b.size(); ++i) {
+        int j = i + 1;
+        if ((bit & (1 << i)) && (bit & (1 << j))) {
+          step = 0;
+          step += (1 << j);
+          step -= (bit & ((1 << j) - 1));
+          f = false;
+          break;
+        }
+        if (bit & (1 << i)) (z += b[i]) %= mod;
+      }
+      if (f) {
+        if (bit & (1 << 0)) ++b1[z];
+        else ++b0[z];
+      } else {
+        --bit;
+        bit += step;
+      }
+    }
 
     lli z = 0;
     each (k, a0) {
