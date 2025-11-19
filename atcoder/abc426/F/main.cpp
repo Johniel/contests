@@ -1,0 +1,292 @@
+// github.com/Johniel/contests
+// atcoder/abc426/F/main.cpp
+
+#include <bits/stdc++.h>
+
+#define each(i, c) for (auto& i : c)
+#define unless(cond) if (!(cond))
+#define __builtin_popcount(x) __builtin_popcountll(x)
+
+using namespace std;
+
+template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p);
+template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p);
+template<typename... Ts> ostream& operator << (ostream& os, const tuple<Ts...>& t) { os << "("; if constexpr (sizeof...(Ts) > 0) { apply([&](const Ts&... args) { ((os << args << ','), ...); }, t); } os << ")"; return os; }
+template<typename... Ts> istream& operator >> (istream& is, tuple<Ts...>& t) { apply([&](Ts&... args) { ((is >> args), ...); }, t); return is; }
+template<typename T> ostream& operator << (ostream& os, vector<T> v) { os << "("; for (auto& i: v) os << i << ","; os << ")"; return os; }
+template<typename T> istream& operator >> (istream& is, vector<T>& v) { for (auto& i: v) is >> i; return is; }
+template<typename T> ostream& operator << (ostream& os, set<T> s) { os << "set{"; for (auto& i: s) os << i << ","; os << "}"; return os; }
+template<typename K, typename V> ostream& operator << (ostream& os, map<K, V> m) { os << "map{"; for (auto& i: m) os << i << ","; os << "}"; return os; }
+template<typename E, size_t N> istream& operator >> (istream& is, array<E, N>& a) { for (auto& i: a) is >> i; return is; }
+template<typename E, size_t N> ostream& operator << (ostream& os, array<E, N>& a) { os << "[" << N << "]{"; for (auto& i: a) os << i << ","; os << "}"; return os; }
+template<typename T> ostream& operator << (ostream& os, stack<T> s) { os << "stack{"; while (s.size()) { os << s.top() << ","; s.pop(); } os << "}"; return os; }
+template<typename T> ostream& operator << (ostream& os, queue<T> q) { os << "queue{"; while (q.size()) { os << q.front() << ","; q.pop(); } os << "}"; return os; }
+template<typename T> ostream& operator << (ostream& os, deque<T> q) { os << "deque{"; for (int i = 0; i < q.size(); ++i) os << q[i] << ","; os << "}"; return os; }
+template<typename T> ostream& operator << (ostream& os, priority_queue<T> q) { os << "heap{"; while (q.size()) { os << q.top() << ","; q.pop(); } os << "}"; return os; }
+template<typename P, typename Q> ostream& operator << (ostream& os, pair<P, Q> p) { os << "(" << p.first << "," << p.second << ")"; return os; }
+template<typename P, typename Q> istream& operator >> (istream& is, pair<P, Q>& p) { is >> p.first >> p.second; return is; }
+
+template<typename T> inline T setmax(T& a, T b) { return a = std::max(a, b); }
+template<typename T> inline T setmin(T& a, T b) { return a = std::min(a, b); }
+
+__attribute__((constructor)) static void _____(void) { ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.setf(ios_base::fixed); cout.precision(15); return ; }
+
+using lli = long long int;
+using ull = unsigned long long;
+using str = string;
+template<typename T> using vec = vector<T>;
+
+struct SegTreeBeats {
+  // https://codeforces.com/blog/entry/57319?utm_source=chatgpt.com
+  // https://atcoder.jp/contests/abc256/editorial/4113
+  // 再帰版
+  // https://atcoder.jp/contests/abc426/submissions/69890535
+  // 非再帰版
+  // https://atcoder.jp/contests/abc426/submissions/69890775
+  struct Node {
+    long long sum;
+    long long max1, max2;
+    int cmax; // 出現頻度
+    long long min1, min2;
+    int cmin; // 出現頻度
+    long long add; // lazy add
+    int len;       // segment length
+
+    Node() : sum(0),
+             max1(LLONG_MIN), max2(LLONG_MIN), cmax(0),
+             min1(LLONG_MAX), min2(LLONG_MAX), cmin(0),
+             add(0), len(0) {}
+
+    static Node leaf(long long x) {
+      Node t;
+      t.sum = x;
+      t.max1 = t.min1 = x;
+      t.max2 = LLONG_MIN;
+      t.min2 = LLONG_MAX;
+      t.cmax = t.cmin = 1;
+      t.add = 0;
+      t.len = 1;
+      return t;
+    }
+  };
+
+  int n;
+  vector<Node> seg;
+
+  SegTreeBeats(const vector<long long>& a) {
+    int sz = 1;
+    while (sz < (int)a.size()) sz <<= 1;
+    n = sz;
+    seg.assign(n * 2, Node());
+    for (int i = 0; i < (int)a.size(); ++i) seg[n + i] = Node::leaf(a[i]);
+    for (int i = (int)a.size(); i < n; ++i) seg[n + i] = Node::leaf(0);
+    for (int i = n - 1; i >= 1; --i) pull(i);
+  }
+
+  // Merge two nodes
+  static Node merge(const Node& L, const Node& R) {
+    if (L.len == 0) return R;
+    if (R.len == 0) return L;
+    Node t;
+    t.len = L.len + R.len;
+    t.sum = L.sum + R.sum;
+    // max side
+    if (L.max1 > R.max1) {
+      t.max1 = L.max1;
+      t.cmax = L.cmax;
+      t.max2 = max(L.max2, R.max1);
+    } else if (L.max1 < R.max1) {
+      t.max1 = R.max1;
+      t.cmax = R.cmax;
+      t.max2 = max(L.max1, R.max2);
+    } else {
+      t.max1 = L.max1;
+      t.cmax = L.cmax + R.cmax;
+      t.max2 = max(L.max2, R.max2);
+    }
+    // min side
+    if (L.min1 < R.min1) {
+      t.min1 = L.min1;
+      t.cmin = L.cmin;
+      t.min2 = min(L.min2, R.min1);
+    } else if (L.min1 > R.min1) {
+      t.min1 = R.min1;
+      t.cmin = R.cmin;
+      t.min2 = min(L.min1, R.min2);
+    } else {
+      t.min1 = L.min1;
+      t.cmin = L.cmin + R.cmin;
+      t.min2 = min(L.min2, R.min2);
+    }
+    t.add = 0;
+    return t;
+  }
+
+  // apply operations to a node (no pushdown here)
+  static void apply_add(Node& t, long long x) {
+    if (t.len == 0) return;
+    t.sum += x * t.len;
+    if (t.max1 != LLONG_MIN) t.max1 += x;
+    if (t.max2 != LLONG_MIN) t.max2 += x;
+    if (t.min1 != LLONG_MAX) t.min1 += x;
+    if (t.min2 != LLONG_MAX) t.min2 += x;
+    t.add += x;
+  }
+
+  static void apply_chmin(Node& t, long long x) {
+    // pre: t.max2 < x < t.max1
+    if (t.len == 0 || x >= t.max1) return;
+    t.sum += (x - t.max1) * (long long)t.cmax;
+    // max side
+    t.max1 = x;
+    // min sideは基本不変（全要素同値のときのみ min1 も更新され得るが、
+    // そのケースでもこの更新で破綻しない。pullで整う）
+    if (t.min1 > x) t.min1 = x; // 全等や狭小区間の場合の安全策
+    if (t.min2 > x) t.min2 = x; // 影響しない場合が多いが安全側に寄せる
+  }
+
+  static void apply_chmax(Node& t, long long x) {
+    // pre: t.min1 < x < t.min2
+    if (t.len == 0 || x <= t.min1) return;
+    t.sum += (x - t.min1) * (long long)t.cmin;
+    // min side
+    t.min1 = x;
+    // max sideの安全策
+    if (t.max1 < x) t.max1 = x;
+    if (t.max2 < x) t.max2 = x;
+  }
+
+  // ----- range ops (external) -----
+  void range_add(int l, int r, long long x) { range_add(l, r, x, 1, 0, n); }
+  void range_chmin(int l, int r, long long x) { range_chmin(l, r, x, 1, 0, n); }
+  void range_chmax(int l, int r, long long x) { range_chmax(l, r, x, 1, 0, n); }
+  long long range_sum(int l, int r) { return range_sum(l, r, 1, 0, n); }
+  long long range_min(int l, int r) { return range_min(l, r, 1, 0, n); }
+  long long range_max(int l, int r) { return range_max(l, r, 1, 0, n); }
+
+private:
+
+  void push(int k) {
+    Node &t = seg[k], &L = seg[k<<1], &R = seg[k<<1|1];
+    if (t.add != 0) {
+      apply_add(L, t.add);
+      apply_add(R, t.add);
+      t.add = 0;
+    }
+    // 親の max1 / min1 を境界として子を整える
+    if (L.max1 > t.max1) apply_chmin(L, t.max1);
+    if (R.max1 > t.max1) apply_chmin(R, t.max1);
+    if (L.min1 < t.min1) apply_chmax(L, t.min1);
+    if (R.min1 < t.min1) apply_chmax(R, t.min1);
+  }
+
+  void pull(int k) { seg[k] = merge(seg[k<<1], seg[k<<1|1]); }
+
+  // ----- internal recursion -----
+  void range_add(int l, int r, long long x, int k, int nl, int nr) {
+    if (r <= nl || nr <= l) return;
+    if (l <= nl && nr <= r) { apply_add(seg[k], x); return; }
+    push(k);
+    int mid = (nl + nr) >> 1;
+    range_add(l, r, x, k<<1, nl, mid);
+    range_add(l, r, x, k<<1|1, mid, nr);
+    pull(k);
+  }
+
+  void range_chmin(int l, int r, long long x, int k, int nl, int nr) {
+    if (r <= nl || nr <= l || seg[k].max1 <= x) return;
+    if (l <= nl && nr <= r && seg[k].max2 < x) {
+      apply_chmin(seg[k], x);
+      return;
+    }
+    push(k);
+    int mid = (nl + nr) >> 1;
+    range_chmin(l, r, x, k<<1, nl, mid);
+    range_chmin(l, r, x, k<<1|1, mid, nr);
+    pull(k);
+  }
+
+  void range_chmax(int l, int r, long long x, int k, int nl, int nr) {
+    if (r <= nl || nr <= l || seg[k].min1 >= x) return;
+    if (l <= nl && nr <= r && x < seg[k].min2) {
+      apply_chmax(seg[k], x);
+      return;
+    }
+    push(k);
+    int mid = (nl + nr) >> 1;
+    range_chmax(l, r, x, k<<1, nl, mid);
+    range_chmax(l, r, x, k<<1|1, mid, nr);
+    pull(k);
+  }
+
+  long long range_sum(int l, int r, int k, int nl, int nr) {
+    if (r <= nl || nr <= l) return 0LL;
+    if (l <= nl && nr <= r) return seg[k].sum;
+    push(k);
+    int mid = (nl + nr) >> 1;
+    return range_sum(l, r, k<<1, nl, mid) + range_sum(l, r, k<<1|1, mid, nr);
+  }
+
+  long long range_min(int l, int r, int k, int nl, int nr) {
+    if (r <= nl || nr <= l) return LLONG_MAX;
+    if (l <= nl && nr <= r) return seg[k].min1;
+    push(k);
+    int mid = (nl + nr) >> 1;
+    return min(range_min(l, r, k<<1, nl, mid),
+               range_min(l, r, k<<1|1, mid, nr));
+  }
+
+  long long range_max(int l, int r, int k, int nl, int nr) {
+    if (r <= nl || nr <= l) return LLONG_MIN;
+    if (l <= nl && nr <= r) return seg[k].max1;
+    push(k);
+    int mid = (nl + nr) >> 1;
+    return max(range_max(l, r, k<<1, nl, mid),
+               range_max(l, r, k<<1|1, mid, nr));
+  }
+};
+
+// --- usage example ---
+// int main() {
+//   ios::sync_with_stdio(false);
+//   cin.tie(nullptr);
+//   int N, Q; cin >> N >> Q;
+//   vector<long long> a(N);
+//   for (auto &x : a) cin >> x;
+//   SegTreeBeats seg(a);
+//   // ops: 1 add l r x / 2 chmin l r x / 3 chmax l r x / 4 sum l r / 5 min l r / 6 max l r
+//   while (Q--) {
+//     int t; cin >> t;
+//     if (t==1){int l,r; long long x;cin>>l>>r>>x; seg.range_add(l,r,x);}
+//     if (t==2){int l,r; long long x;cin>>l>>r>>x; seg.range_chmin(l,r,x);}
+//     if (t==3){int l,r; long long x;cin>>l>>r>>x; seg.range_chmax(l,r,x);}
+//     if (t==4){int l,r; cin>>l>>r; cout<<seg.range_sum(l,r)<<"\n";}
+//     if (t==5){int l,r; cin>>l>>r; cout<<seg.range_min(l,r)<<"\n";}
+//     if (t==6){int l,r; cin>>l>>r; cout<<seg.range_max(l,r)<<"\n";}
+//   }
+// }
+
+int main(int argc, char *argv[])
+{
+  int n;
+  while (cin >> n) {
+    vec<lli> a(n);
+    cin >> a;
+    SegTreeBeats seg(a);
+
+    int q;
+    cin >> q;
+    while (q--) {
+      int begin, end;
+      lli k;
+      cin >> begin >> end >> k;
+      --begin;
+      lli x = seg.range_sum(begin, end);
+      seg.range_add(begin, end, -k);
+      seg.range_chmax(begin, end, 0);
+      lli y = seg.range_sum(begin, end);
+      cout << x - y << endl;
+    }
+  }
+  return 0;
+}
