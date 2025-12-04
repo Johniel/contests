@@ -38,6 +38,7 @@ template<typename T> using vec = vector<T>;
 
 constexpr lli mod = 998244353; // 1e9 + 7;
 
+// https://yosupo.hatenablog.com/entry/2021/01/31/160215
 struct SuffixAutomaton {
   struct Node {
     unordered_map<char, int> next;
