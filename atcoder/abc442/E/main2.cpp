@@ -62,44 +62,21 @@ double angle(double x, double y)
   return atan2(y, x);
 }
 
-
-namespace geo {
-  template<typename T>
-  T cross(complex<T> a, complex<T> b)
-  {
-    return (a.real() * b.imag() - a.imag() * b.real());
-  }
-
-  template<std::integral T>
-  bool cmp(const complex<T>& a, const complex<T>& b)
-  {
-    int ah = (a.imag() < 0 or (a.imag() == 0 and a.real() < 0));
-    int bh = (b.imag() < 0 or (b.imag() == 0 and b.real() < 0));
-    if (ah != bh) return ah < bh;
-    return cross(a, b) > 0;
-  }
-
-  template<std::integral T>
-  void argument_sort(vector<complex<T>>& points)
-  {
-    sort(points.begin(), points.end(), cmp<T>);
-    return ;
-  }
-
-  template<std::integral T>
-  void argument_sort(vector<pair<T, T>>& points)
-  {
-    vector<complex<T>> v;
-    for (const auto& p: points) {
-      v.push_back(complex<T>(p.first, p.second));
+// https://betrue12.hateblo.jp/entry/2020/01/05/151244
+// https://codeforces.com/contest/1284/submission/68206915
+template<typename Pair>
+void argument_sort(vector<Pair>& A){
+    auto orthant = [](Pair& a){
+        if(a.second >= 0) return (a.first >= 0 ? 0 : 1);
+        else return (a.first >= 0 ? 3 : 2);
+    };
+    vector<Pair> tmp[4];
+    for(auto& p : A) tmp[orthant(p)].emplace_back(p);
+    A.clear();
+    for(int k=0; k<4; k++){
+        sort(tmp[k].begin(), tmp[k].end(), [](auto& p1, auto& p2){ return (int64_t(p1.first)*p2.second - int64_t(p2.first)*p1.second > 0); });
+        for(auto& p : tmp[k]) A.emplace_back(p);
     }
-    argument_sort(v);
-    for (int i = 0; i < v.size(); ++i) {
-      points[i].first = v[i].real();
-      points[i].second = v[i].imag();
-    }
-    return ;
-  }
 }
 
 int main(int argc, char *argv[])
@@ -123,7 +100,7 @@ int main(int argc, char *argv[])
         if (dup[p] == 1) u.push_back(p);
       }
     }
-    geo::argument_sort<lli>(u);
+    argument_sort<pair<lli, lli>>(u);
     map<pair<lli, lli>, int> idx;
     for (int i = 0; i < u.size(); ++i) {
       idx[u[i]] = i;
