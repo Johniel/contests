@@ -54,11 +54,9 @@ namespace {
     array<int, N> dist;
     Dinic() {}
 
-    void init(int n)
+    void init(int n = N)
     {
-      // fill(g.begin(), g.end(), array<vector<E>, N>());
-      assert(n < N);
-      for (int i = 0; i < n; ++i) g[i].clear();
+      fill(g.begin(), g.begin() + n, vector<E>());
     }
 
     void add_edge(int src, int dst, Cap c)
@@ -72,12 +70,12 @@ namespace {
 
     bool bfs(const int src, const int dst, const int size)
     {
-      const int inf = 1 << 29;
+      const int inf = numeric_limits<int>::max() / 2;
       fill(dist.begin(), dist.begin() + size, inf);
       queue<int> q;
       dist[src] = 0;
       for (q.push(src); q.size(); q.pop()) {
-        each (e, g[q.front()]) {
+        for (const auto& e: g[q.front()]) {
           if (0 < e.residual() && dist[e.dst] == inf) {
             dist[e.dst] = dist[e.src] + 1;
             q.push(e.dst);
@@ -90,7 +88,7 @@ namespace {
     Cap rec(int curr, const int snk, Cap flow)
     {
       if (curr == snk) return flow;
-      for (; idx[curr] < g[curr].size(); ++idx[curr]) {
+      for (; idx[curr] < (int)g[curr].size(); ++idx[curr]) {
         E& e = g[curr][idx[curr]];
         if (0 < e.residual() && dist[e.src] < dist[e.dst]) {
           Cap f = rec(e.dst, snk, min(flow, e.residual()));
