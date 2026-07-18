@@ -38,88 +38,50 @@ template<typename T> using vec = vector<T>;
 
 constexpr lli mod = 998244353; // 1e9 + 7;
 
-
-using int128 = __int128;
-
-int128 sto128(string &s)
+// 線分PQの垂直二等分線 ax+by+c=0
+tuple<long long int,
+      long long int,
+      long long int> get_canonical(
+        long long int px, long long int py,
+        long long int qx, long long int qy)
 {
-  __int128 val = 0;
-  for (int i = 0; i < s.size() && isdigit(s[i]); ++i) {
-    val = (10 * val) + (s[i] - '0');
-  }
-  return val;
+  // https://atcoder.jp/contests/abc467/editorial/23431
+  long long int a = 2 * (qx - px);
+  long long int b = 2 * (qy - py);
+  long long int c = px * px + py * py - qx * qx - qy * qy;
+  long long int g = gcd(a, gcd(b, c));
+  a /= g, b /= g, c /= g;
+  if (a < 0) a = -a, b = -b, c = -c;
+  if (a == 0 and b < 0) b = -b, c = -c;
+  return {a, b, c};
 }
 
-// https://kenkoooo.hatenablog.com/entry/2016/11/30/163533
-ostream& operator << (ostream& os, __int128_t value)
+bool intersected_ll(tuple<long long int, long long int, long long int> l1,
+                    tuple<long long int, long long int, long long int> l2)
 {
-  ostream::sentry s(os);
-  if (s) {
-    __uint128_t tmp = value < 0 ? -value : value;
-    char buffer[128];
-    char *d = end(buffer);
-    do {
-      --d;
-      *d = "0123456789"[tmp % 10];
-      tmp /= 10;
-    } while (tmp != 0);
-    if (value < 0) {
-      --d;
-      *d = '-';
+  // https://atcoder.jp/contests/abc467/editorial/23431
+  auto [a1, b1, c1] = l1;
+  auto [a2, b2, c2] = l2;
+  if (a1 * b2 - a2 * b1 == 0) {
+    if (a1 == a2 and b1 == b2 and c1 == c2) {
+      return true;
+    } else {
+      return false;
     }
-    int len = end(buffer) - d;
-    if (os.rdbuf()->sputn(d, len) != len) {
-      os.setstate(ios_base::badbit);
-    }
+  } else {
+    return true;
   }
-  return os;
-}
-
-istream& operator >> (istream& is, int128& val)
-{
-  string s;
-  is >> s;
-  val = sto128(s);
-  return is;
-}
-
-
-vec<int128> fn(lli x1, lli y1, lli x2, lli y2)
-{
-  lli a = 2 * (x2 - x1);
-  lli b = 2 * (y2 - y1);
-  lli c = (x1 * x1 - x2 * x2) + (y1 * y1 - y2 * y2);
-
-  lli g = __gcd(__gcd(a, b), c);
-  if (g)  {
-    a /= g;
-    b /= g;
-    c /= g;
-  }
-
-  // ?
-  vec<int128> v;
-  v.push_back(a);
-  v.push_back(b);
-  v.push_back(c);
-  return v;
-  // return {a, b, c};
+  assert(false);
 }
 
 int main(int argc, char *argv[])
 {
   { int _; cin >> _; }
-  vec<lli> v(8);
+  vec<long long int> v(8);
   while (cin >> v) {
-    auto x = fn(v[0], v[1], v[2], v[3]);
-    auto y = fn(v[4], v[5], v[6], v[7]);
-
-    // cout << x << endl;
-    // cout << y << endl;
-
-    cout << (x[0] * y[1] == y[0] * x[1] &&
-             !(x[0] * y[2] == y[0] * x[2] &&
-               x[1] * y[2] == y[1] * x[2]) ? "No" : "Yes") << endl;
+    auto x = get_canonical(v[0], v[1], v[2], v[3]);
+    auto y = get_canonical(v[4], v[5], v[6], v[7]);
+    cout << (intersected_ll(x, y) ? "Yes" : "No") << endl;
   }
   return 0;
 }
