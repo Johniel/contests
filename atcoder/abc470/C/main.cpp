@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     vec<int> t(n, 0);
     int u = 0;
 
-    unordered_map<int, int> freq;
+    map<int, int> freq;
     freq[0] = n;
 
     while (q--) {
