@@ -38,6 +38,34 @@ template<typename T> using vec = vector<T>;
 
 constexpr lli mod = 998244353; // 1e9 + 7;
 
+// Sort strings so that their concatenation becomes lexicographically
+// minimum/maximum.
+//
+// For two strings a and b:
+//   a should come before b iff a + b < b + a.
+//
+// Typical use cases:
+// - Arrange decimal strings to form the smallest/largest number.
+// - Optimize the lexicographical order of a concatenation.
+// - Any problem where only the relative order of concatenated strings matters.
+template<bool Greater = false>
+struct omega_order {
+  bool operator()(const string& a, const string& b) const {
+    const int n = a.size();
+    const int m = b.size();
+
+    for (int i = 0; i < n + m; ++i) {
+      const char x = (i < n) ? a[i] : b[i - n];
+      const char y = (i < m) ? b[i] : a[i - m];
+
+      if (x != y) {
+        return Greater ? x > y : x < y;
+      }
+    }
+    return false;
+  }
+};
+
 int main(int argc, char *argv[])
 {
   int n, k;
@@ -73,10 +101,8 @@ int main(int argc, char *argv[])
     }
     b.push_back(to_string(u[idx[mx]].second));
 
-    sort(a.begin(), a.end(), [] (auto a, auto b) { return a + b < b + a; });
-    reverse(a.begin(), a.end());
-    sort(b.begin(), b.end(), [] (auto a, auto b) { return a + b < b + a; });
-    reverse(b.begin(), b.end());
+    sort(a.begin(), a.end(), omega_order<true>{});
+    sort(b.begin(), b.end(), omega_order<true>{});
     str s = accumulate(a.begin(), a.end(), str(""));
     str t = accumulate(b.begin(), b.end(), str(""));
 
