@@ -90,11 +90,12 @@ struct PrefixTree {
     return accept[curr];
   }
 
-  struct iterator {
-    int node_idx;
+  struct cursor {
     const PrefixTree* tree;
-    iterator(const PrefixTree* t, int idx) : tree(t), node_idx(idx) {}
-    void next(const char& c) {
+    int node_idx;
+    cursor(const PrefixTree* t, int idx) : tree(t), node_idx(idx) {}
+    void next(char c) {
+      if (!valid()) return ;
       auto itr = tree->nodes[node_idx].find(c);
       if (itr != tree->nodes[node_idx].end()) {
         node_idx = itr->second;
@@ -102,20 +103,17 @@ struct PrefixTree {
         node_idx = -1;
       }
     }
-    int children(void) {
+    int children(void) const {
       assert(node_idx != -1);
       return tree->children[node_idx];
     }
-    int accept(void) {
+    int accept(void) const {
       assert(node_idx != -1);
       return tree->accept[node_idx];
     }
-    bool operator == (iterator other) {
-      return other.node_idx == node_idx && tree == other.tree;
-    }
+    bool valid(void) const { return node_idx != -1; }
   };
-  iterator begin(void) const { return iterator(this, 0); }
-  iterator end(void) const { return iterator(this, -1); }
+  cursor root(void) const { return cursor(this, 0); }
 };
 
 int main(int argc, char *argv[])
@@ -145,13 +143,13 @@ int main(int argc, char *argv[])
         int match = 0;
         str s;
         bool f = false;
-        PrefixTree::iterator itr = tree.begin();
+        PrefixTree::cursor itr = tree.root();
         int idx = 0;
         for (int j = 0; j < t.size(); ++j) {
           s += t[j];
           auto itr2 = itr;
           itr2.next(s.back());
-          unless (itr2 == tree.end() || match + itr2.children() <= m) {
+          unless (!itr2.valid() || match + itr2.children() <= m) {
             itr = itr2;
           } else {
             while (idx < s.size()) {
@@ -166,8 +164,8 @@ int main(int argc, char *argv[])
             }
             s.back() = ('o' + 'x') - s.back();
             itr.next(s.back());
-            if (itr == tree.end()) break;
-            if (!(itr2 == tree.end())) match += itr2.children();
+            if (!itr.valid()) break;
+            if (itr2.valid()) match += itr2.children();
           }
         }
         cout << (f ? "Yes" : "No") << '\n';
