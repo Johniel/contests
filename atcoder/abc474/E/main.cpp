@@ -49,9 +49,8 @@ struct PrefixTree {
     children.push_back(0);
     return nodes.size() - 1;
   }
-  // O(|S|),w個insertする
-  void insert(const string& s, const int m = 1) {
-    // assert(1 <= m);
+  // O(|S|),sをm個insertする
+  void _insert(const string& s, const int m) {
     int curr = 0;
     for (size_t i = 0; i < s.size(); ++i) {
       curr = nodes[curr].count(s[i]) ? nodes[curr][s[i]] : nodes[curr][s[i]] = make_node();
@@ -59,6 +58,14 @@ struct PrefixTree {
     }
     accept[curr] += m;
     return ;
+  }
+  void insert(const string& s, const int m = 1) {
+    assert(0 <= m);
+    if (m) _insert(s, m);
+  }
+  void erase(const string& s, const int m = -1) {
+    assert(m <= 0);
+    if (m) _insert(s, m);
   }
   // O(|S|),sのprefixに一致する文字列がいくつinsertされているか長さ別に答える。
   vector<int> count(const string& s) {
@@ -75,7 +82,6 @@ struct PrefixTree {
   // NOT VERIFIED
   // O(|S|),sに一致する文字列がいくつinsertされているか数える。
   int match(const string& s) {
-
     int curr = 0;
     for (size_t i = 0; i < s.size(); ++i) {
       if (nodes[curr].count(s[i]) == 0) return 0;
@@ -83,6 +89,33 @@ struct PrefixTree {
     }
     return accept[curr];
   }
+
+  struct iterator {
+    int node_idx;
+    const PrefixTree* tree;
+    iterator(const PrefixTree* t, int idx) : tree(t), node_idx(idx) {}
+    void next(const char& c) {
+      auto itr = tree->nodes[node_idx].find(c);
+      if (itr != tree->nodes[node_idx].end()) {
+        node_idx = itr->second;
+      } else {
+        node_idx = -1;
+      }
+    }
+    int children(void) {
+      assert(node_idx != -1);
+      return tree->children[node_idx];
+    }
+    int accept(void) {
+      assert(node_idx != -1);
+      return tree->accept[node_idx];
+    }
+    bool operator == (iterator other) {
+      return other.node_idx == node_idx && tree == other.tree;
+    }
+  };
+  iterator begin(void) const { return iterator(this, 0); }
+  iterator end(void) const { return iterator(this, -1); }
 };
 
 int main(int argc, char *argv[])
@@ -105,29 +138,22 @@ int main(int argc, char *argv[])
       cin >> i >> prob;
       --i;
       --prob;
-      tree.insert(v[i], -1);
+      tree.erase(v[i]);
       if (v[i][prob] == 'x') v[i][prob] = 'o';
       else v[i][prob] = 'x';
-      tree.insert(v[i], +1);
+      tree.insert(v[i]);
       {
         int match = 0;
         str s;
         bool f = false;
-        int curr = 0;
+        PrefixTree::iterator itr = tree.begin();
         int idx = 0;
         for (int j = 0; j < t.size(); ++j) {
           s += t[j];
-          bool ff = true;
-          int x = -1;
-          int y = 0;
-          if (tree.nodes[curr].count(s.back()) == 0) {
-            ff = false;
-          } else {
-            x = tree.nodes[curr][s.back()];
-            y = tree.children[x];
-          }
-          unless (match + y <= m) {
-            curr = x;
+          auto itr2 = itr;
+          itr2.next(s.back());
+          unless (itr2 == tree.end() || match + itr2.children() <= m) {
+            itr = itr2;
           } else {
             while (idx < s.size()) {
               if (v[i][idx] == s[idx]) ++idx;
@@ -141,9 +167,9 @@ int main(int argc, char *argv[])
             }
             if (s.back() == 'o') s.back() = 'x';
             else s.back() = 'o';
-            if (tree.nodes[curr].count(s.back()) == 0) break;
-            curr = tree.nodes[curr][s.back()];
-            match += y;
+            itr.next(s.back());
+            if (itr == tree.end()) break;
+            if (!(itr2 == tree.end())) match += itr2.children();
           }
         }
         cout << (f ? "Yes" : "No") << '\n';
