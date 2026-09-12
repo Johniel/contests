@@ -139,8 +139,7 @@ int main(int argc, char *argv[])
       --i;
       --prob;
       tree.erase(v[i]);
-      if (v[i][prob] == 'x') v[i][prob] = 'o';
-      else v[i][prob] = 'x';
+      v[i][prob] = ('o' + 'x') - v[i][prob];
       tree.insert(v[i]);
       {
         int match = 0;
@@ -165,8 +164,7 @@ int main(int argc, char *argv[])
             } else {
               idx = max(0, idx - 1);
             }
-            if (s.back() == 'o') s.back() = 'x';
-            else s.back() = 'o';
+            s.back() = ('o' + 'x') - s.back();
             itr.next(s.back());
             if (itr == tree.end()) break;
             if (!(itr2 == tree.end())) match += itr2.children();
